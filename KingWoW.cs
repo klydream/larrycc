@@ -22,7 +22,7 @@ namespace KingWoW
 {
     class KingWoW : CombatRoutine
     {
-        public override sealed string Name { get { return "KingWoW CC (by Attilio76)黑子汉化"; } }
+        public override sealed string Name { get { return "KingWoW CC"; } }
         private static LocalPlayer Me { get { return StyxWoW.Me; } }
         
         public override WoWClass Class

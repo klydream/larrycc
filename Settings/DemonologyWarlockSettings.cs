@@ -333,7 +333,7 @@ namespace KingWoW
         [Category("设置杂项")]
         [DisplayName("二级斩杀生命百分比")]
         [Description("Start Second Last Kill if boss hp lower than this value")]
-        public int Phase1KillBossHP { get; set; }
+        public int Phase2KillBossHP { get; set; }
 
         [Setting]
         [DefaultValue(true)]
