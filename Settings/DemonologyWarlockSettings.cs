@@ -197,9 +197,9 @@ namespace KingWoW
         [Setting]
         [DefaultValue(true)]
         [Category("设置AOE")]
-        [DisplayName("启用龙息术")]
-        [Description("enable/disable use of DragonBreath")]
-        public bool UseDragonBreath { get; set; }
+        [DisplayName("启用暗影之怒")]
+        [Description("enable/disable use of Shadowfury")]
+        public bool UseShadowfury { get; set; }
 
         [Setting]
         [DefaultValue(true)]

@@ -106,7 +106,8 @@ namespace KingWoW
         private const string INVOCATION_BUFF = "Invoker's Energy";
         private const string RUNE_OF_POWER = "Rune of Power";
 
-        private const string PYROBLAST = "Pyroblast";
+        private const string METAMORPHOSIS = "Metamorphosis";
+        private const string CORRUPTION = "Corruption";
         private const string PYROBLAST_PROC = "Pyroblast!";
         private const string INFERNO_BLAST = "Inferno Blast";
         private const string SHADOW_BOLT = "Shadow Bolt";
@@ -440,44 +441,7 @@ namespace KingWoW
                     return utils.Cast(Hand_of_Guldan, target);
                 }
             }
-
-            //if (utils.isAuraActive(HEATING_UP) || utils.isAuraActive(PYROBLAST_PROC) || utils.isAuraActive(PRESENCE_OF_MIND) || (DemonologyWarlockSettings.Instance.UseDeepFreeze && utils.CanCast(DEEP_FREEZE)))
-            //{
-            //    WoWUnit target = null;
-            //    if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.MANUAL)
-            //        target = Me.CurrentTarget;
-            //    else if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.AUTO)
-            //    {
-            //        target = utils.getTargetToAttack(40, tank);
-            //    }
-            //    else if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.SEMIAUTO)
-            //    {
-            //        target = Me.CurrentTarget;
-            //        if (target == null || target.IsDead || !target.InLineOfSpellSight || target.Distance - target.CombatReach -1  > 40)
-            //            target = utils.getTargetToAttack(40, tank);
-            //    }
-            //    
-            //    if (target != null && !target.IsFriendly && target.Attackable && !target.IsDead && target.InLineOfSpellSight && target.Distance - target.CombatReach -1  <= 40)
-            //    {
-            //        if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.AUTO)
-            //            target.Target();
-            //        if ((DemonologyWarlockSettings.Instance.AutofaceTarget || SoloBotType) && !Me.IsMoving)
-            //        {
-            //            Me.SetFacing(target);
-            //        }
-            //        //deep freeze
-            //        if (((utils.isAuraActive(PYROBLAST_PROC) && utils.isAuraActive(HEATING_UP) && DemonologyWarlockSettings.Instance.PyroOnlyWithHU)
-            //              || (utils.isAuraActive(PYROBLAST_PROC) && !DemonologyWarlockSettings.Instance.PyroOnlyWithHU) 
-            //              || (Me.HasAura(PYROBLAST_PROC) && Me.GetAuraByName(PYROBLAST_PROC).TimeLeft.TotalMilliseconds <= 2000)) 
-            //              && utils.CanCast(PYROBLAST, target))
-            //        {
-            //            utils.LogActivity(PYROBLAST, target.Name);
-            //            return utils.Cast(PYROBLAST, target);
-            //        }
-            //        
-            //    }
-            //    
-            //}
+            
             return false;
         }
 
@@ -576,38 +540,26 @@ namespace KingWoW
                     Me.SetFacing(target);
                 }
 
-                //COMBUSTION
-                if (DemonologyWarlockSettings.Instance.CDUseCombustion == DemonologyWarlockSettings.CDCombustionUseType.COOLDOWN && utils.CanCast(COMBUSTION)
-                    && utils.MyAuraTimeLeft(IGNITE, target) > 0 && utils.MyAuraTimeLeft(PYROBLAST, target) > 0)
+                //apply dot
+                if (utils.MyAuraTimeLeft(CORRUPTION, target) < 3500 && !Me.METAMORPHOSIS)
                 {
-                    utils.LogActivity("IGNITE POWER:" + GetTargetIgniteStrength());
-                    utils.LogActivity(COMBUSTION, target.Name);
-                    return utils.Cast(COMBUSTION, target);
+                    utils.LogActivity("CORRUPTION", target.Name);
+                    return utils.Cast(CORRUPTION, target);
                 }
-
-                if (DemonologyWarlockSettings.Instance.CDUseCombustion == DemonologyWarlockSettings.CDCombustionUseType.CONDITION && utils.CanCast(COMBUSTION)
-                    && utils.MyAuraTimeLeft(IGNITE, target) > 0 && GetTargetIgniteStrength() >= DemonologyWarlockSettings.Instance.MinIgniteForCombustion)
-                {
-                    utils.LogActivity("IGNITE POWER:" + GetTargetIgniteStrength());
-                    utils.LogActivity(COMBUSTION, target.Name);
-                    return utils.Cast(COMBUSTION, target);
-                }
-
-                if (utils.CanCast(INFERNO_BLAST, target) && !FrostMageSettings.Instance.AvoidAOE && 
-                    utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count() >= DemonologyWarlockSettings.Instance.AOECount 
-                    && utils.MyAuraTimeLeft(IGNITE, target) > 0 /*&& utils.MyAuraTimeLeft(PYROBLAST, target) > 0*/
-                    /*&& utils.MyAuraTimeLeft(LIVING_BOMB, target) > 0*/)
-                {
-                    utils.LogActivity(INFERNO_BLAST, target.Name);
-                    return utils.Cast(INFERNO_BLAST, target);
-                }
+                //if (!Me.IsMoving && nextTimeVampiricTouchAllowed <= DateTime.Now && utils.MyAuraTimeLeft(VAMPIRIC_TOUCH, target) < 4500
+                //    && !(talents.IsSelected(9) && utils.MyAuraTimeLeft(DEVOURING_PLAGUE, target) > 0) && !(Me.IsChanneling && Me.ChanneledCastingSpellId == MIND_FLY_INSANITY))
+                //{
+                //    utils.LogActivity("VAMPIRIC_TOUCH", target.Name);
+                //    SetNextTimeVampiricTouch();
+                //    return utils.Cast(VAMPIRIC_TOUCH, target);
+                //}
 
                 //apply  Nether Tempest and always refresh it right before the last tick;
-                if (utils.CanCast(NETHER_TEMPEST, target) && (utils.MyAuraTimeLeft(NETHER_TEMPEST, target) < 1500) && !(target.IsPlayer && DemonologyWarlockSettings.Instance.AvoidDOTPlayers))
-                {
-                    utils.LogActivity(NETHER_TEMPEST, target.Name);
-                    return utils.Cast(NETHER_TEMPEST, target);
-                }
+                //if (utils.CanCast(NETHER_TEMPEST, target) && (utils.MyAuraTimeLeft(NETHER_TEMPEST, target) < 1500) && !(target.IsPlayer && DemonologyWarlockSettings.Instance.AvoidDOTPlayers))
+                //{
+                //    utils.LogActivity(NETHER_TEMPEST, target.Name);
+                //    return utils.Cast(NETHER_TEMPEST, target);
+                //}
 
                 //apply  Living Bomb and refresh it right before or right after the last tick (the expiring Living Bomb will explode in both cases);
                 if (utils.CanCast(LIVING_BOMB, target) && (utils.MyAuraTimeLeft(LIVING_BOMB, target) < 1500) && !(target.IsPlayer && DemonologyWarlockSettings.Instance.AvoidDOTPlayers))
@@ -624,24 +576,24 @@ namespace KingWoW
                     return SpellManager.ClickRemoteLocation(target.Location);
                 }
 
-                if (DemonologyWarlockSettings.Instance.UseDragonBreath && utils.CanCast(DRAGON_BREATH) && !FrostMageSettings.Instance.AvoidAOE && utils.AllAttaccableEnemyMobsInRange(15).Count() >= DemonologyWarlockSettings.Instance.AOECount)
-                {
-                    utils.LogActivity(DRAGON_BREATH);
-                    return utils.Cast(DRAGON_BREATH);
-                }
-
-                if (DemonologyWarlockSettings.Instance.UseArcaneExplosion && utils.CanCast(ARCANE_EXPLOSION) && !FrostMageSettings.Instance.AvoidAOE && utils.AllAttaccableEnemyMobsInRange(10).Count() >= DemonologyWarlockSettings.Instance.AOECount)
-                {
-                    utils.LogActivity(ARCANE_EXPLOSION);
-                    return utils.Cast(ARCANE_EXPLOSION);
-                }
-
-                if (DemonologyWarlockSettings.Instance.UseRingOfFrost && utils.CanCast(RING_OF_FROST) && target.Distance2DSqr <= 30 * 30)
-                {
-                    utils.LogActivity(RING_OF_FROST, target.Name);
-                    utils.Cast(RING_OF_FROST);
-                    return SpellManager.ClickRemoteLocation(target.Location);
-                }
+                //if (DemonologyWarlockSettings.Instance.UseDragonBreath && utils.CanCast(DRAGON_BREATH) && !FrostMageSettings.Instance.AvoidAOE && utils.AllAttaccableEnemyMobsInRange(15).Count() >= DemonologyWarlockSettings.Instance.AOECount)
+                //{
+                //    utils.LogActivity(DRAGON_BREATH);
+                //    return utils.Cast(DRAGON_BREATH);
+                //}
+                //
+                //if (DemonologyWarlockSettings.Instance.UseArcaneExplosion && utils.CanCast(ARCANE_EXPLOSION) && !FrostMageSettings.Instance.AvoidAOE && utils.AllAttaccableEnemyMobsInRange(10).Count() >= DemonologyWarlockSettings.Instance.AOECount)
+                //{
+                //    utils.LogActivity(ARCANE_EXPLOSION);
+                //    return utils.Cast(ARCANE_EXPLOSION);
+                //}
+                //
+                //if (DemonologyWarlockSettings.Instance.UseRingOfFrost && utils.CanCast(RING_OF_FROST) && target.Distance2DSqr <= 30 * 30)
+                //{
+                //    utils.LogActivity(RING_OF_FROST, target.Name);
+                //    utils.Cast(RING_OF_FROST);
+                //    return SpellManager.ClickRemoteLocation(target.Location);
+                //}
 
                 Multidot(); 
 
