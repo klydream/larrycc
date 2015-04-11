@@ -26,11 +26,15 @@ namespace KingWoW
         [Description("Distance to pull from")]
         public float PullDistance { get; set; }
 
-        public enum ArmorType
+        public enum WarlockPet
         {
-            FROST,
-            MOLTEN,
-            MAGE
+            Imp         = 23,       // Pet.CreatureFamily.Id
+            Voidwalker  = 16,
+            Succubus    = 17,
+            Felhunter   = 15,
+            Felguard    = 29,
+            Doomguard   = 19,
+            Infernal	= 108
         }
 
         public enum TargetType
@@ -111,11 +115,11 @@ namespace KingWoW
         public bool MultidotAvoidCC { get; set; }
 
         [Setting]
-        [DefaultValue(ArmorType.MOLTEN)]
+        [DefaultValue(WarlockPet.MOLTEN)]
         [Category("设置BUFF")]
-        [DisplayName("启用护甲术 FROST(霜)/MOLTEN(熔岩)/MAGE(法师)")]
-        [Description("chose armor to use")]
-        public ArmorType ArmorToUse { get; set; }
+        [DisplayName("召唤宠物")]
+        [Description("chose Pet to Summon")]
+        public WarlockPet PetToSummon { get; set; }
 
         [Setting]
         [DefaultValue(false)]

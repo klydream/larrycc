@@ -115,7 +115,7 @@ namespace KingWoW
         private const string INFERNO_BLAST = "Inferno Blast";
         private const string SHADOW_BOLT = "Shadow Bolt";
         private const string SHADOWFURY = "Shadowfury";
-        
+        private const string DARKFLIGHT = "Darkflight";
          
 
         //END TALENTS
@@ -384,9 +384,16 @@ namespace KingWoW
         }
         
         public static bool HaveHealthStone { get { return StyxWoW.Me.BagItems.Any(i => i.Entry == 5512); } }
+        
+        public static bool SummonBestPet()
+        {
+            return false;
+        }
 
         private bool Buff()
         {
+            GetBestPet();
+            
             if (utils.Mounted() || utils.MeIsCastingWithLag() /*ExtraUtilsSettings.Instance.PauseRotation || */)
                 return false;
             //Mana Gem
@@ -403,7 +410,6 @@ namespace KingWoW
                 return utils.Cast(DARK_INTENT);
             }
 
-            
             return false;
         }
 
@@ -686,6 +692,14 @@ namespace KingWoW
                     
                 }
             }
+            else
+            {
+            	if (utils.CanCast(DARKFLIGHT))
+              {
+                  utils.LogActivity(DARKFLIGHT);
+                  return utils.Cast(DARKFLIGHT);
+              }
+            }
             return false;
         }
 
@@ -724,8 +738,7 @@ namespace KingWoW
             return false;
         }
         
-        #region Talents
-        public static bool HasTalent(WarlockTalents tal)
+        private bool HasTalent(WarlockTalents tal)
         {
             return talents.IsSelected((int)tal);
         }
@@ -765,8 +778,123 @@ namespace KingWoW
             Cataclysm,
             DemonicServitude
         }
-        #endregion
         
         private static uint CurrentDemonicFury { get { return Me.GetCurrentPower(WoWPowerType.DemonicFury); } }
+        
+        #region Pet Support
+
+        /// <summary>
+        /// determines the best WarlockPet value to use.  Attempts to use 
+        /// user setting first, but if choice not available yet will choose Imp 
+        /// for instances and Voidwalker for everything else.  
+        /// </summary>
+        /// <returns>WarlockPet to use</returns>
+        public WarlockPet GetBestPet()
+        {
+            WarlockPet currPet = GetCurrentPet();
+            if (currPet != WarlockPet.None)
+                return currPet;
+
+            WarlockPet bestPet = (WarlockPet)DemonologyWarlockSettings.Instance.PetToSummon;
+            
+            string spellName = "Summon" + bestPet.ToString().CamelToSpaced();
+            
+            if (!utils.CanCast(spellName))
+            {
+                utils.LogActivity("Summon Voidwalker");
+                return utils.Cast("Summon Voidwalker");
+            }
+            
+            utils.LogActivity(spellName);
+            return utils.Cast(spellName);
+        }
+
+        /// <summary>
+        /// Pet.CreatureFamily.Id values for pets while the
+        /// Grimoire of Supremecy talent is selected.  
+        /// </summary>
+        public enum WarlockGrimoireOfSupremecyPets
+        {
+            FelImp = 100,
+            Wrathguard = 104,
+            Voidlord = 101,
+            Observer = 103,
+            Shivarra = 102,
+            Terrorguard = 147,
+            Abyssal = 148
+        }
+        
+        public enum WarlockPet
+        {
+            None        = 0,    
+            Imp         = 23,       // Pet.CreatureFamily.Id
+            Voidwalker  = 16,
+            Succubus    = 17,
+            Felhunter   = 15,
+            Felguard    = 29,
+            Doomguard   = 19,
+            Infernal	= 108
+        }
+       
+        /// <summary>
+        /// return standard pet id associated with active pet. 
+        /// note: we map Grimoire of Supremecy pets so rest of 
+        /// Singular can treat in talent independent fashion
+        /// </summary>
+        /// <returns></returns>
+        public static WarlockPet GetCurrentPet()
+        {
+            if (!Me.GotAlivePet)
+                return WarlockPet.None;
+
+            if (Me.Pet == null)
+            {
+                Logger.WriteDebug( "????? GetCurrentPet unstable - have live pet but Me.Pet == null !!!!!");
+                return WarlockPet.None;
+            }
+
+            uint id;
+            try
+            {
+                // following will fail when we have a non-creature warlock pet
+                // .. this happens in quests where we get a pet assigned as Me.Pet (like Eric "The Swift")
+                id = Me.Pet.CreatureFamilyInfo.Id;
+            }
+            catch
+            {
+                return WarlockPet.Other;
+            }
+
+            switch ((WarlockGrimoireOfSupremecyPets) Me.Pet.CreatureFamilyInfo.Id)
+            {
+                case (WarlockGrimoireOfSupremecyPets)WarlockPet.Imp:
+                case (WarlockGrimoireOfSupremecyPets)WarlockPet.Felguard:
+                case (WarlockGrimoireOfSupremecyPets)WarlockPet.Voidwalker:
+                case (WarlockGrimoireOfSupremecyPets)WarlockPet.Felhunter:
+                case (WarlockGrimoireOfSupremecyPets)WarlockPet.Succubus:
+                case (WarlockGrimoireOfSupremecyPets)WarlockPet.Infernal:
+                case (WarlockGrimoireOfSupremecyPets)WarlockPet.Doomguard:
+                    return (WarlockPet)Me.Pet.CreatureFamilyInfo.Id;
+
+                case WarlockGrimoireOfSupremecyPets.FelImp:
+                    return WarlockPet.Imp;
+                case WarlockGrimoireOfSupremecyPets.Wrathguard:
+                    return WarlockPet.Felguard;
+                case WarlockGrimoireOfSupremecyPets.Voidlord:
+                    return WarlockPet.Voidwalker;
+                case WarlockGrimoireOfSupremecyPets.Observer:
+                    return WarlockPet.Felhunter;
+                case WarlockGrimoireOfSupremecyPets.Shivarra:
+                    return WarlockPet.Succubus;
+                case WarlockGrimoireOfSupremecyPets.Abyssal:
+                    return WarlockPet.Infernal;
+                case WarlockGrimoireOfSupremecyPets.Terrorguard:
+                    return WarlockPet.Doomguard;
+            }
+
+            return WarlockPet.Other;
+        }
+
+        #endregion
     }
 }
