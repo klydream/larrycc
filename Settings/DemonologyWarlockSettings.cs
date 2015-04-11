@@ -34,7 +34,7 @@ namespace KingWoW
             Felhunter   = 15,
             Felguard    = 29,
             Doomguard   = 19,
-            Infernal	= 108
+            Infernal	  = 108
         }
 
         public enum TargetType
@@ -115,7 +115,7 @@ namespace KingWoW
         public bool MultidotAvoidCC { get; set; }
 
         [Setting]
-        [DefaultValue(WarlockPet.MOLTEN)]
+        [DefaultValue(WarlockPet.Voidwalker)]
         [Category("设置BUFF")]
         [DisplayName("召唤宠物")]
         [Description("chose Pet to Summon")]

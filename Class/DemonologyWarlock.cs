@@ -392,11 +392,12 @@ namespace KingWoW
 
         private bool Buff()
         {
-            GetBestPet();
             
             if (utils.Mounted() || utils.MeIsCastingWithLag() /*ExtraUtilsSettings.Instance.PauseRotation || */)
                 return false;
-            //Mana Gem
+                
+            GetBestPet();
+            //HEALTH STONE
             if (!Me.Combat && !HaveHealthStone && Me.Level >= 10 && utils.CanCast(CREATE_HEALTHSTONE) && !Me.IsMoving)
             {
                 utils.LogActivity(CREATE_HEALTHSTONE);
@@ -789,24 +790,27 @@ namespace KingWoW
         /// for instances and Voidwalker for everything else.  
         /// </summary>
         /// <returns>WarlockPet to use</returns>
-        public WarlockPet GetBestPet()
+        public bool GetBestPet()
         {
-            WarlockPet currPet = GetCurrentPet();
-            if (currPet != WarlockPet.None)
-                return currPet;
+            if (Me.GotAlivePet)
+                return false;
 
             WarlockPet bestPet = (WarlockPet)DemonologyWarlockSettings.Instance.PetToSummon;
             
-            string spellName = "Summon" + bestPet.ToString().CamelToSpaced();
+            string spellName = "Summon " + bestPet.ToString();
             
-            if (!utils.CanCast(spellName))
+            if (utils.CanCast(spellName) && !Me.IsMoving)
+            {
+                utils.LogActivity(spellName);
+                return utils.Cast(spellName);
+            }
+            else if (utils.CanCast("Summon Voidwalker") && !Me.IsMoving)
             {
                 utils.LogActivity("Summon Voidwalker");
                 return utils.Cast("Summon Voidwalker");
             }
+            return false;
             
-            utils.LogActivity(spellName);
-            return utils.Cast(spellName);
         }
 
         /// <summary>
@@ -833,7 +837,8 @@ namespace KingWoW
             Felhunter   = 15,
             Felguard    = 29,
             Doomguard   = 19,
-            Infernal	= 108
+            Infernal	  = 108,
+            Other       = 99999     // a quest or other pet forced upon us for some reason
         }
        
         /// <summary>
@@ -849,7 +854,7 @@ namespace KingWoW
 
             if (Me.Pet == null)
             {
-                Logger.WriteDebug( "????? GetCurrentPet unstable - have live pet but Me.Pet == null !!!!!");
+                //Logger.WriteDebug( "????? GetCurrentPet unstable - have live pet but Me.Pet == null !!!!!");
                 return WarlockPet.None;
             }
 
@@ -894,7 +899,7 @@ namespace KingWoW
 
             return WarlockPet.Other;
         }
-
+        
         #endregion
     }
 }
