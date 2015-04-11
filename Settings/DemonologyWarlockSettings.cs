@@ -81,7 +81,7 @@ namespace KingWoW
         [DisplayName("多目标DOT最少人数")]
         [Description("Enable Multidot rotation if Enemy in range >= this value")]
         public int MultidotEnemyNumberMin { get; set; }
-
+        
         [Setting]
         [DefaultValue(false)]
         [Category("设置多目标DOT")]
@@ -195,11 +195,18 @@ namespace KingWoW
         public bool UseFlameStrike { get; set; }
 
         [Setting]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [Category("设置AOE")]
         [DisplayName("启用暗影之怒")]
         [Description("enable/disable use of Shadowfury")]
         public bool UseShadowfury { get; set; }
+        
+        [Setting]
+        [DefaultValue(3)]
+        [Category("设置AOE")]
+        [DisplayName("启用暗影之怒最少人数")]
+        [Description("Enable Shadowfury if Enemy in range >= this value")]
+        public int ShadowfuryAOECount { get; set; }
 
         [Setting]
         [DefaultValue(true)]
@@ -253,9 +260,9 @@ namespace KingWoW
         [Setting]
         [DefaultValue(CDUseType.COOLDOWN)]
         [Category("设置爆发CD")]
-        [DisplayName("启用操控时间")]
-        [Description("Chose when use your AlterTime CD")]
-        public CDUseType CDUseAlterTime { get; set; }
+        [DisplayName("启用黑暗灵魂")]
+        [Description("Chose when use your DarkSoul CD")]
+        public CDUseType CDUseDarkSoul { get; set; }
 
         [Setting]
         [DefaultValue(false)]
