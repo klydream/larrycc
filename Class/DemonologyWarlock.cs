@@ -21,7 +21,7 @@ using Styx.CommonBot.Inventory;
 
 namespace KingWoW
 {
-    class DemonologyWarlocCombatClass : KingWoWAbstractBaseClass
+    class DemonologyWarlockCombatClass : KingWoWAbstractBaseClass
     {
 
         private static string Name = "KingWoW DemonologyWarlock'";
@@ -72,7 +72,7 @@ namespace KingWoW
         private const string CREATE_HEALTHSTONE = "Create Healthstone";
         private const string MIRROR_IMAGE = "Mirror Image";
         private const string BLIZZARD = "Blizzard";
-        private const string FROST_ARMOR = "Frost Armor";
+        private const string Hand_of_Guldan = "Hand of Gul'dan";
         private const string INVISIBILITY = "Invisibility";
         private const string DARK_INTENT = "Dark Intent";
         private const string DARK_SOUL = "Dark Soul: Knowledge";
@@ -126,7 +126,7 @@ namespace KingWoW
         }
         private void RegisterHotkeys()
         {
-            HotkeysManager.Register("Routine Pause", (Keys)DemonologyWarlocCombatClass.Instance.PauseKey, DemonologyWarlocCombatClass.Instance.ModKey, hk =>
+            HotkeysManager.Register("Routine Pause", (Keys)DemonologyWarlockSettings.Instance.PauseKey, DemonologyWarlockSettings.Instance.ModKey, hk =>
             {
                 IsCRPaused = !IsCRPaused;
                 if (IsCRPaused)
@@ -140,10 +140,10 @@ namespace KingWoW
                     Logging.Write("Routine Resumed!");
                 }
             });
-            HotkeysManager.Register("Multidot", (Keys)DemonologyWarlocCombatClass.Instance.MultidotKey, DemonologyWarlocCombatClass.Instance.ModKey, hk =>
+            HotkeysManager.Register("Multidot", (Keys)DemonologyWarlockSettings.Instance.MultidotKey, DemonologyWarlockSettings.Instance.ModKey, hk =>
             {
-                DemonologyWarlocCombatClass.Instance.MultidotEnabled = !DemonologyWarlocCombatClass.Instance.MultidotEnabled;
-                if (DemonologyWarlocCombatClass.Instance.MultidotEnabled)
+                DemonologyWarlockSettings.Instance.MultidotEnabled = !DemonologyWarlockSettings.Instance.MultidotEnabled;
+                if (DemonologyWarlockSettings.Instance.MultidotEnabled)
                 {
                     Lua.DoString(@"print('Multidot \124cFF15E61C Enabled!')");
                     Logging.Write("Multidot Enabled!");
@@ -156,10 +156,10 @@ namespace KingWoW
                 }
 
             });
-            HotkeysManager.Register("AvoidAOE", (Keys)DemonologyWarlocCombatClass.Instance.AvoidAOEKey, DemonologyWarlocCombatClass.Instance.ModKey, hk =>
+            HotkeysManager.Register("AvoidAOE", (Keys)DemonologyWarlockSettings.Instance.AvoidAOEKey, DemonologyWarlockSettings.Instance.ModKey, hk =>
             {
-                DemonologyWarlocCombatClass.Instance.AvoidAOE = !DemonologyWarlocCombatClass.Instance.AvoidAOE;
-                if (DemonologyWarlocCombatClass.Instance.AvoidAOE)
+                DemonologyWarlockSettings.Instance.AvoidAOE = !DemonologyWarlockSettings.Instance.AvoidAOE;
+                if (DemonologyWarlockSettings.Instance.AvoidAOE)
                 {
                     Lua.DoString(@"print('AvoidAOE \124cFF15E61C Enabled!')");
                     Logging.Write("AvoidAOE Enabled!");
@@ -193,7 +193,7 @@ namespace KingWoW
             return baseDmg;       
         }
 
-        public DemonologyWarlocCombatClass()
+        public DemonologyWarlockCombatClass()
         {
             utils = new KingWoWUtility();
             movement = new Movement();
@@ -211,7 +211,7 @@ namespace KingWoW
         {
             get
             {
-                if ((Me.Mounted && !DemonologyWarlocCombatClass.Instance.AutoDismountOnCombat) || IsCRPaused || !StyxWoW.IsInGame || !StyxWoW.IsInWorld || Me.Silenced/*|| utils.IsGlobalCooldown(true)*/ || utils.isAuraActive(DRINK) || utils.isAuraActive(FOOD) || Me.IsChanneling || utils.MeIsCastingWithLag())
+                if ((Me.Mounted && !DemonologyWarlockSettings.Instance.AutoDismountOnCombat) || IsCRPaused || !StyxWoW.IsInGame || !StyxWoW.IsInWorld || Me.Silenced/*|| utils.IsGlobalCooldown(true)*/ || utils.isAuraActive(DRINK) || utils.isAuraActive(FOOD) || Me.IsChanneling || utils.MeIsCastingWithLag())
                     return false;
 
                 //UPDATE TANK
@@ -233,10 +233,10 @@ namespace KingWoW
             get
             {
                 if (Me.IsDead) return MyDeath();
-                if ((Me.Mounted && !DemonologyWarlocCombatClass.Instance.AutoDismountOnCombat) || IsCRPaused || !StyxWoW.IsInGame || !StyxWoW.IsInWorld || Me.Silenced/*|| utils.IsGlobalCooldown(true)*/ || utils.isAuraActive(DRINK) || utils.isAuraActive(FOOD) || Me.IsChanneling || utils.MeIsCastingWithLag() || Me.Mounted)
+                if ((Me.Mounted && !DemonologyWarlockSettings.Instance.AutoDismountOnCombat) || IsCRPaused || !StyxWoW.IsInGame || !StyxWoW.IsInWorld || Me.Silenced/*|| utils.IsGlobalCooldown(true)*/ || utils.isAuraActive(DRINK) || utils.isAuraActive(FOOD) || Me.IsChanneling || utils.MeIsCastingWithLag() || Me.Mounted)
                     return false;
 
-                if (!Me.Combat && DemonologyWarlocCombatClass.Instance.UseEvocation)
+                if (!Me.Combat && DemonologyWarlockSettings.Instance.UseEvocation)
                     LifeTap();
                 //UPDATE TANK
                 //tank = utils.GetTank();
@@ -275,9 +275,9 @@ namespace KingWoW
                     Me.ClearTarget();
                 else if (target != null && !target.IsFriendly && target.Attackable && !target.IsDead)
                 {
-                    if (!target.InLineOfSpellSight || target.Distance > DemonologyWarlocCombatClass.Instance.PullDistance)
+                    if (!target.InLineOfSpellSight || target.Distance > DemonologyWarlockSettings.Instance.PullDistance)
                     {
-                        movement.KingHealMove(target, DemonologyWarlocCombatClass.Instance.PullDistance);
+                        movement.KingHealMove(target, DemonologyWarlockSettings.Instance.PullDistance);
                     }
                     if (utils.CanCast(SHADOW_BOLT, target)/*&& !Me.IsMoving*/)
                     {
@@ -347,7 +347,7 @@ namespace KingWoW
                 if (Me.IsDead) return false;
                 if ((utils.isAuraActive(DRINK) || utils.isAuraActive(FOOD)) && (Me.ManaPercent < 100 || Me.HealthPercent < 100))
                     return true;
-                if (Me.ManaPercent <= DemonologyWarlocCombatClass.Instance.ManaPercent &&
+                if (Me.ManaPercent <= DemonologyWarlockSettings.Instance.ManaPercent &&
                 !utils.isAuraActive(DRINK) && !Me.Combat && !Me.IsMoving && !utils.MeIsCastingWithLag())
                 {
                     WoWItem mydrink = Consumable.GetBestDrink(false);
@@ -358,7 +358,7 @@ namespace KingWoW
                         return true;
                     }
                 }
-                if (Me.HealthPercent <= DemonologyWarlocCombatClass.Instance.HealthPercent &&
+                if (Me.HealthPercent <= DemonologyWarlockSettings.Instance.HealthPercent &&
                 !utils.isAuraActive(FOOD) && !Me.Combat && !Me.IsMoving && !utils.MeIsCastingWithLag())
                 {
                     WoWItem myfood = Consumable.GetBestFood(false);
@@ -379,24 +379,21 @@ namespace KingWoW
             nextTimeRuneOfPowerAllowed = DateTime.Now + new TimeSpan(0, 0, 0, 0, 3000);
         }
         
-        public bool HaveHealthstone()
-        {
-            return ObjectManager.GetObjectsOfTypeFast<WoWItem>().Any(item => item.Entry == 5512);
-        }
+        public static bool HaveHealthStone { get { return StyxWoW.Me.BagItems.Any(i => i.Entry == 5512); } }
 
         private bool Buff()
         {
             if (utils.Mounted() || utils.MeIsCastingWithLag() /*ExtraUtilsSettings.Instance.PauseRotation || */)
                 return false;
             //Mana Gem
-            if (!Me.Combat && !utils.HaveHealthstone() && Me.Level >= 10 && utils.CanCast(CREATE_HEALTHSTONE) && !Me.IsMoving)
+            if (!Me.Combat && !HaveHealthStone && Me.Level >= 10 && utils.CanCast(CREATE_HEALTHSTONE) && !Me.IsMoving)
             {
                 utils.LogActivity(CREATE_HEALTHSTONE);
                 return utils.Cast(CREATE_HEALTHSTONE);
             }
 
             //Dark Intent
-            if (DemonologyWarlocCombatClass.Instance.AutoBuffBrillance && !utils.isAuraActive(DARK_INTENT) && utils.CanCast(DARK_INTENT))
+            if (DemonologyWarlockSettings.Instance.AutoBuffBrillance && !utils.isAuraActive(DARK_INTENT) && utils.CanCast(DARK_INTENT))
             {
                 utils.LogActivity(DARK_INTENT);
                 return utils.Cast(DARK_INTENT);
@@ -421,16 +418,16 @@ namespace KingWoW
             //cast  Frost Bomb on cooldown.
 //actions+=/hand_of_guldan,if=!in_flight&dot.shadowflame.remains<travel_time+action.shadow_bolt.cast_time&talent.demonbolt.enabled&((set_bonus.tier17_4pc=0&((charges=1&recharge_time<4)|charges=2))|(charges=3|(charges=2&recharge_time<13.8-travel_time*2))|dot.shadowflame.remains>travel_time)
 
-            if (utils.CanCast(FROST_BOMB))
+            if (utils.CanCast(Hand_of_Guldan))
             {
                 WoWUnit target = null;
-                if (DemonologyWarlocCombatClass.Instance.TargetTypeSelected == DemonologyWarlocCombatClass.TargetType.MANUAL)
+                if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.MANUAL)
                     target = Me.CurrentTarget;
-                else if (DemonologyWarlocCombatClass.Instance.TargetTypeSelected == DemonologyWarlocCombatClass.TargetType.AUTO)
+                else if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.AUTO)
                 {
                     target = utils.getTargetToAttack(40, tank);
                 }
-                else if (DemonologyWarlocCombatClass.Instance.TargetTypeSelected == DemonologyWarlocCombatClass.TargetType.SEMIAUTO)
+                else if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.SEMIAUTO)
                 {
                     target = Me.CurrentTarget;
                     if (target == null || target.IsDead || !target.InLineOfSpellSight || target.Distance - target.CombatReach - 1 > 40)
@@ -439,63 +436,48 @@ namespace KingWoW
                 
                 if (target != null && !target.IsDead && target.InLineOfSpellSight && target.Distance - target.CombatReach - 1 <= 40)
                 {
-                    utils.LogActivity(FROST_BOMB, target.Name);
-                    return utils.Cast(FROST_BOMB, target);
+                    utils.LogActivity(Hand_of_Guldan, target.Name);
+                    return utils.Cast(Hand_of_Guldan, target);
                 }
             }
 
-            if (utils.isAuraActive(HEATING_UP) || utils.isAuraActive(PYROBLAST_PROC) || utils.isAuraActive(PRESENCE_OF_MIND) || (DemonologyWarlocCombatClass.Instance.UseDeepFreeze && utils.CanCast(DEEP_FREEZE)))
-            {
-                WoWUnit target = null;
-                if (DemonologyWarlocCombatClass.Instance.TargetTypeSelected == DemonologyWarlocCombatClass.TargetType.MANUAL)
-                    target = Me.CurrentTarget;
-                else if (DemonologyWarlocCombatClass.Instance.TargetTypeSelected == DemonologyWarlocCombatClass.TargetType.AUTO)
-                {
-                    target = utils.getTargetToAttack(40, tank);
-                }
-                else if (DemonologyWarlocCombatClass.Instance.TargetTypeSelected == DemonologyWarlocCombatClass.TargetType.SEMIAUTO)
-                {
-                    target = Me.CurrentTarget;
-                    if (target == null || target.IsDead || !target.InLineOfSpellSight || target.Distance - target.CombatReach -1  > 40)
-                        target = utils.getTargetToAttack(40, tank);
-                }
-                
-                if (target != null && !target.IsFriendly && target.Attackable && !target.IsDead && target.InLineOfSpellSight && target.Distance - target.CombatReach -1  <= 40)
-                {
-                    if (DemonologyWarlocCombatClass.Instance.TargetTypeSelected == DemonologyWarlocCombatClass.TargetType.AUTO)
-                        target.Target();
-                    if ((DemonologyWarlocCombatClass.Instance.AutofaceTarget || SoloBotType) && !Me.IsMoving)
-                    {
-                        Me.SetFacing(target);
-                    }
-                    //deep freeze
-                    if (DemonologyWarlocCombatClass.Instance.UseDeepFreeze && utils.CanCast(DEEP_FREEZE, target) && !target.HasAura(DEEP_FREEZE))
-                    {
-                        utils.LogActivity(DEEP_FREEZE, target.Name);
-                        return utils.Cast(DEEP_FREEZE, target);
-                    }
-                    if (((utils.isAuraActive(PYROBLAST_PROC) && utils.isAuraActive(HEATING_UP) && DemonologyWarlocCombatClass.Instance.PyroOnlyWithHU)
-                          || (utils.isAuraActive(PYROBLAST_PROC) && !DemonologyWarlocCombatClass.Instance.PyroOnlyWithHU) 
-                          || (Me.HasAura(PYROBLAST_PROC) && Me.GetAuraByName(PYROBLAST_PROC).TimeLeft.TotalMilliseconds <= 2000)) 
-                          && utils.CanCast(PYROBLAST, target))
-                    {
-                        utils.LogActivity(PYROBLAST, target.Name);
-                        return utils.Cast(PYROBLAST, target);
-                    }
-                    if ((utils.isAuraActive(HEATING_UP) && !utils.isAuraActive(PYROBLAST_PROC))  && utils.CanCast(INFERNO_BLAST, target))
-                    {
-                        utils.LogActivity(INFERNO_BLAST, target.Name);
-                        return utils.Cast(INFERNO_BLAST, target);
-                    }
-                    if (utils.isAuraActive(PRESENCE_OF_MIND) && !utils.isAuraActive(PYROBLAST_PROC) && utils.CanCast(PYROBLAST, target))
-                    {
-                        utils.LogActivity("PoM detected! instant PYROBLAST", target.Name);
-                        return utils.Cast(PYROBLAST, target);
-                    }
-                    
-                }
-                
-            }
+            //if (utils.isAuraActive(HEATING_UP) || utils.isAuraActive(PYROBLAST_PROC) || utils.isAuraActive(PRESENCE_OF_MIND) || (DemonologyWarlockSettings.Instance.UseDeepFreeze && utils.CanCast(DEEP_FREEZE)))
+            //{
+            //    WoWUnit target = null;
+            //    if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.MANUAL)
+            //        target = Me.CurrentTarget;
+            //    else if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.AUTO)
+            //    {
+            //        target = utils.getTargetToAttack(40, tank);
+            //    }
+            //    else if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.SEMIAUTO)
+            //    {
+            //        target = Me.CurrentTarget;
+            //        if (target == null || target.IsDead || !target.InLineOfSpellSight || target.Distance - target.CombatReach -1  > 40)
+            //            target = utils.getTargetToAttack(40, tank);
+            //    }
+            //    
+            //    if (target != null && !target.IsFriendly && target.Attackable && !target.IsDead && target.InLineOfSpellSight && target.Distance - target.CombatReach -1  <= 40)
+            //    {
+            //        if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.AUTO)
+            //            target.Target();
+            //        if ((DemonologyWarlockSettings.Instance.AutofaceTarget || SoloBotType) && !Me.IsMoving)
+            //        {
+            //            Me.SetFacing(target);
+            //        }
+            //        //deep freeze
+            //        if (((utils.isAuraActive(PYROBLAST_PROC) && utils.isAuraActive(HEATING_UP) && DemonologyWarlockSettings.Instance.PyroOnlyWithHU)
+            //              || (utils.isAuraActive(PYROBLAST_PROC) && !DemonologyWarlockSettings.Instance.PyroOnlyWithHU) 
+            //              || (Me.HasAura(PYROBLAST_PROC) && Me.GetAuraByName(PYROBLAST_PROC).TimeLeft.TotalMilliseconds <= 2000)) 
+            //              && utils.CanCast(PYROBLAST, target))
+            //        {
+            //            utils.LogActivity(PYROBLAST, target.Name);
+            //            return utils.Cast(PYROBLAST, target);
+            //        }
+            //        
+            //    }
+            //    
+            //}
             return false;
         }
 
@@ -540,9 +522,9 @@ namespace KingWoW
         private bool Defensivececk()
         {
 
-            if (DemonologyWarlocCombatClass.Instance.UseShadowfury && Me.Combat && (utils.AllAttaccableEnemyMobsInRange(12).Count() >= 1) && utils.CanCast(SHADOWFURY))
+            if (DemonologyWarlockSettings.Instance.UseShadowfury && Me.Combat && (utils.AllAttaccableEnemyMobsInRange(12).Count() >= 1) && utils.CanCast(SHADOWFURY))
             {
-                ShadowfuryCandidateTarget = utils.EnemyInRangeWithMobsAround(35, 10, DemonologyWarlocCombatClass.Instance.ShadowfuryAOECount);
+                ShadowfuryCandidateTarget = utils.EnemyInRangeWithMobsAround(35, 10, DemonologyWarlockSettings.Instance.ShadowfuryAOECount);
                 if (ShadowfuryCandidateTarget != null)
                 {
                     utils.LogActivity(SHADOWFURY, ShadowfuryCandidateTarget.Name);
@@ -551,7 +533,7 @@ namespace KingWoW
                 }
             }
 
-            if (DemonologyWarlocCombatClass.Instance.UseBlink && Me.Combat && Me.IsMoving && (utils.AllAttaccableEnemyMobsInRange(12).Count() >= 1) && utils.CanCast(ROCKET_JUMP))
+            if (DemonologyWarlockSettings.Instance.UseBlink && Me.Combat && Me.IsMoving && (utils.AllAttaccableEnemyMobsInRange(12).Count() >= 1) && utils.CanCast(ROCKET_JUMP))
             {
                 utils.LogActivity(ROCKET_JUMP);
                 return utils.Cast(ROCKET_JUMP);
@@ -572,13 +554,13 @@ namespace KingWoW
             //Multidot();
 
             WoWUnit target = null;
-            if (DemonologyWarlocCombatClass.Instance.TargetTypeSelected == DemonologyWarlocCombatClass.TargetType.MANUAL)
+            if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.MANUAL)
                 target = Me.CurrentTarget;
-            else if (DemonologyWarlocCombatClass.Instance.TargetTypeSelected == DemonologyWarlocCombatClass.TargetType.AUTO)
+            else if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.AUTO)
             {
                 target = utils.getTargetToAttack(40, tank);
             }
-            else if (DemonologyWarlocCombatClass.Instance.TargetTypeSelected == DemonologyWarlocCombatClass.TargetType.SEMIAUTO)
+            else if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.SEMIAUTO)
             {
                 target = Me.CurrentTarget;
                 if (target == null || target.IsDead || !target.InLineOfSpellSight || target.Distance - target.CombatReach -1  > 40)
@@ -587,15 +569,15 @@ namespace KingWoW
             
             if (target != null && !target.IsFriendly && target.Attackable && !target.IsDead && target.InLineOfSpellSight && target.Distance - target.CombatReach -1  <= 40)
             {
-                if (DemonologyWarlocCombatClass.Instance.TargetTypeSelected == DemonologyWarlocCombatClass.TargetType.AUTO)
+                if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.AUTO)
                     target.Target();
-                if ((DemonologyWarlocCombatClass.Instance.AutofaceTarget || SoloBotType) && !Me.IsMoving)
+                if ((DemonologyWarlockSettings.Instance.AutofaceTarget || SoloBotType) && !Me.IsMoving)
                 {
                     Me.SetFacing(target);
                 }
 
                 //COMBUSTION
-                if (DemonologyWarlocCombatClass.Instance.CDUseCombustion == DemonologyWarlocCombatClass.CDCombustionUseType.COOLDOWN && utils.CanCast(COMBUSTION)
+                if (DemonologyWarlockSettings.Instance.CDUseCombustion == DemonologyWarlockSettings.CDCombustionUseType.COOLDOWN && utils.CanCast(COMBUSTION)
                     && utils.MyAuraTimeLeft(IGNITE, target) > 0 && utils.MyAuraTimeLeft(PYROBLAST, target) > 0)
                 {
                     utils.LogActivity("IGNITE POWER:" + GetTargetIgniteStrength());
@@ -603,8 +585,8 @@ namespace KingWoW
                     return utils.Cast(COMBUSTION, target);
                 }
 
-                if (DemonologyWarlocCombatClass.Instance.CDUseCombustion == DemonologyWarlocCombatClass.CDCombustionUseType.CONDITION && utils.CanCast(COMBUSTION)
-                    && utils.MyAuraTimeLeft(IGNITE, target) > 0 && GetTargetIgniteStrength() >= DemonologyWarlocCombatClass.Instance.MinIgniteForCombustion)
+                if (DemonologyWarlockSettings.Instance.CDUseCombustion == DemonologyWarlockSettings.CDCombustionUseType.CONDITION && utils.CanCast(COMBUSTION)
+                    && utils.MyAuraTimeLeft(IGNITE, target) > 0 && GetTargetIgniteStrength() >= DemonologyWarlockSettings.Instance.MinIgniteForCombustion)
                 {
                     utils.LogActivity("IGNITE POWER:" + GetTargetIgniteStrength());
                     utils.LogActivity(COMBUSTION, target.Name);
@@ -612,7 +594,7 @@ namespace KingWoW
                 }
 
                 if (utils.CanCast(INFERNO_BLAST, target) && !FrostMageSettings.Instance.AvoidAOE && 
-                    utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count() >= DemonologyWarlocCombatClass.Instance.AOECount 
+                    utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count() >= DemonologyWarlockSettings.Instance.AOECount 
                     && utils.MyAuraTimeLeft(IGNITE, target) > 0 /*&& utils.MyAuraTimeLeft(PYROBLAST, target) > 0*/
                     /*&& utils.MyAuraTimeLeft(LIVING_BOMB, target) > 0*/)
                 {
@@ -621,40 +603,40 @@ namespace KingWoW
                 }
 
                 //apply  Nether Tempest and always refresh it right before the last tick;
-                if (utils.CanCast(NETHER_TEMPEST, target) && (utils.MyAuraTimeLeft(NETHER_TEMPEST, target) < 1500) && !(target.IsPlayer && DemonologyWarlocCombatClass.Instance.AvoidDOTPlayers))
+                if (utils.CanCast(NETHER_TEMPEST, target) && (utils.MyAuraTimeLeft(NETHER_TEMPEST, target) < 1500) && !(target.IsPlayer && DemonologyWarlockSettings.Instance.AvoidDOTPlayers))
                 {
                     utils.LogActivity(NETHER_TEMPEST, target.Name);
                     return utils.Cast(NETHER_TEMPEST, target);
                 }
 
                 //apply  Living Bomb and refresh it right before or right after the last tick (the expiring Living Bomb will explode in both cases);
-                if (utils.CanCast(LIVING_BOMB, target) && (utils.MyAuraTimeLeft(LIVING_BOMB, target) < 1500) && !(target.IsPlayer && DemonologyWarlocCombatClass.Instance.AvoidDOTPlayers))
+                if (utils.CanCast(LIVING_BOMB, target) && (utils.MyAuraTimeLeft(LIVING_BOMB, target) < 1500) && !(target.IsPlayer && DemonologyWarlockSettings.Instance.AvoidDOTPlayers))
                 {
                     utils.LogActivity(LIVING_BOMB, target.Name);
                     return utils.Cast(LIVING_BOMB, target);
                 }
 
                 //+++++++++++++++++++++++++AOE rotation start+++++++++++++++++++++++++++++++//
-                if (DemonologyWarlocCombatClass.Instance.UseFlameStrike && utils.CanCast(FLAMESTRIKE) && !FrostMageSettings.Instance.AvoidAOE && target.Distance <= 40 && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count() >= DemonologyWarlocCombatClass.Instance.AOECount)
+                if (DemonologyWarlockSettings.Instance.UseFlameStrike && utils.CanCast(FLAMESTRIKE) && !FrostMageSettings.Instance.AvoidAOE && target.Distance <= 40 && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count() >= DemonologyWarlockSettings.Instance.AOECount)
                 {
                     utils.LogActivity(FLAMESTRIKE, target.Name);
                     utils.Cast(FLAMESTRIKE);
                     return SpellManager.ClickRemoteLocation(target.Location);
                 }
 
-                if (DemonologyWarlocCombatClass.Instance.UseDragonBreath && utils.CanCast(DRAGON_BREATH) && !FrostMageSettings.Instance.AvoidAOE && utils.AllAttaccableEnemyMobsInRange(15).Count() >= DemonologyWarlocCombatClass.Instance.AOECount)
+                if (DemonologyWarlockSettings.Instance.UseDragonBreath && utils.CanCast(DRAGON_BREATH) && !FrostMageSettings.Instance.AvoidAOE && utils.AllAttaccableEnemyMobsInRange(15).Count() >= DemonologyWarlockSettings.Instance.AOECount)
                 {
                     utils.LogActivity(DRAGON_BREATH);
                     return utils.Cast(DRAGON_BREATH);
                 }
 
-                if (DemonologyWarlocCombatClass.Instance.UseArcaneExplosion && utils.CanCast(ARCANE_EXPLOSION) && !FrostMageSettings.Instance.AvoidAOE && utils.AllAttaccableEnemyMobsInRange(10).Count() >= DemonologyWarlocCombatClass.Instance.AOECount)
+                if (DemonologyWarlockSettings.Instance.UseArcaneExplosion && utils.CanCast(ARCANE_EXPLOSION) && !FrostMageSettings.Instance.AvoidAOE && utils.AllAttaccableEnemyMobsInRange(10).Count() >= DemonologyWarlockSettings.Instance.AOECount)
                 {
                     utils.LogActivity(ARCANE_EXPLOSION);
                     return utils.Cast(ARCANE_EXPLOSION);
                 }
 
-                if (DemonologyWarlocCombatClass.Instance.UseRingOfFrost && utils.CanCast(RING_OF_FROST) && target.Distance2DSqr <= 30 * 30)
+                if (DemonologyWarlockSettings.Instance.UseRingOfFrost && utils.CanCast(RING_OF_FROST) && target.Distance2DSqr <= 30 * 30)
                 {
                     utils.LogActivity(RING_OF_FROST, target.Name);
                     utils.Cast(RING_OF_FROST);
@@ -664,7 +646,7 @@ namespace KingWoW
                 Multidot(); 
 
                 //Cast  SHADOW_BOLT as a filler spell.
-                if (!Me.IsMoving && utils.CanCast(SHADOW_BOLT, target) && !utils.isAuraActive(PRESENCE_OF_MIND) && !utils.CanCast(FROST_BOMB) 
+                if (!Me.IsMoving && utils.CanCast(SHADOW_BOLT, target) && !utils.isAuraActive(PRESENCE_OF_MIND) && !utils.CanCast(Hand_of_Guldan) 
                     && !(utils.isAuraActive(PYROBLAST_PROC) && utils.isAuraActive(HEATING_UP)) && !(utils.isAuraActive(HEATING_UP) && utils.CanCast(INFERNO_BLAST)))
                 {
                     utils.LogActivity(SHADOW_BOLT, target.Name);
@@ -685,9 +667,9 @@ namespace KingWoW
                     return utils.Cast(TOUCH_OF_CHAOS, target);
                 }
             }
-            else if (ExtraUtilsSettings.Instance.movementEnabled && Me.CurrentTarget != null && !Me.CurrentTarget.IsDead && (!Me.CurrentTarget.InLineOfSpellSight || Me.CurrentTarget.Distance - Me.CurrentTarget.CombatReach - 1 > DemonologyWarlocCombatClass.Instance.PullDistance))
+            else if (ExtraUtilsSettings.Instance.movementEnabled && Me.CurrentTarget != null && !Me.CurrentTarget.IsDead && (!Me.CurrentTarget.InLineOfSpellSight || Me.CurrentTarget.Distance - Me.CurrentTarget.CombatReach - 1 > DemonologyWarlockSettings.Instance.PullDistance))
             {
-                movement.KingHealMove(Me.CurrentTarget, DemonologyWarlocCombatClass.Instance.PullDistance);
+                movement.KingHealMove(Me.CurrentTarget, DemonologyWarlockSettings.Instance.PullDistance);
             }
             
             return false;
@@ -703,12 +685,12 @@ namespace KingWoW
 
                 if (extra.IsTargetBoss())
                 {
-                    if (utils.CanCast(DARK_SOUL) && DemonologyWarlocCombatClass.Instance.CDUseDarkSoul == DemonologyWarlocCombatClass.CDUseType.BOSS)
+                    if (utils.CanCast(DARK_SOUL) && DemonologyWarlockSettings.Instance.CDUseDarkSoul == DemonologyWarlockSettings.CDUseType.BOSS)
                     {
                         utils.LogActivity(DARK_SOUL);
                         return utils.Cast(DARK_SOUL);
                     }
-                    else if (utils.CanCast(DARK_SOUL) && DemonologyWarlocCombatClass.Instance.CDUseDarkSoul == DemonologyWarlocCombatClass.CDUseType.CONDITION)
+                    else if (utils.CanCast(DARK_SOUL) && DemonologyWarlockSettings.Instance.CDUseDarkSoul == DemonologyWarlockSettings.CDUseType.CONDITION)
                     {
                         if (utils.GetAuraStack(Me, DARK_SOUL, true) == 2)
                         {
@@ -720,12 +702,12 @@ namespace KingWoW
                             utils.LogActivity(DARK_SOUL);
                             return utils.Cast(DARK_SOUL);
                         }
-                        else if (Me.CurrentTarget.HealthPercent < DemonologyWarlocCombatClass.Instance.Phase1KillBossHP && CurrentDemonicFury>400)
+                        else if (Me.CurrentTarget.HealthPercent < DemonologyWarlockSettings.Instance.Phase1KillBossHP && CurrentDemonicFury>400)
                         {
                             utils.LogActivity(DARK_SOUL);
                             return utils.Cast(DARK_SOUL);
                         }
-                        else if (Me.CurrentTarget.HealthPercent < DemonologyWarlocCombatClass.Instance.Phase2KillBossHP)
+                        else if (Me.CurrentTarget.HealthPercent < DemonologyWarlockSettings.Instance.Phase2KillBossHP)
                         {
                             utils.LogActivity(DARK_SOUL);
                             return utils.Cast(DARK_SOUL);
@@ -755,16 +737,16 @@ namespace KingWoW
 
         private bool Multidot()
         {
-            if (DemonologyWarlocCombatClass.Instance.MultidotEnabled)
+            if (DemonologyWarlockSettings.Instance.MultidotEnabled)
             {
-                int enemyNumber = utils.AllAttaccableEnemyMobsInRangeTargettingMyParty(40f, DemonologyWarlocCombatClass.Instance.MultidotAvoidCC).Count();
-                if (enemyNumber >= DemonologyWarlocCombatClass.Instance.MultidotEnemyNumberMin)
+                int enemyNumber = utils.AllAttaccableEnemyMobsInRangeTargettingMyParty(40f, DemonologyWarlockSettings.Instance.MultidotAvoidCC).Count();
+                if (enemyNumber >= DemonologyWarlockSettings.Instance.MultidotEnemyNumberMin)
                 {
                     WoWUnit TargetForMultidot = null;
                     //apply  Nether Tempest and always refresh it right before the last tick;
-                    if (utils.CanCast(NETHER_TEMPEST) && utils.AllEnemyMobsHasMyAura(NETHER_TEMPEST).Count() < DemonologyWarlocCombatClass.Instance.MultidotEnemyNumberMax)
+                    if (utils.CanCast(NETHER_TEMPEST) && utils.AllEnemyMobsHasMyAura(NETHER_TEMPEST).Count() < DemonologyWarlockSettings.Instance.MultidotEnemyNumberMax)
                     {
-                        TargetForMultidot = utils.NextApplyAuraTarget(NETHER_TEMPEST, 40, 1000, DemonologyWarlocCombatClass.Instance.MultidotAvoidCC, DemonologyWarlocCombatClass.Instance.AvoidDOTPlayers);
+                        TargetForMultidot = utils.NextApplyAuraTarget(NETHER_TEMPEST, 40, 1000, DemonologyWarlockSettings.Instance.MultidotAvoidCC, DemonologyWarlockSettings.Instance.AvoidDOTPlayers);
                         if (TargetForMultidot != null)
                         {
                             utils.LogActivity("   MULTIDOT   " + NETHER_TEMPEST, TargetForMultidot.Name);
@@ -775,7 +757,7 @@ namespace KingWoW
                     //apply  Living Bomb and refresh it right before or right after the last tick (the expiring Living Bomb will explode in both cases);
                     if (utils.CanCast(LIVING_BOMB) && utils.AllEnemyMobsHasMyAura(LIVING_BOMB).Count() < 3)
                     {
-                        TargetForMultidot = utils.NextApplyAuraTarget(LIVING_BOMB, 40, 1000, DemonologyWarlocCombatClass.Instance.MultidotAvoidCC, DemonologyWarlocCombatClass.Instance.AvoidDOTPlayers);
+                        TargetForMultidot = utils.NextApplyAuraTarget(LIVING_BOMB, 40, 1000, DemonologyWarlockSettings.Instance.MultidotAvoidCC, DemonologyWarlockSettings.Instance.AvoidDOTPlayers);
                         if (TargetForMultidot != null)
                         {
                             utils.LogActivity("   MULTIDOT   " + LIVING_BOMB, TargetForMultidot.Name);
