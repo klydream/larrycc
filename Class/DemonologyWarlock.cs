@@ -43,6 +43,9 @@ namespace KingWoW
         private string BaseBot = "unknown";
         private DateTime nextTimeRuneOfPowerAllowed;
         private TalentManager talents = null;
+        
+        private WoWUnit ShadowfuryCandidateTarget = null;
+        private WoWUnit blizzardCandidateTarget = null;
 
         private const string DEBUG_LABEL = "DEBUG";
         private const string TRACE_LABEL = "TRACE";
@@ -91,7 +94,7 @@ namespace KingWoW
         //END OF SPELLS AND AURAS ==============================
 
         //TALENTS
-        private const string PRESENCE_OF_MIND = "Presence of Mind";
+        private const string ArchimondesDarkness = "ArchimondesDarkness";
         private const string TOUCH_OF_CHAOS = "Touch of Chaos";
         private const string LIFE_TAP = "Life Tap";
         private const string BURNING_RUSH = "Burning Rush";
@@ -539,9 +542,20 @@ namespace KingWoW
                 {
                     Me.SetFacing(target);
                 }
+                
+                if (utils.CanCast("Grimoire: Infernal") && utils.isAuraActive(DARK_SOUL) && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count() >= 9)
+                {
+                    utils.LogActivity("Grimoire: Infernal");
+                    return utils.Cast("Grimoire: Infernal");
+                }
+                else if (utils.CanCast("Grimoire: Doomguard") && utils.isAuraActive(DARK_SOUL))
+                {
+                    utils.LogActivity("Grimoire: Doomguard");
+                    return utils.Cast("Grimoire: Doomguard");
+                }
 
                 //apply dot
-                if (utils.MyAuraTimeLeft(CORRUPTION, target) < 3500 && !Me.METAMORPHOSIS)
+                if (utils.MyAuraTimeLeft(CORRUPTION, target) < 3500 && !utils.isAuraActive(METAMORPHOSIS))
                 {
                     utils.LogActivity("CORRUPTION", target.Name);
                     return utils.Cast(CORRUPTION, target);
@@ -562,11 +576,11 @@ namespace KingWoW
                 //}
 
                 //apply  Living Bomb and refresh it right before or right after the last tick (the expiring Living Bomb will explode in both cases);
-                if (utils.CanCast(LIVING_BOMB, target) && (utils.MyAuraTimeLeft(LIVING_BOMB, target) < 1500) && !(target.IsPlayer && DemonologyWarlockSettings.Instance.AvoidDOTPlayers))
-                {
-                    utils.LogActivity(LIVING_BOMB, target.Name);
-                    return utils.Cast(LIVING_BOMB, target);
-                }
+                //if (utils.CanCast(LIVING_BOMB, target) && (utils.MyAuraTimeLeft(LIVING_BOMB, target) < 1500) && !(target.IsPlayer && DemonologyWarlockSettings.Instance.AvoidDOTPlayers))
+                //{
+                //    utils.LogActivity(LIVING_BOMB, target.Name);
+                //    return utils.Cast(LIVING_BOMB, target);
+                //}
 
                 //+++++++++++++++++++++++++AOE rotation start+++++++++++++++++++++++++++++++//
                 if (DemonologyWarlockSettings.Instance.UseFlameStrike && utils.CanCast(FLAMESTRIKE) && !FrostMageSettings.Instance.AvoidAOE && target.Distance <= 40 && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count() >= DemonologyWarlockSettings.Instance.AOECount)
@@ -598,8 +612,7 @@ namespace KingWoW
                 Multidot(); 
 
                 //Cast  SHADOW_BOLT as a filler spell.
-                if (!Me.IsMoving && utils.CanCast(SHADOW_BOLT, target) && !utils.isAuraActive(PRESENCE_OF_MIND) && !utils.CanCast(Hand_of_Guldan) 
-                    && !(utils.isAuraActive(PYROBLAST_PROC) && utils.isAuraActive(HEATING_UP)) && !(utils.isAuraActive(HEATING_UP) && utils.CanCast(INFERNO_BLAST)))
+                if (!Me.IsMoving && utils.CanCast(SHADOW_BOLT, target))
                 {
                     utils.LogActivity(SHADOW_BOLT, target.Name);
                     return utils.Cast(SHADOW_BOLT, target);
@@ -613,7 +626,7 @@ namespace KingWoW
                     utils.Cast(BURNING_RUSH);
                 }
                 //TOUCH_OF_CHAOS
-                if (Me.IsMoving && SpellManager.HasSpell(TOUCH_OF_CHAOS) && !utils.isAuraActive(PRESENCE_OF_MIND))
+                if (Me.IsMoving && SpellManager.HasSpell(TOUCH_OF_CHAOS) && !utils.isAuraActive(METAMORPHOSIS))
                 {
                     utils.LogActivity(TOUCH_OF_CHAOS, target.Name);
                     return utils.Cast(TOUCH_OF_CHAOS, target);
@@ -649,7 +662,7 @@ namespace KingWoW
                             utils.LogActivity(DARK_SOUL);
                             return utils.Cast(DARK_SOUL);
                         }
-                        else if (!HasTalent(ArchimondesDarkness))
+                        else if (!HasTalent(WarlockTalents.ArchimondesDarkness))
                         {
                             utils.LogActivity(DARK_SOUL);
                             return utils.Cast(DARK_SOUL);
@@ -669,17 +682,6 @@ namespace KingWoW
                             utils.LogActivity(DARK_SOUL);
                             return utils.Cast(DARK_SOUL);
                         }
-                    }
-                    
-                    if (utils.CanCast("Grimoire: Infernal") && utils.isAuraActive(DARK_SOUL) && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count() >= 9)
-                    {
-                        utils.LogActivity("Grimoire: Infernal");
-                        return utils.Cast("Grimoire: Infernal");
-                    }
-                    else if (utils.CanCast("Grimoire: Doomguard") && && utils.isAuraActive(DARK_SOUL))
-                    {
-                        utils.LogActivity("Grimoire: Doomguard");
-                        return utils.Cast("Grimoire: Doomguard");
                     }
                     
                 }
@@ -707,15 +709,15 @@ namespace KingWoW
                     }
 
                     //apply  Living Bomb and refresh it right before or right after the last tick (the expiring Living Bomb will explode in both cases);
-                    if (utils.CanCast(LIVING_BOMB) && utils.AllEnemyMobsHasMyAura(LIVING_BOMB).Count() < 3)
-                    {
-                        TargetForMultidot = utils.NextApplyAuraTarget(LIVING_BOMB, 40, 1000, DemonologyWarlockSettings.Instance.MultidotAvoidCC, DemonologyWarlockSettings.Instance.AvoidDOTPlayers);
-                        if (TargetForMultidot != null)
-                        {
-                            utils.LogActivity("   MULTIDOT   " + LIVING_BOMB, TargetForMultidot.Name);
-                            return utils.Cast(LIVING_BOMB, TargetForMultidot);
-                        }
-                    }
+                    //if (utils.CanCast(LIVING_BOMB) && utils.AllEnemyMobsHasMyAura(LIVING_BOMB).Count() < 3)
+                    //{
+                    //    TargetForMultidot = utils.NextApplyAuraTarget(LIVING_BOMB, 40, 1000, DemonologyWarlockSettings.Instance.MultidotAvoidCC, DemonologyWarlockSettings.Instance.AvoidDOTPlayers);
+                    //    if (TargetForMultidot != null)
+                    //    {
+                    //        utils.LogActivity("   MULTIDOT   " + LIVING_BOMB, TargetForMultidot.Name);
+                    //        return utils.Cast(LIVING_BOMB, TargetForMultidot);
+                    //    }
+                    //}
 
                 }
             }
