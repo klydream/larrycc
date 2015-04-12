@@ -584,15 +584,15 @@ namespace KingWoW
                     utils.LogActivity(METAMORPHOSIS);
                     return utils.Cast(METAMORPHOSIS);
                 }
-                
+                //CurrentDemonicFury<(800-cooldown.dark_soul.remains*(10%spell_haste))
 if(utils.isAuraActive(METAMORPHOSIS)
 && ((CurrentDemonicFury<650 && !utils.CanCast(DARK_SOUL)) || CurrentDemonicFury<450)
 && !utils.isAuraActive(DARK_SOUL)
-&& (!utils.isAuraActive(BLOOD_PACT) && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL) || CurrentDemonicFury<(800-cooldown.dark_soul.remains*(10%spell_haste)))
+&& ((!utils.isAuraActive(BLOOD_PACT) && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL)) || (utils.GetSpellCooldown(DARK_SOUL).Seconds <= 20 && CurrentDemonicFury<300))
 && Me.CurrentTarget.HealthPercent > DemonologyWarlockSettings.Instance.Phase2KillBossHP)
 
 //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges>0&dot.shadowflame.remains<action.hand_of_guldan.travel_time+action.shadow_bolt.cast_time&((demonic_fury<100&buff.dark_soul.remains>10)|time<15)
-//actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges=3&(!buff.dark_soul.remains>gcd|action.metamorphosis.cooldown<gcd)
+if(utils.isAuraActive(METAMORPHOSIS) && action.hand_of_guldan.charges=3 && (!buff.dark_soul.remains>gcd|action.metamorphosis.cooldown<gcd))
 
                 if (CurrentDemonicFury<40 && utils.isAuraActive(METAMORPHOSIS))
                 {
