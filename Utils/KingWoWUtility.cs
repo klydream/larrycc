@@ -878,6 +878,15 @@ namespace KingWoW
         {
             return SpellManager.Cast(spellid, target);
         }
+        
+        //string
+        public int GetCharges(string spell)
+        {
+            SpellFindResults sfr;
+            if (SpellManager.FindSpell(spell, out sfr))
+                 return Lua.GetReturnVal<int>("return GetSpellCharges(" + (sfr.Override ?? sfr.Original).Id.ToString() + ")", 0);
+            return 0;
+        }
 
         //string
         public TimeSpan GetSpellCooldown(string spell)

@@ -79,17 +79,13 @@ namespace KingWoW
         private const string DARK_INTENT = "Dark Intent";
         private const string DARK_SOUL = "Dark Soul: Knowledge";
         private const string FROZEN_ORB = "Frozen Orb";
-        private const string DEEP_FREEZE = "Deep Freeze";
         private const string CONJURE_REFRESHMENT_TABLE = "Conjure Refreshment Table";
-        private const string BRAIN_FREEZE = "Brain Freeze";
         private const string MAGE_ARMOR = "Mage Armor";
         private const string TIME_WARP = "Time Warp";
         private const string ALTER_TIME = "Alter Time";
 
-        private const string BRILLIANT_MANA_GEM = "Brilliant Mana Gem";
-        private const string MANA_GEM = "Brilliant Mana Gem";
+        private const string CHAOS_WAVE = "Chaos Wave";
 
-        private const string FREEZE = "Freeze";
         //END OF SPELLS AND AURAS ==============================
 
         //TALENTS
@@ -574,7 +570,7 @@ namespace KingWoW
                     return utils.Cast("Grimoire: Doomguard");
                 }
                 
-                if (CurrentDemonicFury>=400)
+                if (utils.CanCast(METAMORPHOSIS) && CurrentDemonicFury>=400 && !utils.isAuraActive(METAMORPHOSIS))
                 {
                     utils.LogActivity(METAMORPHOSIS);
                     return utils.Cast(METAMORPHOSIS);
@@ -587,26 +583,33 @@ namespace KingWoW
                     return true;
                 }
                 
-                if (utils.isAuraActive(MOLTEN_CORE) && utils.isAuraActive(METAMORPHOSIS))
+                //buff.dark_soul.up&active_enemies>=2|(charges=3|set_bonus.tier17_4pc=0&charges=2)
+                if (utils.CanCast(CHAOS_WAVE, target) && CurrentDemonicFury>=80 && utils.isAuraActive(METAMORPHOSIS) && (utils.isAuraActive(DARK_SOUL) || utils.GetCharges(CHAOS_WAVE) == 3))
+                {
+                    utils.LogActivity(CHAOS_WAVE, target.Name);
+                    return utils.Cast(CHAOS_WAVE, target);
+                }
+                
+                if (utils.CanCast(SOUL_FIRE, target) && CurrentDemonicFury>=80 && utils.isAuraActive(MOLTEN_CORE) && utils.isAuraActive(METAMORPHOSIS))
                 {
                     utils.LogActivity(SOUL_FIRE, target.Name);
                     return utils.Cast(SOUL_FIRE, target);
                 }
                 
-                if (!utils.isAuraActive(MOLTEN_CORE) && utils.isAuraActive(METAMORPHOSIS))
+                if (utils.CanCast(TOUCH_OF_CHAOS, target) && CurrentDemonicFury>=40 && !utils.isAuraActive(MOLTEN_CORE) && utils.isAuraActive(METAMORPHOSIS))
                 {
                     utils.LogActivity(TOUCH_OF_CHAOS, target.Name);
                     return utils.Cast(TOUCH_OF_CHAOS, target);
                 }
                 
                 //apply dot
-                if (utils.MyAuraTimeLeft(CORRUPTION, target) < 3500 && !utils.isAuraActive(METAMORPHOSIS))
+                if (utils.CanCast(CORRUPTION, target) && utils.MyAuraTimeLeft(CORRUPTION, target) < 3500 && !utils.isAuraActive(METAMORPHOSIS))
                 {
                     utils.LogActivity("CORRUPTION", target.Name);
                     return utils.Cast(CORRUPTION, target);
                 }
                 
-                if (utils.MyAuraTimeLeft(DOOM, target) < 3500 && utils.isAuraActive(METAMORPHOSIS))
+                if (utils.CanCast(DOOM, target) && utils.MyAuraTimeLeft(DOOM, target) < 3500 && utils.isAuraActive(METAMORPHOSIS))
                 {
                     utils.LogActivity("DOOM", target.Name);
                     return utils.Cast(DOOM, target);
@@ -877,5 +880,6 @@ namespace KingWoW
             //2 seconds wait to avoid popping 2 consecutive vampiric touch
             nextTimeVampiricTouchAllowed = DateTime.Now + new TimeSpan(0, 0, 0, 0, 2500);
         }
+        
     }
 }
