@@ -60,7 +60,6 @@ namespace KingWoW
         private const string FIRE_BLAST = "Fire Blast";
         private const string ROCKET_JUMP = "Rocket Jump";
         private const string COUNTERSPELL = "Counterspell";
-        private const string SUMMON_WATER_ELEMENTAL = "Summon Water Elemental";
         private const string FROSTBOLT = "Frostbolt";
         private const string POLYMORPH = "Polymorph";
         private const string ARCANE_EXPLOSION = "Arcane Explosion";
@@ -94,7 +93,7 @@ namespace KingWoW
         //END OF SPELLS AND AURAS ==============================
 
         //TALENTS
-        private const string ArchimondesDarkness = "ArchimondesDarkness";
+        private const string ARCHIMONDESDARKNESS = "ArchimondesDarkness";
         private const string TOUCH_OF_CHAOS = "Touch of Chaos";
         private const string LIFE_TAP = "Life Tap";
         private const string BURNING_RUSH = "Burning Rush";
@@ -110,12 +109,18 @@ namespace KingWoW
         private const string RUNE_OF_POWER = "Rune of Power";
 
         private const string METAMORPHOSIS = "Metamorphosis";
+        private const string MOLTEN_CORE = "Molten Core";
+        private const string SOUL_FIRE = "Soul Fire";
+        private const string DOOM = "Doom";
         private const string CORRUPTION = "Corruption";
         private const string PYROBLAST_PROC = "Pyroblast!";
         private const string INFERNO_BLAST = "Inferno Blast";
         private const string SHADOW_BOLT = "Shadow Bolt";
-        private const string SHADOWFURY = "Shadowfury";
-        private const string DARKFLIGHT = "Darkflight";
+        private const string SHADOW_FURY = "SHADOW_FURY";
+        private const string DARK_FLIGHT = "DARK_FLIGHT";
+        private const string GRIMOIRE_OF_SACRIFICE = "GrimoireOfSacrifice";
+        
+        private DateTime nextTimeVampiricTouchAllowed;
          
 
         //END TALENTS
@@ -208,6 +213,7 @@ namespace KingWoW
             BaseBot = "unknown";
             nextTimeRuneOfPowerAllowed = DateTime.Now;
             talents = new TalentManager();
+            nextTimeVampiricTouchAllowed = DateTime.Now;
 
         }
 
@@ -398,6 +404,13 @@ namespace KingWoW
                 
             GetBestPet();
             //HEALTH STONE
+            if (HasTalent(WarlockTalents.GrimoireOfSacrifice) && utils.CanCast(GRIMOIRE_OF_SACRIFICE))
+            {
+                utils.LogActivity(GRIMOIRE_OF_SACRIFICE);
+                return utils.Cast(GRIMOIRE_OF_SACRIFICE);
+            }
+            
+            //HEALTH STONE
             if (!Me.Combat && !HaveHealthStone && Me.Level >= 10 && utils.CanCast(CREATE_HEALTHSTONE) && !Me.IsMoving)
             {
                 utils.LogActivity(CREATE_HEALTHSTONE);
@@ -496,13 +509,13 @@ namespace KingWoW
         private bool Defensivececk()
         {
 
-            if (DemonologyWarlockSettings.Instance.UseShadowfury && Me.Combat && (utils.AllAttaccableEnemyMobsInRange(12).Count() >= 1) && utils.CanCast(SHADOWFURY))
+            if (DemonologyWarlockSettings.Instance.UseShadowfury && Me.Combat && (utils.AllAttaccableEnemyMobsInRange(12).Count() >= 1) && utils.CanCast(SHADOW_FURY))
             {
                 ShadowfuryCandidateTarget = utils.EnemyInRangeWithMobsAround(35, 10, DemonologyWarlockSettings.Instance.ShadowfuryAOECount);
                 if (ShadowfuryCandidateTarget != null)
                 {
-                    utils.LogActivity(SHADOWFURY, ShadowfuryCandidateTarget.Name);
-                    utils.Cast(SHADOWFURY);
+                    utils.LogActivity(SHADOW_FURY, ShadowfuryCandidateTarget.Name);
+                    utils.Cast(SHADOW_FURY);
                     return SpellManager.ClickRemoteLocation(ShadowfuryCandidateTarget.Location);
                 }
             }
@@ -560,12 +573,43 @@ namespace KingWoW
                     utils.LogActivity("Grimoire: Doomguard");
                     return utils.Cast("Grimoire: Doomguard");
                 }
-
+                
+                if (CurrentDemonicFury>=400)
+                {
+                    utils.LogActivity(METAMORPHOSIS);
+                    return utils.Cast(METAMORPHOSIS);
+                }
+                
+                if (CurrentDemonicFury<40 && utils.isAuraActive(METAMORPHOSIS))
+                {
+                    utils.LogActivity("Cancel Metamorphosis");
+                    Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
+                    return true;
+                }
+                
+                if (utils.isAuraActive(MOLTEN_CORE) && utils.isAuraActive(METAMORPHOSIS))
+                {
+                    utils.LogActivity(SOUL_FIRE, target.Name);
+                    return utils.Cast(SOUL_FIRE, target);
+                }
+                
+                if (!utils.isAuraActive(MOLTEN_CORE) && utils.isAuraActive(METAMORPHOSIS))
+                {
+                    utils.LogActivity(TOUCH_OF_CHAOS, target.Name);
+                    return utils.Cast(TOUCH_OF_CHAOS, target);
+                }
+                
                 //apply dot
                 if (utils.MyAuraTimeLeft(CORRUPTION, target) < 3500 && !utils.isAuraActive(METAMORPHOSIS))
                 {
                     utils.LogActivity("CORRUPTION", target.Name);
                     return utils.Cast(CORRUPTION, target);
+                }
+                
+                if (utils.MyAuraTimeLeft(DOOM, target) < 3500 && utils.isAuraActive(METAMORPHOSIS))
+                {
+                    utils.LogActivity("DOOM", target.Name);
+                    return utils.Cast(DOOM, target);
                 }
                 //if (!Me.IsMoving && nextTimeVampiricTouchAllowed <= DateTime.Now && utils.MyAuraTimeLeft(VAMPIRIC_TOUCH, target) < 4500
                 //    && !(talents.IsSelected(9) && utils.MyAuraTimeLeft(DEVOURING_PLAGUE, target) > 0) && !(Me.IsChanneling && Me.ChanneledCastingSpellId == MIND_FLY_INSANITY))
@@ -633,7 +677,7 @@ namespace KingWoW
                     utils.Cast(BURNING_RUSH);
                 }
                 //TOUCH_OF_CHAOS
-                if (Me.IsMoving && SpellManager.HasSpell(TOUCH_OF_CHAOS) && !utils.isAuraActive(METAMORPHOSIS))
+                if (Me.IsMoving && SpellManager.HasSpell(TOUCH_OF_CHAOS) && utils.isAuraActive(METAMORPHOSIS))
                 {
                     utils.LogActivity(TOUCH_OF_CHAOS, target.Name);
                     return utils.Cast(TOUCH_OF_CHAOS, target);
@@ -695,10 +739,10 @@ namespace KingWoW
             }
             else
             {
-            	if (utils.CanCast(DARKFLIGHT))
+            	if (utils.CanCast(DARK_FLIGHT))
               {
-                  utils.LogActivity(DARKFLIGHT);
-                  return utils.Cast(DARKFLIGHT);
+                  utils.LogActivity(DARK_FLIGHT);
+                  return utils.Cast(DARK_FLIGHT);
               }
             }
             return false;
@@ -754,7 +798,7 @@ namespace KingWoW
         
             HowlOfTerror,
             MortalCoil,
-            Shadowfury,
+            SHADOW_FURY,
         
             SoulLink,
             SacrificialPact,
@@ -767,7 +811,7 @@ namespace KingWoW
             GrimoireOfSupremacy,
             GrimoireOfService,
             GrimoireOfSacrifice,
-            GrimoireOfSynergy = GrimoireOfSacrifice,
+            GRIMOIRE_OF_SYNERGY = GrimoireOfSacrifice,
         
             ArchimondesDarkness,
             KiljaedensCunning,
@@ -792,7 +836,7 @@ namespace KingWoW
         /// <returns>WarlockPet to use</returns>
         public bool GetBestPet()
         {
-            if (Me.GotAlivePet)
+            if (Me.GotAlivePet || utils.isAuraActive(GRIMOIRE_OF_SACRIFICE))
                 return false;
 
             WarlockPet bestPet = (WarlockPet)DemonologyWarlockSettings.Instance.PetToSummon;
@@ -827,5 +871,11 @@ namespace KingWoW
         }
        
         #endregion
+        
+        public void SetNextTimeVampiricTouch()
+        {
+            //2 seconds wait to avoid popping 2 consecutive vampiric touch
+            nextTimeVampiricTouchAllowed = DateTime.Now + new TimeSpan(0, 0, 0, 0, 2500);
+        }
     }
 }
