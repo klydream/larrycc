@@ -116,6 +116,10 @@ namespace KingWoW
         private const string DARK_FLIGHT = "DARK_FLIGHT";
         private const string GRIMOIRE_OF_SACRIFICE = "GrimoireOfSacrifice";
         
+        private const string BLOOD_PACT = "Blood Pact";
+        private const string ARCHMAGES_GREATER_INCANDESCENCE = "Item - Attacks Proc Archmage's Greater Incandescence";
+        private const string HOWLING_SOUL = "Item - Attacks Proc Critical Strike [Howling Soul]";
+        
         private DateTime nextTimeVampiricTouchAllowed;
          
 
@@ -581,7 +585,12 @@ namespace KingWoW
                     return utils.Cast(METAMORPHOSIS);
                 }
                 
-//actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&((demonic_fury<650&!glyph.dark_soul.enabled)|demonic_fury<450)&buff.dark_soul.down&(trinket.stacking_proc.multistrike.down&trinket.proc.any.down|demonic_fury<(800-cooldown.dark_soul.remains*(10%spell_haste)))&target.time_to_die>20
+if(utils.isAuraActive(METAMORPHOSIS)
+&& ((CurrentDemonicFury<650 && !utils.CanCast(DARK_SOUL)) || CurrentDemonicFury<450)
+&& !utils.isAuraActive(DARK_SOUL)
+&& (!utils.isAuraActive(BLOOD_PACT) && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL) || CurrentDemonicFury<(800-cooldown.dark_soul.remains*(10%spell_haste)))
+&& Me.CurrentTarget.HealthPercent > DemonologyWarlockSettings.Instance.Phase2KillBossHP)
+
 //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges>0&dot.shadowflame.remains<action.hand_of_guldan.travel_time+action.shadow_bolt.cast_time&((demonic_fury<100&buff.dark_soul.remains>10)|time<15)
 //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges=3&(!buff.dark_soul.remains>gcd|action.metamorphosis.cooldown<gcd)
 
