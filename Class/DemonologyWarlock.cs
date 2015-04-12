@@ -534,6 +534,11 @@ namespace KingWoW
             Defensivececk();
             UseCD();
             ProcWork();
+            
+            //foreach (var a in Me.GetAllAuras())
+            //{
+            //    utils.LogActivity(a.Name+"1321123123123s");
+            //}
             //Multidot();
 
             WoWUnit target = null;
@@ -576,6 +581,10 @@ namespace KingWoW
                     return utils.Cast(METAMORPHOSIS);
                 }
                 
+//actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&((demonic_fury<650&!glyph.dark_soul.enabled)|demonic_fury<450)&buff.dark_soul.down&(trinket.stacking_proc.multistrike.down&trinket.proc.any.down|demonic_fury<(800-cooldown.dark_soul.remains*(10%spell_haste)))&target.time_to_die>20
+//actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges>0&dot.shadowflame.remains<action.hand_of_guldan.travel_time+action.shadow_bolt.cast_time&((demonic_fury<100&buff.dark_soul.remains>10)|time<15)
+//actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges=3&(!buff.dark_soul.remains>gcd|action.metamorphosis.cooldown<gcd)
+
                 if (CurrentDemonicFury<40 && utils.isAuraActive(METAMORPHOSIS))
                 {
                     utils.LogActivity("Cancel Metamorphosis");
@@ -760,13 +769,13 @@ namespace KingWoW
                 {
                     WoWUnit TargetForMultidot = null;
                     //apply  Nether Tempest and always refresh it right before the last tick;
-                    if (utils.CanCast(NETHER_TEMPEST) && utils.AllEnemyMobsHasMyAura(NETHER_TEMPEST).Count() < DemonologyWarlockSettings.Instance.MultidotEnemyNumberMax)
+                    if (utils.CanCast(CORRUPTION) && utils.AllEnemyMobsHasMyAura(CORRUPTION).Count() < DemonologyWarlockSettings.Instance.MultidotEnemyNumberMax)
                     {
-                        TargetForMultidot = utils.NextApplyAuraTarget(NETHER_TEMPEST, 40, 1000, DemonologyWarlockSettings.Instance.MultidotAvoidCC, DemonologyWarlockSettings.Instance.AvoidDOTPlayers);
+                        TargetForMultidot = utils.NextApplyAuraTarget(CORRUPTION, 40, 1000, DemonologyWarlockSettings.Instance.MultidotAvoidCC, DemonologyWarlockSettings.Instance.AvoidDOTPlayers);
                         if (TargetForMultidot != null)
                         {
                             utils.LogActivity("   MULTIDOT   " + NETHER_TEMPEST, TargetForMultidot.Name);
-                            return utils.Cast(NETHER_TEMPEST, TargetForMultidot);
+                            return utils.Cast(CORRUPTION, TargetForMultidot);
                         }
                     }
 

@@ -1,0 +1,465 @@
+
+[03:30:04.164 N] 04:153 my HP% 100    MANA% 100     TANK CHANGED: Warlock
+[03:30:04.261 N] 04:261 my HP% 100    MANA% 100     Create Healthstone
+[03:30:07.341 N] 07:341 my HP% 100    MANA% 95.13     Create Healthstone
+[03:30:21.939 N] 21:939 my HP% 100    MANA% 94.62     Hand of Gul'dan: 地下城训练假人
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Track Pets1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Warlock1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Dark Intent1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Greater Draenic Intellect Flask1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Garrison Ability Override1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Update Resources on Apply1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Logging Relearn Master1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Garrison Owner1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Blood Pact1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Demonic Fury1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Wild Imps1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Doom1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Archimonde's Darkness1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Soul Leech1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Demonic Servitude1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Glyph of Eternal Resolve1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Glyph of Siphon Life1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:21.944 N] 21:944 my HP% 100    MANA% 94.62     Mark of Bleeding Hollow1321123123123
+[03:30:21.945 N] 21:944 my HP% 100    MANA% 94.62     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:21.945 N] 21:945 my HP% 100    MANA% 94.62     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:21.945 N] 21:945 my HP% 100    MANA% 94.62     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:21.945 N] 21:945 my HP% 100    MANA% 94.62     Empowered Demons1321123123123
+[03:30:21.945 N] 21:945 my HP% 100    MANA% 94.62     Soul Link1321123123123
+[03:30:21.945 N] 21:945 my HP% 100    MANA% 94.62     Override Command Demon1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Track Pets1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Warlock1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Dark Intent1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Greater Draenic Intellect Flask1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Garrison Ability Override1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Update Resources on Apply1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Logging Relearn Master1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Garrison Owner1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Blood Pact1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Demonic Fury1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Wild Imps1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Doom1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Archimonde's Darkness1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Soul Leech1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Demonic Servitude1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Glyph of Eternal Resolve1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Glyph of Siphon Life1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Mark of Bleeding Hollow1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Empowered Demons1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Soul Link1321123123123
+[03:30:22.044 N] 22:044 my HP% 100    MANA% 94.85     Override Command Demon1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Track Pets1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Warlock1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Dark Intent1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Greater Draenic Intellect Flask1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Garrison Ability Override1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Update Resources on Apply1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Logging Relearn Master1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Garrison Owner1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Blood Pact1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Demonic Fury1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Wild Imps1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Doom1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Archimonde's Darkness1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Soul Leech1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Demonic Servitude1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Glyph of Eternal Resolve1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Glyph of Siphon Life1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Mark of Bleeding Hollow1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Empowered Demons1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Soul Link1321123123123
+[03:30:22.098 N] 22:098 my HP% 100    MANA% 89.78     Override Command Demon1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Track Pets1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Warlock1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Dark Intent1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Greater Draenic Intellect Flask1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Garrison Ability Override1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Update Resources on Apply1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Logging Relearn Master1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Garrison Owner1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Blood Pact1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Demonic Fury1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Wild Imps1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Doom1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Archimonde's Darkness1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Soul Leech1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Demonic Servitude1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Glyph of Eternal Resolve1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Glyph of Siphon Life1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Mark of Bleeding Hollow1321123123123
+[03:30:22.140 N] 22:140 my HP% 100    MANA% 89.91     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:22.141 N] 22:140 my HP% 100    MANA% 89.91     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:22.141 N] 22:141 my HP% 100    MANA% 89.91     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:22.141 N] 22:141 my HP% 100    MANA% 89.91     Empowered Demons1321123123123
+[03:30:22.141 N] 22:141 my HP% 100    MANA% 89.91     Soul Link1321123123123
+[03:30:22.141 N] 22:141 my HP% 100    MANA% 89.91     Override Command Demon1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Track Pets1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Warlock1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Dark Intent1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Greater Draenic Intellect Flask1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Garrison Ability Override1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Update Resources on Apply1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Logging Relearn Master1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Garrison Owner1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Blood Pact1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Demonic Fury1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Wild Imps1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Doom1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Archimonde's Darkness1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Soul Leech1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Demonic Servitude1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Glyph of Eternal Resolve1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Glyph of Siphon Life1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Mark of Bleeding Hollow1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Empowered Demons1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Soul Link1321123123123
+[03:30:22.208 N] 22:208 my HP% 100    MANA% 89.91     Override Command Demon1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Track Pets1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Warlock1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Dark Intent1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Greater Draenic Intellect Flask1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Garrison Ability Override1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Update Resources on Apply1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Logging Relearn Master1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Garrison Owner1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Blood Pact1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Demonic Fury1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Wild Imps1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Doom1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Archimonde's Darkness1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Soul Leech1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Demonic Servitude1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Glyph of Eternal Resolve1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Glyph of Siphon Life1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Mark of Bleeding Hollow1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Empowered Demons1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Soul Link1321123123123
+[03:30:22.267 N] 22:267 my HP% 100    MANA% 90.03     Override Command Demon1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Track Pets1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Warlock1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Dark Intent1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Greater Draenic Intellect Flask1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Garrison Ability Override1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Update Resources on Apply1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Logging Relearn Master1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Garrison Owner1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Blood Pact1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Demonic Fury1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Wild Imps1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Doom1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Archimonde's Darkness1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Soul Leech1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Demonic Servitude1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Glyph of Eternal Resolve1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Glyph of Siphon Life1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Mark of Bleeding Hollow1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Empowered Demons1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Soul Link1321123123123
+[03:30:22.335 N] 22:335 my HP% 100    MANA% 90.03     Override Command Demon1321123123123
+[03:30:22.401 N] 22:401 my HP% 100    MANA% 90.18     Track Pets1321123123123
+[03:30:22.401 N] 22:401 my HP% 100    MANA% 90.18     Warlock1321123123123
+[03:30:22.401 N] 22:401 my HP% 100    MANA% 90.18     Dark Intent1321123123123
+[03:30:22.401 N] 22:401 my HP% 100    MANA% 90.18     Greater Draenic Intellect Flask1321123123123
+[03:30:22.401 N] 22:401 my HP% 100    MANA% 90.18     Garrison Ability Override1321123123123
+[03:30:22.401 N] 22:401 my HP% 100    MANA% 90.18     Update Resources on Apply1321123123123
+[03:30:22.402 N] 22:401 my HP% 100    MANA% 90.18     Logging Relearn Master1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Garrison Owner1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Blood Pact1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Demonic Fury1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Wild Imps1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Doom1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Archimonde's Darkness1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Soul Leech1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Demonic Servitude1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Glyph of Eternal Resolve1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Glyph of Siphon Life1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Mark of Bleeding Hollow1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Empowered Demons1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Soul Link1321123123123
+[03:30:22.402 N] 22:402 my HP% 100    MANA% 90.18     Override Command Demon1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Track Pets1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Warlock1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Dark Intent1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Greater Draenic Intellect Flask1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Garrison Ability Override1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Update Resources on Apply1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Logging Relearn Master1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Garrison Owner1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Blood Pact1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Demonic Fury1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Wild Imps1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Doom1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Archimonde's Darkness1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Soul Leech1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Demonic Servitude1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Glyph of Eternal Resolve1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Glyph of Siphon Life1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Mark of Bleeding Hollow1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Empowered Demons1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Soul Link1321123123123
+[03:30:22.476 N] 22:476 my HP% 100    MANA% 90.18     Override Command Demon1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Track Pets1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Warlock1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Dark Intent1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Greater Draenic Intellect Flask1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Garrison Ability Override1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Update Resources on Apply1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Logging Relearn Master1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Garrison Owner1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Blood Pact1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Demonic Fury1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Wild Imps1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Doom1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Archimonde's Darkness1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Soul Leech1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Demonic Servitude1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Glyph of Eternal Resolve1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Glyph of Siphon Life1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Mark of Bleeding Hollow1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Empowered Demons1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Soul Link1321123123123
+[03:30:22.555 N] 22:555 my HP% 100    MANA% 90.34     Override Command Demon1321123123123
+[03:30:22.614 N] 22:614 my HP% 100    MANA% 90.34     Track Pets1321123123123
+[03:30:22.614 N] 22:614 my HP% 100    MANA% 90.34     Warlock1321123123123
+[03:30:22.614 N] 22:614 my HP% 100    MANA% 90.34     Dark Intent1321123123123
+[03:30:22.614 N] 22:614 my HP% 100    MANA% 90.34     Greater Draenic Intellect Flask1321123123123
+[03:30:22.614 N] 22:614 my HP% 100    MANA% 90.34     Garrison Ability Override1321123123123
+[03:30:22.614 N] 22:614 my HP% 100    MANA% 90.34     Update Resources on Apply1321123123123
+[03:30:22.614 N] 22:614 my HP% 100    MANA% 90.34     Logging Relearn Master1321123123123
+[03:30:22.614 N] 22:614 my HP% 100    MANA% 90.34     Garrison Owner1321123123123
+[03:30:22.614 N] 22:614 my HP% 100    MANA% 90.34     Blood Pact1321123123123
+[03:30:22.614 N] 22:614 my HP% 100    MANA% 90.34     Demonic Fury1321123123123
+[03:30:22.614 N] 22:614 my HP% 100    MANA% 90.34     Wild Imps1321123123123
+[03:30:22.614 N] 22:614 my HP% 100    MANA% 90.34     Doom1321123123123
+[03:30:22.614 N] 22:614 my HP% 100    MANA% 90.34     Archimonde's Darkness1321123123123
+[03:30:22.614 N] 22:614 my HP% 100    MANA% 90.34     Soul Leech1321123123123
+[03:30:22.614 N] 22:614 my HP% 100    MANA% 90.34     Demonic Servitude1321123123123
+[03:30:22.614 N] 22:614 my HP% 100    MANA% 90.34     Glyph of Eternal Resolve1321123123123
+[03:30:22.614 N] 22:614 my HP% 100    MANA% 90.34     Glyph of Siphon Life1321123123123
+[03:30:22.615 N] 22:614 my HP% 100    MANA% 90.34     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:22.615 N] 22:615 my HP% 100    MANA% 90.34     Mark of Bleeding Hollow1321123123123
+[03:30:22.615 N] 22:615 my HP% 100    MANA% 90.34     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:22.615 N] 22:615 my HP% 100    MANA% 90.34     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:22.615 N] 22:615 my HP% 100    MANA% 90.34     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:22.615 N] 22:615 my HP% 100    MANA% 90.34     Empowered Demons1321123123123
+[03:30:22.615 N] 22:615 my HP% 100    MANA% 90.34     Soul Link1321123123123
+[03:30:22.615 N] 22:615 my HP% 100    MANA% 90.34     Override Command Demon1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Track Pets1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Warlock1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Dark Intent1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Greater Draenic Intellect Flask1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Garrison Ability Override1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Update Resources on Apply1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Logging Relearn Master1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Garrison Owner1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Blood Pact1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Demonic Fury1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Wild Imps1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Doom1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Archimonde's Darkness1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Soul Leech1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Demonic Servitude1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Glyph of Eternal Resolve1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Glyph of Siphon Life1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Mark of Bleeding Hollow1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Empowered Demons1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Soul Link1321123123123
+[03:30:22.677 N] 22:677 my HP% 100    MANA% 90.48     Override Command Demon1321123123123
+[03:30:22.742 N] 22:742 my HP% 100    MANA% 90.48     Track Pets1321123123123
+[03:30:22.742 N] 22:742 my HP% 100    MANA% 90.48     Warlock1321123123123
+[03:30:22.742 N] 22:742 my HP% 100    MANA% 90.48     Dark Intent1321123123123
+[03:30:22.742 N] 22:742 my HP% 100    MANA% 90.48     Greater Draenic Intellect Flask1321123123123
+[03:30:22.742 N] 22:742 my HP% 100    MANA% 90.48     Garrison Ability Override1321123123123
+[03:30:22.742 N] 22:742 my HP% 100    MANA% 90.48     Update Resources on Apply1321123123123
+[03:30:22.742 N] 22:742 my HP% 100    MANA% 90.48     Logging Relearn Master1321123123123
+[03:30:22.742 N] 22:742 my HP% 100    MANA% 90.48     Garrison Owner1321123123123
+[03:30:22.742 N] 22:742 my HP% 100    MANA% 90.48     Blood Pact1321123123123
+[03:30:22.745 N] 22:745 my HP% 100    MANA% 90.48     Demonic Fury1321123123123
+[03:30:22.745 N] 22:745 my HP% 100    MANA% 90.48     Wild Imps1321123123123
+[03:30:22.745 N] 22:745 my HP% 100    MANA% 90.48     Doom1321123123123
+[03:30:22.745 N] 22:745 my HP% 100    MANA% 90.48     Archimonde's Darkness1321123123123
+[03:30:22.745 N] 22:745 my HP% 100    MANA% 90.48     Soul Leech1321123123123
+[03:30:22.745 N] 22:745 my HP% 100    MANA% 90.48     Demonic Servitude1321123123123
+[03:30:22.745 N] 22:745 my HP% 100    MANA% 90.48     Glyph of Eternal Resolve1321123123123
+[03:30:22.745 N] 22:745 my HP% 100    MANA% 90.48     Glyph of Siphon Life1321123123123
+[03:30:22.745 N] 22:745 my HP% 100    MANA% 90.48     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:22.745 N] 22:745 my HP% 100    MANA% 90.48     Mark of Bleeding Hollow1321123123123
+[03:30:22.745 N] 22:745 my HP% 100    MANA% 90.48     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:22.745 N] 22:745 my HP% 100    MANA% 90.48     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:22.745 N] 22:745 my HP% 100    MANA% 90.48     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:22.745 N] 22:745 my HP% 100    MANA% 90.48     Empowered Demons1321123123123
+[03:30:22.745 N] 22:745 my HP% 100    MANA% 90.48     Soul Link1321123123123
+[03:30:22.745 N] 22:745 my HP% 100    MANA% 90.48     Override Command Demon1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Track Pets1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Warlock1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Dark Intent1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Greater Draenic Intellect Flask1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Garrison Ability Override1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Update Resources on Apply1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Logging Relearn Master1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Garrison Owner1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Blood Pact1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Demonic Fury1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Wild Imps1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Doom1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Archimonde's Darkness1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Soul Leech1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Demonic Servitude1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Glyph of Eternal Resolve1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Glyph of Siphon Life1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Mark of Bleeding Hollow1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Empowered Demons1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Soul Link1321123123123
+[03:30:22.806 N] 22:806 my HP% 100    MANA% 90.63     Override Command Demon1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Track Pets1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Warlock1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Dark Intent1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Greater Draenic Intellect Flask1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Mark of Bleeding Hollow1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Garrison Ability Override1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Update Resources on Apply1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Logging Relearn Master1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Garrison Owner1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Blood Pact1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Demonic Fury1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Wild Imps1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Doom1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Archimonde's Darkness1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Soul Leech1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Demonic Servitude1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Glyph of Eternal Resolve1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Glyph of Siphon Life1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Mark of Bleeding Hollow1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Empowered Demons1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Soul Link1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Override Command Demon1321123123123
+[03:30:22.906 N] 22:906 my HP% 100    MANA% 90.63     Soul Leech1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Track Pets1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Warlock1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Dark Intent1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Greater Draenic Intellect Flask1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Mark of Bleeding Hollow1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Garrison Ability Override1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Update Resources on Apply1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Logging Relearn Master1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Garrison Owner1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Blood Pact1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Demonic Fury1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Wild Imps1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Doom1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Archimonde's Darkness1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Soul Leech1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Demonic Servitude1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Glyph of Eternal Resolve1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Glyph of Siphon Life1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Mark of Bleeding Hollow1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Empowered Demons1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Soul Link1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Override Command Demon1321123123123
+[03:30:22.953 N] 22:953 my HP% 100    MANA% 90.81     Soul Leech1321123123123
+[03:30:23.009 N] 23:009 my HP% 100    MANA% 90.81     Track Pets1321123123123
+[03:30:23.009 N] 23:009 my HP% 100    MANA% 90.81     Warlock1321123123123
+[03:30:23.009 N] 23:009 my HP% 100    MANA% 90.81     Dark Intent1321123123123
+[03:30:23.009 N] 23:009 my HP% 100    MANA% 90.81     Greater Draenic Intellect Flask1321123123123
+[03:30:23.009 N] 23:009 my HP% 100    MANA% 90.81     Mark of Bleeding Hollow1321123123123
+[03:30:23.010 N] 23:009 my HP% 100    MANA% 90.81     Garrison Ability Override1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Update Resources on Apply1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Logging Relearn Master1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Garrison Owner1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Blood Pact1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Demonic Fury1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Wild Imps1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Doom1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Archimonde's Darkness1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Soul Leech1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Demonic Servitude1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Glyph of Eternal Resolve1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Glyph of Siphon Life1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Mark of Bleeding Hollow1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Empowered Demons1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Soul Link1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Override Command Demon1321123123123
+[03:30:23.010 N] 23:010 my HP% 100    MANA% 90.81     Soul Leech1321123123123
+[03:30:23.090 N] 23:090 my HP% 100    MANA% 90.94     Hand of Gul'dan: 地下城训练假人
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Track Pets1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Warlock1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Dark Intent1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Greater Draenic Intellect Flask1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Mark of Bleeding Hollow1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Garrison Ability Override1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Update Resources on Apply1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Logging Relearn Master1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Garrison Owner1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Blood Pact1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Demonic Fury1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Wild Imps1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Doom1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Archimonde's Darkness1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Soul Leech1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Demonic Servitude1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Glyph of Eternal Resolve1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Glyph of Siphon Life1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Item - Attacks Proc Archmage's Greater Incandescence1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Mark of Bleeding Hollow1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Item - Warlock T17 Demonology 2P Bonus1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Item - Warlock T17 Demonology 4P Bonus1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Empowered Demons1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Soul Link1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Override Command Demon1321123123123
+[03:30:23.095 N] 23:095 my HP% 100    MANA% 90.94     Soul Leech1321123123123
+
