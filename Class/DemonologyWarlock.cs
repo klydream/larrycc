@@ -115,6 +115,7 @@ namespace KingWoW
         private const string SHADOW_FURY = "SHADOW_FURY";
         private const string DARK_FLIGHT = "DARK_FLIGHT";
         private const string GRIMOIRE_OF_SACRIFICE = "GrimoireOfSacrifice";
+        private const string SHADOW_FLAME = "shadowflame";
         
         private const string BLOOD_PACT = "Blood Pact";
         private const string ARCHMAGES_GREATER_INCANDESCENCE = "Item - Attacks Proc Archmage's Greater Incandescence";
@@ -585,16 +586,23 @@ namespace KingWoW
                     return utils.Cast(METAMORPHOSIS);
                 }
                 //CurrentDemonicFury<(800-cooldown.dark_soul.remains*(10%spell_haste))
-if(utils.isAuraActive(METAMORPHOSIS)
-&& ((CurrentDemonicFury<650 && !utils.CanCast(DARK_SOUL)) || CurrentDemonicFury<450)
-&& !utils.isAuraActive(DARK_SOUL)
-&& ((!utils.isAuraActive(BLOOD_PACT) && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL)) || (utils.GetSpellCooldown(DARK_SOUL).Seconds <= 20 && CurrentDemonicFury<300))
-&& Me.CurrentTarget.HealthPercent > DemonologyWarlockSettings.Instance.Phase2KillBossHP)
+                if(utils.isAuraActive(METAMORPHOSIS)
+                  && ((CurrentDemonicFury<650 && !utils.CanCast(DARK_SOUL)) || CurrentDemonicFury<450)
+                  && !utils.isAuraActive(DARK_SOUL)
+                  && ((!utils.isAuraActive(BLOOD_PACT) && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL)) || (utils.GetSpellCooldown(DARK_SOUL).Seconds <= 20 && CurrentDemonicFury<300))
+                  && Me.CurrentTarget.HealthPercent > DemonologyWarlockSettings.Instance.Phase2KillBossHP)
+                {
+                	  utils.LogActivity("Cancel Metamorphosis for next dark soul");
+                    Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
+                    return true;
+                }
 
-//actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges>0&dot.shadowflame.remains<action.hand_of_guldan.travel_time+action.shadow_bolt.cast_time&((demonic_fury<100&buff.dark_soul.remains>10)|time<15)
-if(utils.isAuraActive(METAMORPHOSIS) && action.hand_of_guldan.charges=3 && (!buff.dark_soul.remains>gcd|action.metamorphosis.cooldown<gcd))
-
-                if (CurrentDemonicFury<40 && utils.isAuraActive(METAMORPHOSIS))
+if(	buff.metamorphosis.up
+	&& utils.GetCharges(CHAOS_WAVE)>0
+	&& utils.MyAuraTimeLeft(SHADOW_FLAME, target)<action.hand_of_guldan.travel_time+action.shadow_bolt.cast_time
+	&((CurrentDemonicFury<100 && utils.MyAuraTimeLeft(DARK_SOUL)>10)|time<15))
+                //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges=3&(!buff.dark_soul.remains>gcd|action.metamorphosis.cooldown<gcd)
+                if(utils.isAuraActive(METAMORPHOSIS) && utils.GetCharges(CHAOS_WAVE)==3 && (!buff.dark_soul.remains>gcd || action.metamorphosis.cooldown<gcd))
                 {
                     utils.LogActivity("Cancel Metamorphosis");
                     Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
