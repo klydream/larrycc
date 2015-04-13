@@ -887,6 +887,24 @@ namespace KingWoW
                  return Lua.GetReturnVal<int>("return GetSpellCharges(" + (sfr.Override ?? sfr.Original).Id.ToString() + ")", 0);
             return 0;
         }
+        
+        public TimeSpan GetSpellCastTime(string spell)
+        {
+            SpellFindResults sfr;
+            if (spell != null)
+            {
+                if (SpellManager.FindSpell(spell, out sfr))
+                {
+                  int time = (int)sfr.CastTime;
+                  if (time == 0)
+                      time = spell.BaseDuration;
+                  return TimeSpan.FromMilliseconds(time);
+                }
+                return TimeSpan.Zero;
+            }
+
+            return TimeSpan.Zero;
+        }
 
         //string
         public TimeSpan GetSpellCooldown(string spell)

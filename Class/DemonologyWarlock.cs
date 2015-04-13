@@ -41,7 +41,6 @@ namespace KingWoW
         private WoWUnit lastTank = null;
         private bool SoloBotType = false;
         private string BaseBot = "unknown";
-        private DateTime nextTimeRuneOfPowerAllowed;
         private TalentManager talents = null;
         
         private WoWUnit ShadowfuryCandidateTarget = null;
@@ -121,7 +120,8 @@ namespace KingWoW
         private const string ARCHMAGES_GREATER_INCANDESCENCE = "Item - Attacks Proc Archmage's Greater Incandescence";
         private const string HOWLING_SOUL = "Item - Attacks Proc Critical Strike [Howling Soul]";
         
-        private DateTime nextTimeVampiricTouchAllowed;
+        private DateTime nextTimeCancelMetamorphosis;
+        
          
 
         //END TALENTS
@@ -212,9 +212,8 @@ namespace KingWoW
             lastTank = null; ;
             SoloBotType = false;
             BaseBot = "unknown";
-            nextTimeRuneOfPowerAllowed = DateTime.Now;
             talents = new TalentManager();
-            nextTimeVampiricTouchAllowed = DateTime.Now;
+            nextTimeCancelMetamorphosis = DateTime.Now;
 
         }
 
@@ -290,16 +289,16 @@ namespace KingWoW
                     {
                         movement.KingHealMove(target, DemonologyWarlockSettings.Instance.PullDistance);
                     }
-                    if (utils.CanCast(SHADOW_BOLT, target)/*&& !Me.IsMoving*/)
+                    if (utils.CanCast(SOUL_FIRE, target))
                     {
                         if (!Me.IsMoving && !Me.IsFacing(target))
                         {
                             utils.LogActivity(FACING, target.Name);
                             Me.SetFacing(target);
                         }
-
-                        utils.LogActivity(SHADOW_BOLT, target.Name);
-                        return utils.Cast(SHADOW_BOLT, target);
+                        utils.LogActivity("start combate with SOUL FIRE", target.Name);
+                        SetCancelMetamorphosis();
+                        return utils.Cast(SOUL_FIRE, target);
                     }
                 }
                 return false;
@@ -383,20 +382,9 @@ namespace KingWoW
                 return false;
             }
         }
-
-        public void SetNextTimeRuneOfPower()
-        {
-            //3 seconds wait to avoid popping 2 rune of frost cause has high priority
-            nextTimeRuneOfPowerAllowed = DateTime.Now + new TimeSpan(0, 0, 0, 0, 3000);
-        }
         
         public static bool HaveHealthStone { get { return StyxWoW.Me.BagItems.Any(i => i.Entry == 5512); } }
         
-        public static bool SummonBestPet()
-        {
-            return false;
-        }
-
         private bool Buff()
         {
             
@@ -596,13 +584,18 @@ namespace KingWoW
                     Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
                     return true;
                 }
-
-if(	buff.metamorphosis.up
-	&& utils.GetCharges(CHAOS_WAVE)>0
-	&& utils.MyAuraTimeLeft(SHADOW_FLAME, target)<action.hand_of_guldan.travel_time+action.shadow_bolt.cast_time
-	&((CurrentDemonicFury<100 && utils.MyAuraTimeLeft(DARK_SOUL)>10)|time<15))
+                
+                //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges>0&dot.shadowflame.remains<action.hand_of_guldan.travel_time+action.shadow_bolt.cast_time&((demonic_fury<100&buff.dark_soul.remains>10)|time<15)
+                if(	utils.isAuraActive(METAMORPHOSIS)	&& utils.GetCharges(CHAOS_WAVE)>0
+                	&& utils.MyAuraTimeLeft(SHADOW_FLAME, target)<500+utils.GetSpellCastTime(SHADOW_BOLT)
+                	&& ((CurrentDemonicFury<100 && utils.MyAuraTimeLeft(DARK_SOUL, me)>10000) || nextTimeCancelMetamorphosis <= DateTime.Now))
+                {
+                    utils.LogActivity("Cancel Metamorphosis for start boost");
+                    Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
+                    return true;
+                }
                 //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges=3&(!buff.dark_soul.remains>gcd|action.metamorphosis.cooldown<gcd)
-                if(utils.isAuraActive(METAMORPHOSIS) && utils.GetCharges(CHAOS_WAVE)==3 && (!buff.dark_soul.remains>gcd || action.metamorphosis.cooldown<gcd))
+                if(utils.isAuraActive(METAMORPHOSIS) && utils.GetCharges(CHAOS_WAVE)==3 && (utils.MyAuraTimeLeft(DARK_SOUL, me)<1500 * Me.SpellHasteModifier || utils.GetSpellCooldown(METAMORPHOSIS)<1500 * Me.SpellHasteModifier))
                 {
                     utils.LogActivity("Cancel Metamorphosis");
                     Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
@@ -631,13 +624,13 @@ if(	buff.metamorphosis.up
                 //apply dot
                 if (utils.CanCast(CORRUPTION, target) && utils.MyAuraTimeLeft(CORRUPTION, target) < 3500 && !utils.isAuraActive(METAMORPHOSIS))
                 {
-                    utils.LogActivity("CORRUPTION", target.Name);
+                    utils.LogActivity(CORRUPTION, target.Name);
                     return utils.Cast(CORRUPTION, target);
                 }
                 
                 if (utils.CanCast(DOOM, target) && utils.MyAuraTimeLeft(DOOM, target) < 3500 && utils.isAuraActive(METAMORPHOSIS))
                 {
-                    utils.LogActivity("DOOM", target.Name);
+                    utils.LogActivity(DOOM, target.Name);
                     return utils.Cast(DOOM, target);
                 }
                 //if (!Me.IsMoving && nextTimeVampiricTouchAllowed <= DateTime.Now && utils.MyAuraTimeLeft(VAMPIRIC_TOUCH, target) < 4500
@@ -901,10 +894,10 @@ if(	buff.metamorphosis.up
        
         #endregion
         
-        public void SetNextTimeVampiricTouch()
+        public void SetCancelMetamorphosis()
         {
-            //2 seconds wait to avoid popping 2 consecutive vampiric touch
-            nextTimeVampiricTouchAllowed = DateTime.Now + new TimeSpan(0, 0, 0, 0, 2500);
+            //in periond of start boost, cancel Metamorphosis before 15s
+            nextTimeCancelMetamorphosis = DateTime.Now + new TimeSpan(0, 0, 0, 0, 15000);
         }
         
     }
