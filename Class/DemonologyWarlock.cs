@@ -628,8 +628,9 @@ namespace KingWoW
                     utils.LogActivity(METAMORPHOSIS);
                     return utils.Cast(METAMORPHOSIS);
                 }
-actions+=/metamorphosis,if=(trinket.stacking_proc.multistrike.react|trinket.proc.any.react)&((demonic_fury>450&action.dark_soul.recharge_time>=10&glyph.dark_soul.enabled)|(demonic_fury>650&cooldown.dark_soul.remains>=10))                
-                if (utils.CanCast(METAMORPHOSIS) && CurrentDemonicFury>=950 && !utils.isAuraActive(METAMORPHOSIS))
+                
+                //((demonic_fury>450&action.dark_soul.recharge_time>=10&glyph.dark_soul.enabled)|(demonic_fury>650&cooldown.dark_soul.remains>=10))                
+                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS) && (utils.isAuraActive(BLOOD_PACT) || utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) || utils.isAuraActive(HOWLING_SOUL)) && ((CurrentDemonicFury>=450 && utils.CanCast(DARK_SOUL)) || ( ((int)utils.GetSpellCooldown(METAMORPHOSIS).Milliseconds>10000) && CurrentDemonicFury>=650)))
                 {
                     utils.LogActivity(METAMORPHOSIS);
                     return utils.Cast(METAMORPHOSIS);
