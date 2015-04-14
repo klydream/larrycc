@@ -113,6 +113,19 @@ actions+=/life_tap
 
 
 
+actions=use_item,name=shards_of_nothing
+actions+=/potion,name=draenic_intellect,if=buff.bloodlust.react&buff.dark_soul.remains>10|target.time_to_die<=25|buff.dark_soul.remains>10
+actions+=/berserking
+actions+=/blood_fury
+actions+=/arcane_torrent
+actions+=/mannoroths_fury
+actions+=/dark_soul,if=!talent.archimondes_darkness.enabled|(talent.archimondes_darkness.enabled&(charges=2|trinket.proc.any.react|trinket.stacking_any.intellect.react>6|target.time_to_die<40))
+actions+=/service_pet,if=talent.grimoire_of_service.enabled&(target.time_to_die>120|target.time_to_die<20|(buff.dark_soul.remains&target.health.pct<20))
+actions+=/summon_doomguard,if=!talent.demonic_servitude.enabled&active_enemies<9
+actions+=/summon_infernal,if=!talent.demonic_servitude.enabled&active_enemies>=9
+actions+=/run_action_list,name=single_target,if=active_enemies<6&(!talent.charred_remains.enabled|active_enemies<4)
+actions+=/run_action_list,name=aoe,if=active_enemies>=6|(talent.charred_remains.enabled&active_enemies>=4)
+
 actions.single_target=havoc,target=2
 actions.single_target+=/shadowburn,if=talent.charred_remains.enabled&target.time_to_die<10
 actions.single_target+=/kiljaedens_cunning,if=(talent.cataclysm.enabled&!cooldown.cataclysm.remains)
@@ -141,3 +154,17 @@ actions.single_target+=/fire_and_brimstone,if=buff.fire_and_brimstone.down&dot.i
 actions.single_target+=/immolate,cycle_targets=1,if=remains<=(duration*0.3)
 actions.single_target+=/conflagrate
 actions.single_target+=/incinerate
+
+actions.aoe=rain_of_fire,if=!talent.charred_remains.enabled&remains<=tick_time
+actions.aoe+=/havoc,target=2,if=(!talent.charred_remains.enabled|buff.fire_and_brimstone.down)
+actions.aoe+=/shadowburn,if=!talent.charred_remains.enabled&buff.havoc.remains
+actions.aoe+=/chaos_bolt,if=!talent.charred_remains.enabled&buff.havoc.remains>cast_time&buff.havoc.stack>=3
+actions.aoe+=/kiljaedens_cunning,if=(talent.cataclysm.enabled&!cooldown.cataclysm.remains)
+actions.aoe+=/kiljaedens_cunning,moving=1,if=!talent.cataclysm.enabled
+actions.aoe+=/cataclysm
+actions.aoe+=/fire_and_brimstone,if=buff.fire_and_brimstone.down
+actions.aoe+=/immolate,if=buff.fire_and_brimstone.up&!dot.immolate.ticking
+actions.aoe+=/conflagrate,if=buff.fire_and_brimstone.up&charges=2
+actions.aoe+=/immolate,if=buff.fire_and_brimstone.up&dot.immolate.remains<=(dot.immolate.duration*0.3)
+actions.aoe+=/chaos_bolt,if=talent.charred_remains.enabled&buff.fire_and_brimstone.up
+actions.aoe+=/incinerate

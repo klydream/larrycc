@@ -111,8 +111,8 @@ namespace KingWoW
         private const string PYROBLAST_PROC = "Pyroblast!";
         private const string INFERNO_BLAST = "Inferno Blast";
         private const string SHADOW_BOLT = "Shadow Bolt";
-        private const string SHADOW_FURY = "SHADOW_FURY";
-        private const string DARK_FLIGHT = "DARK_FLIGHT";
+        private const string SHADOW_FURY = "Shadow Fury";
+        private const string DARK_FLIGHT = "Dark Flight";
         private const string GRIMOIRE_OF_SACRIFICE = "GrimoireOfSacrifice";
         private const string SHADOW_FLAME = "shadowflame";
         
@@ -691,20 +691,20 @@ namespace KingWoW
                 //}
 
                 //+++++++++++++++++++++++++AOE rotation start+++++++++++++++++++++++++++++++//
-                if (DemonologyWarlockSettings.Instance.UseFlameStrike && utils.CanCast(FLAMESTRIKE) && !FrostMageSettings.Instance.AvoidAOE && target.Distance <= 40 && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count() >= DemonologyWarlockSettings.Instance.AOECount)
+                if (DemonologyWarlockSettings.Instance.UseFlameStrike && utils.CanCast(FLAMESTRIKE) && !DemonologyWarlockSettings.Instance.AvoidAOE && target.Distance <= 40 && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count() >= DemonologyWarlockSettings.Instance.AOECount)
                 {
                     utils.LogActivity(FLAMESTRIKE, target.Name);
                     utils.Cast(FLAMESTRIKE);
                     return SpellManager.ClickRemoteLocation(target.Location);
                 }
 
-                //if (DemonologyWarlockSettings.Instance.UseDragonBreath && utils.CanCast(DRAGON_BREATH) && !FrostMageSettings.Instance.AvoidAOE && utils.AllAttaccableEnemyMobsInRange(15).Count() >= DemonologyWarlockSettings.Instance.AOECount)
+                //if (DemonologyWarlockSettings.Instance.UseDragonBreath && utils.CanCast(DRAGON_BREATH) && !DemonologyWarlockSettings.Instance.AvoidAOE && utils.AllAttaccableEnemyMobsInRange(15).Count() >= DemonologyWarlockSettings.Instance.AOECount)
                 //{
                 //    utils.LogActivity(DRAGON_BREATH);
                 //    return utils.Cast(DRAGON_BREATH);
                 //}
                 //
-                //if (DemonologyWarlockSettings.Instance.UseArcaneExplosion && utils.CanCast(ARCANE_EXPLOSION) && !FrostMageSettings.Instance.AvoidAOE && utils.AllAttaccableEnemyMobsInRange(10).Count() >= DemonologyWarlockSettings.Instance.AOECount)
+                //if (DemonologyWarlockSettings.Instance.UseArcaneExplosion && utils.CanCast(ARCANE_EXPLOSION) && !DemonologyWarlockSettings.Instance.AvoidAOE && utils.AllAttaccableEnemyMobsInRange(10).Count() >= DemonologyWarlockSettings.Instance.AOECount)
                 //{
                 //    utils.LogActivity(ARCANE_EXPLOSION);
                 //    return utils.Cast(ARCANE_EXPLOSION);
