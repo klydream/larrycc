@@ -576,11 +576,41 @@ namespace KingWoW
         
         private bool single()
         {
-            if (utils.CanCast(DARK_FLIGHT))
+            //actions.single_target=havoc,target=2
+            if (utils.CanCast(HAVOC) && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count() >= 2)
             {
-                utils.LogActivity(DARK_FLIGHT);
-                return utils.Cast(DARK_FLIGHT);
+                utils.LogActivity(HAVOC, Me.CurrentTargetGuid.name);
+                return utils.Cast(HAVOC, Me.CurrentTargetGuid);
             }
+
+            //actions.single_target+=/shadowburn,if=talent.charred_remains.enabled&target.time_to_die<10
+            if (utils.CanCast(SHADOWBURN) && (!utils.HasTalent(CHARRED_REMAINS) && utils.isAuraActive(HAVOC)))
+            {
+                utils.LogActivity(SHADOWBURN);
+                return utils.Cast(SHADOWBURN);
+            }
+//actions.single_target+=/fire_and_brimstone,if=buff.fire_and_brimstone.down&dot.immolate.remains<=action.immolate.cast_time&(cooldown.cataclysm.remains>action.immolate.cast_time|!talent.cataclysm.enabled)&active_enemies>4
+//actions.single_target+=/immolate,cycle_targets=1,if=remains<=cast_time&(cooldown.cataclysm.remains>cast_time|!talent.cataclysm.enabled)
+//actions.single_target+=/cancel_buff,name=fire_and_brimstone,if=buff.fire_and_brimstone.up&dot.immolate.remains>(dot.immolate.duration*0.3)
+//actions.single_target+=/shadowburn,if=buff.havoc.remains
+//actions.single_target+=/chaos_bolt,if=buff.havoc.remains>cast_time&buff.havoc.stack>=3
+//actions.single_target+=/conflagrate,if=charges=2
+//actions.single_target+=/rain_of_fire,if=remains<=tick_time&(active_enemies>4|(buff.mannoroths_fury.up&active_enemies>2))
+//actions.single_target+=/chaos_bolt,if=talent.charred_remains.enabled&active_enemies>1&target.health.pct>20
+//actions.single_target+=/chaos_bolt,if=talent.charred_remains.enabled&buff.backdraft.stack<3&burning_ember>=2.5
+//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&(burning_ember>=3.5|buff.dark_soul.up|target.time_to_die<20)
+//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&set_bonus.tier17_2pc=1&burning_ember>=2.5
+//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&buff.archmages_greater_incandescence_int.react&buff.archmages_greater_incandescence_int.remains>cast_time
+//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.intellect.react&trinket.proc.intellect.remains>cast_time
+//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.crit.react&trinket.proc.crit.remains>cast_time
+//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.stacking_proc.multistrike.react>=8&trinket.stacking_proc.multistrike.remains>=cast_time
+//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.multistrike.react&trinket.proc.multistrike.remains>cast_time
+//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.versatility.react&trinket.proc.versatility.remains>cast_time
+//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.mastery.react&trinket.proc.mastery.remains>cast_time
+//actions.single_target+=/fire_and_brimstone,if=buff.fire_and_brimstone.down&dot.immolate.remains<=(dot.immolate.duration*0.3)&active_enemies>4
+//actions.single_target+=/immolate,cycle_targets=1,if=remains<=(duration*0.3)
+//actions.single_target+=/conflagrate
+//actions.single_target+=/incinerate
             return false;
         }
 
