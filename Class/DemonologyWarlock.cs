@@ -628,31 +628,32 @@ namespace KingWoW
                     utils.LogActivity(METAMORPHOSIS);
                     return utils.Cast(METAMORPHOSIS);
                 }
-                
+actions+=/metamorphosis,if=(trinket.stacking_proc.multistrike.react|trinket.proc.any.react)&((demonic_fury>450&action.dark_soul.recharge_time>=10&glyph.dark_soul.enabled)|(demonic_fury>650&cooldown.dark_soul.remains>=10))                
                 if (utils.CanCast(METAMORPHOSIS) && CurrentDemonicFury>=950 && !utils.isAuraActive(METAMORPHOSIS))
                 {
                     utils.LogActivity(METAMORPHOSIS);
                     return utils.Cast(METAMORPHOSIS);
                 }
-                
-                if (utils.CanCast(METAMORPHOSIS) && CurrentDemonicFury>=950 && !utils.isAuraActive(METAMORPHOSIS))
-                {
-                    utils.LogActivity(METAMORPHOSIS);
-                    return utils.Cast(METAMORPHOSIS);
-                }
-                
-                
-                
-                
-                if (utils.CanCast(METAMORPHOSIS) && CurrentDemonicFury>=950 && !utils.isAuraActive(METAMORPHOSIS))
-                {
-                    utils.LogActivity(METAMORPHOSIS);
-                    return utils.Cast(METAMORPHOSIS);
-                }
-actions+=/metamorphosis,if=(trinket.stacking_proc.multistrike.react|trinket.proc.any.react)&((demonic_fury>450&action.dark_soul.recharge_time>=10&glyph.dark_soul.enabled)|(demonic_fury>650&cooldown.dark_soul.remains>=10))
-actions+=/metamorphosis,if=!dot.doom.ticking&target.time_to_die>=30%(1%spell_haste)&demonic_fury>300
-actions+=/metamorphosis,if=(demonic_fury>750&(action.hand_of_guldan.charges=0|(!dot.shadowflame.ticking&!action.hand_of_guldan.in_flight_to_target)))|floor(demonic_fury%80)*action.soul_fire.execute_time>=target.time_to_die
 
+                //actions+=/metamorphosis,if=!dot.doom.ticking&target.time_to_die>=33&demonic_fury>300                
+                if (utils.CanCast(METAMORPHOSIS) && CurrentDemonicFury>300 && !utils.isAuraActive(DOOM, target) && Me.CurrentTarget.HealthPercent > 9)
+                {
+                    utils.LogActivity(METAMORPHOSIS);
+                    return utils.Cast(METAMORPHOSIS);
+                }
+                //(!dot.shadowflame.ticking&!action.hand_of_guldan.in_flight_to_target)
+                //|floor(demonic_fury%80)*action.soul_fire.execute_time>=target.time_to_die                
+                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS) && ((CurrentDemonicFury>750 && (utils.GetCharges(HAND_OF_GULDAN)==0 || (!utils.isAuraActive(SHADOW_FLAME, target)))) || (CurrentDemonicFury>240 && Me.CurrentTarget.HealthPercent < 4)))
+                {
+                    utils.LogActivity(METAMORPHOSIS);
+                    return utils.Cast(METAMORPHOSIS);
+                }
+                
+                if (utils.CanCast(METAMORPHOSIS) && CurrentDemonicFury>=950 && !utils.isAuraActive(METAMORPHOSIS))
+                {
+                    utils.LogActivity(METAMORPHOSIS);
+                    return utils.Cast(METAMORPHOSIS);
+                }
                 
                 //apply dot
                 if (utils.CanCast(CORRUPTION, target) && utils.MyAuraTimeLeft(CORRUPTION, target) < 3500 && !utils.isAuraActive(METAMORPHOSIS))
