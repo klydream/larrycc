@@ -8,13 +8,13 @@ using Styx.Common.Helpers;
 
 namespace KingWoW
 {
-    public class DemonologyWarlockSettings : Settings
+    public class DestructionWarlockSettings : Settings
     {
-        public static DemonologyWarlockSettings Instance = new DemonologyWarlockSettings();
+        public static DestructionWarlockSettings Instance = new DestructionWarlockSettings();
 
         public string path_name = Path.Combine(Styx.Common.Utilities.AssemblyDirectory, string.Format(@"KingWOWCurrentSettings/FireMage/FireMage-Settings-{0}.xml", StyxWoW.Me.Name));
 
-        public DemonologyWarlockSettings()
+        public DestructionWarlockSettings()
             : base(Path.Combine(Styx.Common.Utilities.AssemblyDirectory, string.Format(@"KingWOWCurrentSettings/FireMage/FireMage-Settings-{0}.xml", StyxWoW.Me.Name)))
         {
         }

@@ -93,12 +93,12 @@ namespace KingWoW
                                 KingWoWBaseClass = new FireMageCombatClass();
                             break;
                         }
-                    //case WoWSpec.WarlockDestruction:
-                    //    {
-                    //        if (KingWoWBaseClass == null)
-                    //            KingWoWBaseClass = new DestructionWarlockCombatClass();
-                    //        break;
-                    //    }
+                    case WoWSpec.WarlockDestruction:
+                        {
+                            if (KingWoWBaseClass == null)
+                                KingWoWBaseClass = new DestructionWarlockCombatClass();
+                            break;
+                        }
                     case WoWSpec.WarlockDemonology:
                         {
                             if (KingWoWBaseClass == null)
@@ -186,12 +186,12 @@ namespace KingWoW
                                 settingsBase = DemonologyWarlockSettings.Instance;
                             break;
                         }
-                    //case WoWSpec.WarlockDestruction:
-                    //    {
-                    //        if (settingsBase == null)
-                    //            settingsBase = DestructionWarlockSettings.Instance;
-                    //        break;
-                    //    }
+                    case WoWSpec.WarlockDestruction:
+                        {
+                            if (settingsBase == null)
+                                settingsBase = DestructionWarlockSettings.Instance;
+                            break;
+                        }
                     case WoWSpec.PriestDiscipline:
                         {
                             if (settingsBase == null)
