@@ -55,73 +55,24 @@ namespace KingWoW
         private const string DRINK = "Drink";
         private const string FOOD = "Food";
 
-        private const string FROSTFIRE_BOLT = "Frostfire Bolt";
-        private const string FIRE_BLAST = "Fire Blast";
-        private const string ROCKET_JUMP = "Rocket Jump";
-        private const string COUNTERSPELL = "Counterspell";
-        private const string FROSTBOLT = "Frostbolt";
-        private const string POLYMORPH = "Polymorph";
-        private const string ARCANE_EXPLOSION = "Arcane Explosion";
-        private const string ICE_LANCE = "Ice Lance";
-        private const string FINGER_OF_FROST = "Fingers of Frost";
-        private const string CONE_OF_COLD = "Cone of Cold";
-        private const string REMOVE_CURSE = "Remove Curse";
-        private const string SLOW_FALL = "Slow Fall";
-        private const string MOLTEN_ARMOR = "Molten Armor";
-        private const string CONJURE_REFRESHMENT = "Conjure Refreshment";
-        private const string FLAMESTRIKE = "Flamestrike";
-        private const string CREATE_HEALTHSTONE = "Create Healthstone";
-        private const string MIRROR_IMAGE = "Mirror Image";
-        private const string BLIZZARD = "Blizzard";
-        private const string Hand_of_Guldan = "Hand of Gul'dan";
-        private const string INVISIBILITY = "Invisibility";
-        private const string DARK_INTENT = "Dark Intent";
-        private const string DARK_SOUL = "Dark Soul: Knowledge";
-        private const string FROZEN_ORB = "Frozen Orb";
-        private const string CONJURE_REFRESHMENT_TABLE = "Conjure Refreshment Table";
-        private const string MAGE_ARMOR = "Mage Armor";
-        private const string TIME_WARP = "Time Warp";
-        private const string ALTER_TIME = "Alter Time";
-
-        private const string CHAOS_WAVE = "Chaos Wave";
-
         //END OF SPELLS AND AURAS ==============================
 
         //TALENTS
+        private const string DARK_INTENT = "Dark Intent";
+        private const string DARK_SOUL = "Dark Soul: Knowledge";
         private const string ARCHIMONDESDARKNESS = "ArchimondesDarkness";
-        private const string TOUCH_OF_CHAOS = "Touch of Chaos";
         private const string LIFE_TAP = "Life Tap";
-        private const string BURNING_RUSH = "Burning Rush";
-        private const string BLAZING_SPEED = "Blazing Speed";
-        private const string RING_OF_FROST = "Ring of Frost";
-        private const string FROSTJAW = "Frostjaw";
-        private const string GREATER_INVISIBILITY = "Greater Invisibility";
 
-        private const string COLD_SNAP = "Cold Snap";
-        private const string NETHER_TEMPEST = "Nether Tempest";
-        
-        private const string INVOCATION_BUFF = "Invoker's Energy";
-        private const string RUNE_OF_POWER = "Rune of Power";
-
-        private const string METAMORPHOSIS = "Metamorphosis";
-        private const string MOLTEN_CORE = "Molten Core";
-        private const string SOUL_FIRE = "Soul Fire";
-        private const string DOOM = "Doom";
-        private const string CORRUPTION = "Corruption";
-        private const string PYROBLAST_PROC = "Pyroblast!";
-        private const string INFERNO_BLAST = "Inferno Blast";
-        private const string SHADOW_BOLT = "Shadow Bolt";
         private const string SHADOW_FURY = "SHADOW_FURY";
         private const string DARK_FLIGHT = "DARK_FLIGHT";
         private const string GRIMOIRE_OF_SACRIFICE = "GrimoireOfSacrifice";
-        private const string SHADOW_FLAME = "shadowflame";
         
         private const string BLOOD_PACT = "Blood Pact";
         private const string ARCHMAGES_GREATER_INCANDESCENCE = "Item - Attacks Proc Archmage's Greater Incandescence";
         private const string HOWLING_SOUL = "Item - Attacks Proc Critical Strike [Howling Soul]";
         private const int    MyGCD;
-        private DateTime nextTimeCancelMetamorphosis;
-        private DateTime StartCombat;
+        private DateTime     nextTimeCancelMetamorphosis;
+        private DateTime     StartCombat;
         
          
 
