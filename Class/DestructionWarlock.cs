@@ -545,7 +545,7 @@ namespace KingWoW
             }
             
             //actions.aoe+=/conflagrate,if=buff.fire_and_brimstone.up&charges=2
-            if (utils.CanCast(CONFLAGRATE) && utils.isAuraActive(FIRE_AND_BRIMSTONE) && utils.GetCharges(CONFLAGRATE) == 2)
+            if (utils.CanCast(CONFLAGRATE) && utils.isAuraActive(FIRE_AND_BRIMSTONE) && utils.GetCharges(CONFLAGRATE)==2)
             {
                 utils.LogActivity(CONFLAGRATE, target.name);
                 return utils.Cast(CONFLAGRATE, target);
@@ -586,7 +586,7 @@ namespace KingWoW
             //actions.single_target+=/shadowburn,if=talent.charred_remains.enabled&target.time_to_die<10
             if (utils.CanCast(SHADOWBURN) && utils.HasTalent(CHARRED_REMAINS) && Me.CurrentTarget.HealthPercent < 3)
             {
-                utils.LogActivity(SHADOWBURN， target.name);
+                utils.LogActivity(SHADOWBURN，target.name);
                 return utils.Cast(SHADOWBURN，target);
             }
             
@@ -598,17 +598,54 @@ namespace KingWoW
             }
             
             //actions.single_target+=/immolate,cycle_targets=1,if=remains<=cast_time
-            if (utils.CanCast(FIRE_AND_BRIMSTONE) && !utils.isAuraActive(FIRE_AND_BRIMSTONE) && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count()>4)
+            if (utils.CanCast(IMMOLATE) && (int)utils.MyAuraTimeLeft(IMMOLATE, target)>utils.GetSpellCastTime(IMMOLATE).Milliseconds)
             {
-                utils.LogActivity(FIRE_AND_BRIMSTONE);
-                return utils.Cast(FIRE_AND_BRIMSTONE);
+                utils.LogActivity(IMMOLATE, target.name);
+                return utils.Cast(IMMOLATE， target);
             }
-//actions.single_target+=/cancel_buff,name=fire_and_brimstone,if=buff.fire_and_brimstone.up&dot.immolate.remains>(dot.immolate.duration*0.3)
-//actions.single_target+=/shadowburn,if=buff.havoc.remains
-//actions.single_target+=/chaos_bolt,if=buff.havoc.remains>cast_time&buff.havoc.stack>=3
-//actions.single_target+=/conflagrate,if=charges=2
-//actions.single_target+=/rain_of_fire,if=remains<=tick_time&(active_enemies>4|(buff.mannoroths_fury.up&active_enemies>2))
-//actions.single_target+=/chaos_bolt,if=talent.charred_remains.enabled&active_enemies>1&target.health.pct>20
+            
+            if (utils.CanCast(IMMOLATE) && (int)utils.MyAuraTimeLeft(IMMOLATE, Me.CurrentTargetGuid)>utils.GetSpellCastTime(IMMOLATE).Milliseconds)
+            {
+                utils.LogActivity(IMMOLATE, Me.CurrentTargetGuid.name);
+                return utils.Cast(IMMOLATE，Me.CurrentTargetGuid);
+            }
+            
+            //actions.single_target+=/cancel_buff,name=fire_and_brimstone,if=buff.fire_and_brimstone.up&dot.immolate.remains>(dot.immolate.duration*0.3)
+            if (utils.CanCast(IMMOLATE) && utils.isAuraActive(FIRE_AND_BRIMSTONE) && (int)utils.MyAuraTimeLeft(IMMOLATE, target)>4500)
+            {
+                utils.LogActivity("Cancel FIRE_AND_BRIMSTONE");
+                Me.GetAuraByName(FIRE_AND_BRIMSTONE).TryCancelAura();
+                return true;
+            }
+            
+            //actions.single_target+=/shadowburn,if=buff.havoc.remains
+            if (utils.CanCast(SHADOWBURN) && utils.isAuraActive(HAVOC))
+            {
+                utils.LogActivity(SHADOWBURN, target.name);
+                return utils.Cast(SHADOWBURN, target);
+            }
+            
+            //actions.single_target+=/chaos_bolt,if=buff.havoc.remains>cast_time&buff.havoc.stack>=3
+            if (utils.CanCast(CHAOS_BOLT) && (int)utils.MyAuraTimeLeft(HAVOC, Me)>utils.GetSpellCastTime(CHAOS_BOLT).Milliseconds &&  utils.GetAuraStack(HAVOC, Me)>=3)
+            {
+                utils.LogActivity(CHAOS_BOLT, target.name);
+                return utils.Cast(CHAOS_BOLT, target);
+            }
+            
+            //actions.single_target+=/conflagrate,if=charges=2
+            if (utils.CanCast(CONFLAGRATE) && utils.GetCharges(CONFLAGRATE)==2)
+            {
+                utils.LogActivity(CONFLAGRATE, target.name);
+                return utils.Cast(CONFLAGRATE, target);
+            }
+            
+            //actions.single_target+=/chaos_bolt,if=talent.charred_remains.enabled&active_enemies>1&target.health.pct>20
+            if (utils.CanCast(CHAOS_BOLT) && utils.GetCharges(CONFLAGRATE)==2)
+            {
+                utils.LogActivity(CHAOS_BOLT, target.name);
+                return utils.Cast(CHAOS_BOLT, target);
+            }
+            
 //actions.single_target+=/chaos_bolt,if=talent.charred_remains.enabled&buff.backdraft.stack<3&burning_ember>=2.5
 //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&(burning_ember>=3.5|buff.dark_soul.up|target.time_to_die<20)
 //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&set_bonus.tier17_2pc=1&burning_ember>=2.5
