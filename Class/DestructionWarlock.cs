@@ -577,20 +577,32 @@ namespace KingWoW
         private bool single()
         {
             //actions.single_target=havoc,target=2
-            if (utils.CanCast(HAVOC) && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count() >= 2)
+            if (utils.CanCast(HAVOC) && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count()>=2)
             {
                 utils.LogActivity(HAVOC, Me.CurrentTargetGuid.name);
                 return utils.Cast(HAVOC, Me.CurrentTargetGuid);
             }
 
             //actions.single_target+=/shadowburn,if=talent.charred_remains.enabled&target.time_to_die<10
-            if (utils.CanCast(SHADOWBURN) && (!utils.HasTalent(CHARRED_REMAINS) && utils.isAuraActive(HAVOC)))
+            if (utils.CanCast(SHADOWBURN) && utils.HasTalent(CHARRED_REMAINS) && Me.CurrentTarget.HealthPercent < 3)
             {
-                utils.LogActivity(SHADOWBURN);
-                return utils.Cast(SHADOWBURN);
+                utils.LogActivity(SHADOWBURN， target.name);
+                return utils.Cast(SHADOWBURN，target);
             }
-//actions.single_target+=/fire_and_brimstone,if=buff.fire_and_brimstone.down&dot.immolate.remains<=action.immolate.cast_time&(cooldown.cataclysm.remains>action.immolate.cast_time|!talent.cataclysm.enabled)&active_enemies>4
-//actions.single_target+=/immolate,cycle_targets=1,if=remains<=cast_time&(cooldown.cataclysm.remains>cast_time|!talent.cataclysm.enabled)
+            
+            //actions.single_target+=/fire_and_brimstone,if=buff.fire_and_brimstone.down&dot.immolate.remains<=action.immolate.cast_time&active_enemies>4
+            if (utils.CanCast(FIRE_AND_BRIMSTONE) && !utils.isAuraActive(FIRE_AND_BRIMSTONE) && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count()>4)
+            {
+                utils.LogActivity(FIRE_AND_BRIMSTONE);
+                return utils.Cast(FIRE_AND_BRIMSTONE);
+            }
+            
+            //actions.single_target+=/immolate,cycle_targets=1,if=remains<=cast_time
+            if (utils.CanCast(FIRE_AND_BRIMSTONE) && !utils.isAuraActive(FIRE_AND_BRIMSTONE) && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count()>4)
+            {
+                utils.LogActivity(FIRE_AND_BRIMSTONE);
+                return utils.Cast(FIRE_AND_BRIMSTONE);
+            }
 //actions.single_target+=/cancel_buff,name=fire_and_brimstone,if=buff.fire_and_brimstone.up&dot.immolate.remains>(dot.immolate.duration*0.3)
 //actions.single_target+=/shadowburn,if=buff.havoc.remains
 //actions.single_target+=/chaos_bolt,if=buff.havoc.remains>cast_time&buff.havoc.stack>=3
