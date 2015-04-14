@@ -119,8 +119,9 @@ namespace KingWoW
         private const string BLOOD_PACT = "Blood Pact";
         private const string ARCHMAGES_GREATER_INCANDESCENCE = "Item - Attacks Proc Archmage's Greater Incandescence";
         private const string HOWLING_SOUL = "Item - Attacks Proc Critical Strike [Howling Soul]";
-        
+        private const int    MyGCD;
         private DateTime nextTimeCancelMetamorphosis;
+        private DateTime StartCombat;
         
          
 
@@ -214,6 +215,7 @@ namespace KingWoW
             BaseBot = "unknown";
             talents = new TalentManager();
             nextTimeCancelMetamorphosis = DateTime.Now;
+            MyGCD = 1500 * Me.SpellHasteModifier;
 
         }
 
@@ -298,6 +300,7 @@ namespace KingWoW
                         }
                         utils.LogActivity("start combate with SOUL FIRE", target.Name);
                         SetCancelMetamorphosis();
+                        StartCombat = DateTime.Now;
                         return utils.Cast(SOUL_FIRE, target);
                     }
                 }
@@ -568,11 +571,6 @@ namespace KingWoW
                     return utils.Cast("Grimoire: Doomguard");
                 }
                 
-                if (utils.CanCast(METAMORPHOSIS) && CurrentDemonicFury>=400 && !utils.isAuraActive(METAMORPHOSIS))
-                {
-                    utils.LogActivity(METAMORPHOSIS);
-                    return utils.Cast(METAMORPHOSIS);
-                }
                 //CurrentDemonicFury<(800-cooldown.dark_soul.remains*(10%spell_haste))
                 if(utils.isAuraActive(METAMORPHOSIS)
                   && ((CurrentDemonicFury<650 && !utils.CanCast(DARK_SOUL)) || CurrentDemonicFury<450)
@@ -595,7 +593,7 @@ namespace KingWoW
                     return true;
                 }
                 //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges=3&(!buff.dark_soul.remains>gcd|action.metamorphosis.cooldown<gcd)
-                if(utils.isAuraActive(METAMORPHOSIS) && utils.GetCharges(CHAOS_WAVE)==3 && (utils.MyAuraTimeLeft(DARK_SOUL, Me)<1500 * Me.SpellHasteModifier || (float)utils.GetSpellCooldown(METAMORPHOSIS).Milliseconds<1500 * Me.SpellHasteModifier))
+                if(utils.isAuraActive(METAMORPHOSIS) && utils.GetCharges(CHAOS_WAVE)==3 && (utils.MyAuraTimeLeft(DARK_SOUL, Me)<MyGCD || (float)utils.GetSpellCooldown(METAMORPHOSIS).Milliseconds<MyGCD))
                 {
                     utils.LogActivity("Cancel Metamorphosis");
                     Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
@@ -620,6 +618,41 @@ namespace KingWoW
                     utils.LogActivity(TOUCH_OF_CHAOS, target.Name);
                     return utils.Cast(TOUCH_OF_CHAOS, target);
                 }
+
+                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS)
+                && utils.MyAuraTimeLeft(DARK_SOUL, Me)>MyGCD
+                && (DateTime.Now>StartCombat+6 || utils.GetAuraStack(SHADOW_FLAME, target)==2)
+                && (CurrentDemonicFury>300 || !utils.CanCast(DARK_SOUL))
+                && ((CurrentDemonicFury>=80 && utils.GetAuraStack(MOLTEN_CORE, Me)>=1) || (CurrentDemonicFury>=40 && CurrentDemonicFury<80)) )
+                {
+                    utils.LogActivity(METAMORPHOSIS);
+                    return utils.Cast(METAMORPHOSIS);
+                }
+                
+                if (utils.CanCast(METAMORPHOSIS) && CurrentDemonicFury>=950 && !utils.isAuraActive(METAMORPHOSIS))
+                {
+                    utils.LogActivity(METAMORPHOSIS);
+                    return utils.Cast(METAMORPHOSIS);
+                }
+                
+                if (utils.CanCast(METAMORPHOSIS) && CurrentDemonicFury>=950 && !utils.isAuraActive(METAMORPHOSIS))
+                {
+                    utils.LogActivity(METAMORPHOSIS);
+                    return utils.Cast(METAMORPHOSIS);
+                }
+                
+                
+                
+                
+                if (utils.CanCast(METAMORPHOSIS) && CurrentDemonicFury>=950 && !utils.isAuraActive(METAMORPHOSIS))
+                {
+                    utils.LogActivity(METAMORPHOSIS);
+                    return utils.Cast(METAMORPHOSIS);
+                }
+actions+=/metamorphosis,if=(trinket.stacking_proc.multistrike.react|trinket.proc.any.react)&((demonic_fury>450&action.dark_soul.recharge_time>=10&glyph.dark_soul.enabled)|(demonic_fury>650&cooldown.dark_soul.remains>=10))
+actions+=/metamorphosis,if=!dot.doom.ticking&target.time_to_die>=30%(1%spell_haste)&demonic_fury>300
+actions+=/metamorphosis,if=(demonic_fury>750&(action.hand_of_guldan.charges=0|(!dot.shadowflame.ticking&!action.hand_of_guldan.in_flight_to_target)))|floor(demonic_fury%80)*action.soul_fire.execute_time>=target.time_to_die
+
                 
                 //apply dot
                 if (utils.CanCast(CORRUPTION, target) && utils.MyAuraTimeLeft(CORRUPTION, target) < 3500 && !utils.isAuraActive(METAMORPHOSIS))
