@@ -895,9 +895,9 @@ namespace KingWoW
             {
                 if (SpellManager.FindSpell(spell, out sfr))
                 {
-                  int time = (int)sfr.CastTime;
+                  int time = (int)(sfr.Override ?? sfr.Original).CastTime;
                   if (time == 0)
-                      time = spell.BaseDuration;
+                      time = (sfr.Override ?? sfr.Original).BaseDuration;
                   return TimeSpan.FromMilliseconds(time);
                 }
                 return TimeSpan.Zero;

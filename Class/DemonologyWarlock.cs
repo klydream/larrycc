@@ -587,15 +587,15 @@ namespace KingWoW
                 
                 //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges>0&dot.shadowflame.remains<action.hand_of_guldan.travel_time+action.shadow_bolt.cast_time&((demonic_fury<100&buff.dark_soul.remains>10)|time<15)
                 if(	utils.isAuraActive(METAMORPHOSIS)	&& utils.GetCharges(CHAOS_WAVE)>0
-                	&& utils.MyAuraTimeLeft(SHADOW_FLAME, target)<500+utils.GetSpellCastTime(SHADOW_BOLT)
-                	&& ((CurrentDemonicFury<100 && utils.MyAuraTimeLeft(DARK_SOUL, me)>10000) || nextTimeCancelMetamorphosis <= DateTime.Now))
+                	&& (int)utils.MyAuraTimeLeft(SHADOW_FLAME, target)<500+utils.GetSpellCastTime(SHADOW_BOLT).Milliseconds
+                	&& ((CurrentDemonicFury<100 && utils.MyAuraTimeLeft(DARK_SOUL, Me)>10000) || nextTimeCancelMetamorphosis <= DateTime.Now))
                 {
                     utils.LogActivity("Cancel Metamorphosis for start boost");
                     Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
                     return true;
                 }
                 //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges=3&(!buff.dark_soul.remains>gcd|action.metamorphosis.cooldown<gcd)
-                if(utils.isAuraActive(METAMORPHOSIS) && utils.GetCharges(CHAOS_WAVE)==3 && (utils.MyAuraTimeLeft(DARK_SOUL, me)<1500 * Me.SpellHasteModifier || utils.GetSpellCooldown(METAMORPHOSIS)<1500 * Me.SpellHasteModifier))
+                if(utils.isAuraActive(METAMORPHOSIS) && utils.GetCharges(CHAOS_WAVE)==3 && (utils.MyAuraTimeLeft(DARK_SOUL, Me)<1500 * Me.SpellHasteModifier || (float)utils.GetSpellCooldown(METAMORPHOSIS).Milliseconds<1500 * Me.SpellHasteModifier))
                 {
                     utils.LogActivity("Cancel Metamorphosis");
                     Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
