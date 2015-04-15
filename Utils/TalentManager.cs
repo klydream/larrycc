@@ -50,7 +50,7 @@ namespace KingWoW
                 Talents.Clear();
 
                 // Always 18 talents. 6 rows of 3 talents.
-                for (int index = 1; index <= 6 * 3; index++)
+                for (int index = 1; index <= 7 * 3; index++)
                 {
                     var selected =
                         Lua.GetReturnVal<bool>(
@@ -64,7 +64,7 @@ namespace KingWoW
                 Glyphs.Clear();
 
                 // 6 glyphs all the time. Plain and simple!
-                for (int i = 1; i <= 6; i++)
+                for (int i = 1; i <= 7; i++)
                 {
                     List<string> glyphInfo = Lua.GetReturnValues(String.Format("return GetGlyphSocketInfo({0})", i));
 

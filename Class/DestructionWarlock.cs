@@ -81,8 +81,8 @@ namespace KingWoW
         
         private const string CHAOTIC_INFUSION = "Chaotic Infusion";
         private const string MARK_OF_BLEEDING_HOLLOW = "Mark of Bleeding Hollow";
-        private const string ARCHMAGES_GREATER_INCANDESCENCE = "Item - Attacks Proc Archmage's Greater Incandescence";
-        private const string HOWLING_SOUL = "Item - Attacks Proc Critical Strike [Howling Soul]";
+        private const string ARCHMAGES_GREATER_INCANDESCENCE = "Archmage's Greater Incandescence";
+        private const string HOWLING_SOUL = "Howling Soul";
         private const string VOID_SHARDS = "Void Shards";
         private       int    MyGCD=1500;
         private DateTime     nextTimeCancelMetamorphosis;
@@ -387,15 +387,6 @@ namespace KingWoW
             return false;
         }
         
-        
-        private bool ProcWork()
-        {
-            //cast  Frost Bomb on cooldown.
-            //actions+=/hand_of_guldan,if=!in_flight&dot.shadowflame.remains<travel_time+action.shadow_bolt.cast_time&talent.demonbolt.enabled&((set_bonus.tier17_4pc=0&((charges=1&recharge_time<4)|charges=2))|(charges=3|(charges=2&recharge_time<13.8-travel_time*2))|dot.shadowflame.remains>travel_time)
-            return false;
-        }
-
-
         private bool BotUpdate()
         {
             if (BaseBot.Equals(BotManager.Current.Name))
@@ -461,7 +452,6 @@ namespace KingWoW
             extra.WaterSpirit();
             extra.LifeSpirit();
             Defensivececk();
-            ProcWork();
             
             //foreach (var a in Me.GetAllAuras())
             //{
@@ -492,6 +482,26 @@ namespace KingWoW
                     Me.SetFacing(target);
                 }
                 
+                if ((int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>6)
+                {
+                   Logging.Write("ARCHMAGES_GREATER_INCANDESCENCE");
+                }
+                if ((int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>6)
+                {
+                   Logging.Write("HOWLING_SOUL");
+                }
+                if ((int)utils.MyAuraTimeLeft(VOID_SHARDS, Me)>6)
+                {
+                   Logging.Write("VOID_SHARDS");
+                }
+                if (utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW))
+                {
+                   Logging.Write("MARK_OF_BLEEDING_HOLLOW");
+                }
+                if (HasTalent(WarlockTalents.ArchimondesDarkness))
+                {
+                   Logging.Write("ArchimondesDarkness");
+                }
                 //actions+=/dark_soul,if=!talent.archimondes_darkness.enabled|(talent.archimondes_darkness.enabled&(charges=2|trinket.proc.any.react|trinket.stacking_any.intellect.react>6|target.time_to_die<40))
                 if (utils.CanCast(DARK_SOUL) && HasTalent(WarlockTalents.ArchimondesDarkness) || (HasTalent(WarlockTalents.ArchimondesDarkness) && (utils.GetCharges(DARK_SOUL)==2 
                                                                                                                                                      || (int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>6
@@ -793,7 +803,9 @@ namespace KingWoW
             GrimoireOfSacrifice,
             GRIMOIRE_OF_SYNERGY = GrimoireOfSacrifice,
         
-            ArchimondesDarkness,
+            SoulburnHaunt,
+            Demonbolt = SoulburnHaunt,
+            ArchimondesDarkness = SoulburnHaunt,
             KiljaedensCunning,
             MannorothsFury,
         

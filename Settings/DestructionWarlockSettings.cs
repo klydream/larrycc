@@ -12,10 +12,10 @@ namespace KingWoW
     {
         public static DestructionWarlockSettings Instance = new DestructionWarlockSettings();
 
-        public string path_name = Path.Combine(Styx.Common.Utilities.AssemblyDirectory, string.Format(@"KingWOWCurrentSettings/FireMage/FireMage-Settings-{0}.xml", StyxWoW.Me.Name));
+        public string path_name = Path.Combine(Styx.Common.Utilities.AssemblyDirectory, string.Format(@"KingWOWCurrentSettings/Warlock/DestructionWarlock-Settings-{0}.xml", StyxWoW.Me.Name));
 
         public DestructionWarlockSettings()
-            : base(Path.Combine(Styx.Common.Utilities.AssemblyDirectory, string.Format(@"KingWOWCurrentSettings/FireMage/FireMage-Settings-{0}.xml", StyxWoW.Me.Name)))
+            : base(Path.Combine(Styx.Common.Utilities.AssemblyDirectory, string.Format(@"KingWOWCurrentSettings/Warlock/DestructionWarlock-Settings-{0}.xml", StyxWoW.Me.Name)))
         {
         }
 
