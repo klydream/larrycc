@@ -354,9 +354,9 @@ namespace KingWoW
             if (utils.Mounted() || utils.MeIsCastingWithLag() /*ExtraUtilsSettings.Instance.PauseRotation || */)
                 return false;
                 
-            //GetBestPet();
+            GetBestPet();
             //GRIMOIRE_OF_SACRIFICE
-            if (HasTalent(WarlockTalents.GrimoireOfSacrifice) && utils.CanCast(GRIMOIRE_OF_SACRIFICE))
+            if (HasTalent(WarlockTalents.GrimoireOfSacrifice) && utils.CanCast(GRIMOIRE_OF_SACRIFICE) &&  !utils.isAuraActive(GRIMOIRE_OF_SACRIFICE))
             {
                 utils.LogActivity(GRIMOIRE_OF_SACRIFICE);
                return utils.Cast(GRIMOIRE_OF_SACRIFICE);
@@ -775,7 +775,8 @@ namespace KingWoW
         
         private bool HasTalent(WarlockTalents tal)
         {
-            return talents.IsSelected((int)tal);
+            //return talents.IsSelected((int)tal);
+            return true;
         }
         
         public enum WarlockTalents
