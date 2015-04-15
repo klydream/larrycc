@@ -481,34 +481,17 @@ namespace KingWoW
                 {
                     Me.SetFacing(target);
                 }
-                
-                if ((int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>6)
-                {
-                   Logging.Write("ARCHMAGES_GREATER_INCANDESCENCE");
-                }
-                if ((int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>6)
-                {
-                   Logging.Write("HOWLING_SOUL");
-                }
-                if ((int)utils.MyAuraTimeLeft(VOID_SHARDS, Me)>6)
-                {
-                   Logging.Write("VOID_SHARDS");
-                }
-                if (utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW))
-                {
-                   Logging.Write("MARK_OF_BLEEDING_HOLLOW");
-                }
                 if (HasTalent(WarlockTalents.ArchimondesDarkness))
                 {
                    Logging.Write("ArchimondesDarkness");
                 }
                 //actions+=/dark_soul,if=!talent.archimondes_darkness.enabled|(talent.archimondes_darkness.enabled&(charges=2|trinket.proc.any.react|trinket.stacking_any.intellect.react>6|target.time_to_die<40))
-                if (utils.CanCast(DARK_SOUL) && HasTalent(WarlockTalents.ArchimondesDarkness) || (HasTalent(WarlockTalents.ArchimondesDarkness) && (utils.GetCharges(DARK_SOUL)==2 
+                if (utils.CanCast(DARK_SOUL) && !utils.isAuraActive(DARK_SOUL) &&( HasTalent(WarlockTalents.ArchimondesDarkness) || (HasTalent(WarlockTalents.ArchimondesDarkness) && (utils.GetCharges(DARK_SOUL)==2 
                                                                                                                                                      || (int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>6
                                                                                                                                                      || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>6
                                                                                                                                                      || (int)utils.MyAuraTimeLeft(VOID_SHARDS, Me)>6 
                                                                                                                                                      || utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW)
-                                                                                                                                                     || time_to_die<40)))
+                                                                                                                                                     || time_to_die<40))))
                 {
                     utils.LogActivity(DARK_SOUL);
                     return utils.Cast(DARK_SOUL);
@@ -599,7 +582,8 @@ namespace KingWoW
         private bool single(WoWUnit target)
         {
             //actions.single_target=havoc,target=2
-            if (utils.CanCast(HAVOC) && active_enemies(target)>=2)
+            //if (utils.CanCast(HAVOC) && active_enemies(target)>=2)
+            if (utils.CanCast(HAVOC) && target != null)
             {
                 utils.LogActivity(HAVOC, Me.FocusedUnit.Name);
                 return utils.Cast(HAVOC, Me.FocusedUnit);
@@ -626,7 +610,7 @@ namespace KingWoW
                 return utils.Cast(IMMOLATE, target);
             }
             
-            if (utils.CanCast(IMMOLATE) && (int)utils.MyAuraTimeLeft(IMMOLATE, Me.FocusedUnit)>utils.GetSpellCastTime(IMMOLATE).Milliseconds)
+            if (utils.CanCast(IMMOLATE) && (int)utils.MyAuraTimeLeft(IMMOLATE, Me.FocusedUnit)<=utils.GetSpellCastTime(IMMOLATE).Milliseconds)
             {
                 utils.LogActivity(IMMOLATE, Me.FocusedUnit.Name);
                 return utils.Cast(IMMOLATE,Me.FocusedUnit);
@@ -662,7 +646,7 @@ namespace KingWoW
             }
             
             //actions.single_target+=/chaos_bolt,if=talent.charred_remains.enabled&active_enemies(target)>1&target.health.pct>20
-            if (utils.CanCast(CHAOS_BOLT) && HasTalent(WarlockTalents.CharredRemains) && active_enemies(target)>1 && Me.CurrentTarget.HealthPercent>20)
+            if (utils.CanCast(CHAOS_BOLT) && HasTalent(WarlockTalents.CharredRemains) && active_enemies(target)>1 && Me.CurrentTarget.HealthPercent>20 && burning_ember>=1)
             {
                 utils.LogActivity(CHAOS_BOLT, target.Name+active_enemies(target).ToString());
                 return utils.Cast(CHAOS_BOLT, target);
