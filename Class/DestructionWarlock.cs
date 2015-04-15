@@ -75,7 +75,7 @@ namespace KingWoW
         private const string DARK_FLIGHT = "DARK_FLIGHT";
         private const string GRIMOIRE_OF_SACRIFICE = "GrimoireOfSacrifice";
         
-        private const string BLOOD_PACT = "Blood Pact";
+        private const string MARK_OF_BLEEDING_HOLLOW = "Mark of Bleeding Hollow";
         private const string ARCHMAGES_GREATER_INCANDESCENCE = "Item - Attacks Proc Archmage's Greater Incandescence";
         private const string HOWLING_SOUL = "Item - Attacks Proc Critical Strike [Howling Soul]";
         private const int    MyGCD;
@@ -483,9 +483,18 @@ namespace KingWoW
                 {
                     Me.SetFacing(target);
                 }
-                
+actions=use_item,name=shards_of_nothing
+actions+=/potion,name=draenic_intellect,if=buff.bloodlust.react&buff.dark_soul.remains>10|target.time_to_die<=25|buff.dark_soul.remains>10
+actions+=/berserking
+actions+=/blood_fury
+actions+=/arcane_torrent
+actions+=/mannoroths_fury
+actions+=/dark_soul,if=!talent.archimondes_darkness.enabled|(talent.archimondes_darkness.enabled&(charges=2|trinket.proc.any.react|trinket.stacking_any.intellect.react>6|target.time_to_die<40))
+actions+=/service_pet,if=talent.grimoire_of_service.enabled&(target.time_to_die>120|target.time_to_die<20|(buff.dark_soul.remains&target.health.pct<20))
+actions+=/summon_doomguard,if=!talent.demonic_servitude.enabled&active_enemies<9
+actions+=/summon_infernal,if=!talent.demonic_servitude.enabled&active_enemies>=9
                 //actions+=/run_action_list,name=aoe,if=active_enemies>=6|(talent.charred_remains.enabled&active_enemies>=4)
-                if (utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count() >= 6 || (utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count() >= 4 && HasTalent(WarlockTalents.CHARRED_REMAINS)) && !DestructionWarlockSettings.Instance.AvoidAOE)
+                if (active_enemies >= 6 || (active_enemies >= 4 && HasTalent(WarlockTalents.CHARRED_REMAINS)) && !DestructionWarlockSettings.Instance.AvoidAOE)
                 {
                     utils.LogActivity("Start AOE");
                     return aoe();
@@ -577,7 +586,7 @@ namespace KingWoW
         private bool single()
         {
             //actions.single_target=havoc,target=2
-            if (utils.CanCast(HAVOC) && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count()>=2)
+            if (utils.CanCast(HAVOC) && active_enemies>=2)
             {
                 utils.LogActivity(HAVOC, Me.CurrentTargetGuid.name);
                 return utils.Cast(HAVOC, Me.CurrentTargetGuid);
@@ -591,7 +600,7 @@ namespace KingWoW
             }
             
             //actions.single_target+=/fire_and_brimstone,if=buff.fire_and_brimstone.down&dot.immolate.remains<=action.immolate.cast_time&active_enemies>4
-            if (utils.CanCast(FIRE_AND_BRIMSTONE) && !utils.isAuraActive(FIRE_AND_BRIMSTONE) && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count()>4)
+            if (utils.CanCast(FIRE_AND_BRIMSTONE) && !utils.isAuraActive(FIRE_AND_BRIMSTONE) && active_enemies>4)
             {
                 utils.LogActivity(FIRE_AND_BRIMSTONE);
                 return utils.Cast(FIRE_AND_BRIMSTONE);
@@ -640,26 +649,78 @@ namespace KingWoW
             }
             
             //actions.single_target+=/chaos_bolt,if=talent.charred_remains.enabled&active_enemies>1&target.health.pct>20
-            if (utils.CanCast(CHAOS_BOLT) && utils.GetCharges(CONFLAGRATE)==2)
+            if (utils.CanCast(CHAOS_BOLT) && utils.HasTalent(CHARRED_REMAINS) && active_enemies>1 && Me.CurrentTarget.HealthPercent>20)
+            {
+                utils.LogActivity(CHAOS_BOLT, target.name, active_enemies);
+                return utils.Cast(CHAOS_BOLT, target);
+            }
+            
+            //actions.single_target+=/chaos_bolt,if=talent.charred_remains.enabled&buff.backdraft.stack<3&burning_ember>=2.5
+            if (utils.CanCast(CHAOS_BOLT) && utils.HasTalent(CHARRED_REMAINS) && utils.GetAuraStack(BACKDRAFT, Me)<3 && burning_ember>=2.5)
             {
                 utils.LogActivity(CHAOS_BOLT, target.name);
                 return utils.Cast(CHAOS_BOLT, target);
             }
-            
-//actions.single_target+=/chaos_bolt,if=talent.charred_remains.enabled&buff.backdraft.stack<3&burning_ember>=2.5
-//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&(burning_ember>=3.5|buff.dark_soul.up|target.time_to_die<20)
-//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&set_bonus.tier17_2pc=1&burning_ember>=2.5
-//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&buff.archmages_greater_incandescence_int.react&buff.archmages_greater_incandescence_int.remains>cast_time
-//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.intellect.react&trinket.proc.intellect.remains>cast_time
-//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.crit.react&trinket.proc.crit.remains>cast_time
-//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.stacking_proc.multistrike.react>=8&trinket.stacking_proc.multistrike.remains>=cast_time
-//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.multistrike.react&trinket.proc.multistrike.remains>cast_time
-//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.versatility.react&trinket.proc.versatility.remains>cast_time
-//actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.mastery.react&trinket.proc.mastery.remains>cast_time
-//actions.single_target+=/fire_and_brimstone,if=buff.fire_and_brimstone.down&dot.immolate.remains<=(dot.immolate.duration*0.3)&active_enemies>4
-//actions.single_target+=/immolate,cycle_targets=1,if=remains<=(duration*0.3)
-//actions.single_target+=/conflagrate
-//actions.single_target+=/incinerate
+
+            //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&(burning_ember>=3.5|buff.dark_soul.up|target.time_to_die<20)
+            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(BACKDRAFT, Me)<3 && (burning_ember>=3.5 || utils.isAuraActive(DARK_SOUL) || target.time_to_die<20))
+            {
+                utils.LogActivity(CHAOS_BOLT, target.name);
+                return utils.Cast(CHAOS_BOLT, target);
+            }
+            //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&set_bonus.tier17_2pc=1&burning_ember>=2.5
+            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(BACKDRAFT, Me)<3 && set_bonus.tier17_2pc=1 && burning_ember>=2.5)
+            {
+                utils.LogActivity(CHAOS_BOLT, target.name);
+                return utils.Cast(CHAOS_BOLT, target);
+            }
+            //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&buff.archmages_greater_incandescence_int.react&buff.archmages_greater_incandescence_int.remains>cast_time
+            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(BACKDRAFT, Me)<3 && utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && (int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>utils.GetSpellCastTime(CHAOS_BOLT).Milliseconds)
+            {
+                utils.LogActivity(CHAOS_BOLT, target.name);
+                return utils.Cast(CHAOS_BOLT, target);
+            }
+
+            //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.intellect.react&trinket.proc.intellect.remains>cast_time
+            //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.crit.react&trinket.proc.crit.remains>cast_time
+            //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.stacking_proc.multistrike.react>=8&trinket.stacking_proc.multistrike.remains>=cast_time
+            //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.multistrike.react&trinket.proc.multistrike.remains>cast_time
+            //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.versatility.react&trinket.proc.versatility.remains>cast_time
+            //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.mastery.react&trinket.proc.mastery.remains>cast_time
+            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(BACKDRAFT, Me)<3 && utils.isAuraActive(HOWLING_SOUL) && (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>utils.GetSpellCastTime(CHAOS_BOLT).Milliseconds)
+            {
+                utils.LogActivity(CHAOS_BOLT, target.name);
+                return utils.Cast(CHAOS_BOLT, target);
+            }
+            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(BACKDRAFT, Me)<3 && utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) && (int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>utils.GetSpellCastTime(CHAOS_BOLT).Milliseconds)
+            {
+                utils.LogActivity(CHAOS_BOLT, target.name);
+                return utils.Cast(CHAOS_BOLT, target);
+            }
+            //actions.single_target+=/fire_and_brimstone,if=buff.fire_and_brimstone.down&dot.immolate.remains<=(dot.immolate.duration*0.3)&active_enemies>4
+            if (utils.CanCast(FIRE_AND_BRIMSTONE) && !utils.isAuraActive(FIRE_AND_BRIMSTONE) && (int)utils.MyAuraTimeLeft(IMMOLATE, target)<=4500 && active_enemies>4)
+            {
+                utils.LogActivity(FIRE_AND_BRIMSTONE);
+                return utils.Cast(FIRE_AND_BRIMSTONE);
+            }
+            //actions.single_target+=/immolate,cycle_targets=1,if=remains<=(duration*0.3)
+            if (utils.CanCast(IMMOLATE) && (int)utils.MyAuraTimeLeft(IMMOLATE, target)<=4500)
+            {
+                utils.LogActivity(IMMOLATE, target.name);
+                return utils.Cast(IMMOLATE, target);
+            }
+            //actions.single_target+=/conflagrate
+            if (utils.CanCast(CONFLAGRATE))
+            {
+                utils.LogActivity(CONFLAGRATE, target.name);
+                return utils.Cast(CONFLAGRATE, target);
+            }
+            //actions.single_target+=/incinerate
+            if (utils.CanCast(INCINERATE))
+            {
+                utils.LogActivity(INCINERATE, target.name);
+                return utils.Cast(INCINERATE, target);
+            }
             return false;
         }
 
@@ -795,6 +856,7 @@ namespace KingWoW
         }
         
         public double burning_ember { get { return Me.GetPowerInfo(WoWPowerType.BurningEmbers).Current / 10; } }
+        public int active_enemies { return utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count(); }
         
     }
 }
