@@ -492,7 +492,7 @@ namespace KingWoW
                                                                                                                                   || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>6
                                                                                                                                   || (int)utils.MyAuraTimeLeft(VOID_SHARDS, Me)>6 
                                                                                                                                   || utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW)
-                                                                                                                                  || target.time_to_die<40)))
+                                                                                                                                  || time_to_die(target)<40)))
                 {
                     utils.LogActivity(DARK_SOUL);
                     return utils.Cast(DARK_SOUL);
@@ -591,7 +591,7 @@ namespace KingWoW
             }
 
             //actions.single_target+=/shadowburn,if=talent.charred_remains.enabled&target.time_to_die<10
-            if (utils.CanCast(SHADOWBURN) && utils.HasTalent(CHARRED_REMAINS) && Me.CurrentTarget.HealthPercent < 3)
+            if (utils.CanCast(SHADOWBURN) && utils.HasTalent(CHARRED_REMAINS) && time_to_die(target))
             {
                 utils.LogActivity(SHADOWBURN，target.name);
                 return utils.Cast(SHADOWBURN，target);
@@ -661,7 +661,7 @@ namespace KingWoW
             }
 
             //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&(burning_ember>=3.5|buff.dark_soul.up|target.time_to_die<20)
-            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(BACKDRAFT, Me)<3 && (burning_ember>=3.5 || utils.isAuraActive(DARK_SOUL) || target.time_to_die<20))
+            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(BACKDRAFT, Me)<3 && (burning_ember>=3.5 || utils.isAuraActive(DARK_SOUL) || time_to_die(target)<20))
             {
                 utils.LogActivity(CHAOS_BOLT, target.name);
                 return utils.Cast(CHAOS_BOLT, target);
@@ -863,17 +863,11 @@ namespace KingWoW
         /// <param name="target">unit to monitor</param>
         /// <param name="indeterminateValue">return value if death cannot be calculated ( -1 or int.MaxValue are common)</param>
         /// <returns>number of seconds </returns>
-        public static long TimeToDeath(this WoWUnit target, long indeterminateValue = -1)
+        public static long time_to_die(WoWUnit target)
         {
             if (target == null || !target.IsValid || !target.IsAlive)
             {
-                //Logging.Write("TimeToDeath: {0} (GUID: {1}, Entry: {2}) is dead!", target.SafeName(), target.Guid, target.Entry);
                 return 0;
-            }
-
-            if (StyxWoW.Me.CurrentTarget.IsTrainingDummy())
-            {
-                return 111;     // pick a magic number since training dummies dont die
             }
 
             //Fill variables on new target or on target switch, this will loose all calculations from last target
@@ -906,7 +900,7 @@ namespace KingWoW
                 if (calcTime < 1) calcTime = 1;
                 //calc_time is a int value for time to die (seconds) so there's no need to do SecondsToTime(calc_time)
                 long timeToDie = calcTime;
-                //Logging.Write("TimeToDeath: {0} (GUID: {1}, Entry: {2}) dies in {3}, you are dpsing with {4} dps", target.SafeName(), target.Guid, target.Entry, timeToDie, dps);
+                //Logging.Write("time_to_die: {0} (GUID: {1}, Entry: {2}) dies in {3}, you are dpsing with {4} dps", target.SafeName(), target.Guid, target.Entry, timeToDie, dps);
                 return timeToDie;
             }
             if (hpDiff <= 0)
@@ -917,16 +911,16 @@ namespace KingWoW
                 _firstLifeMax = target.MaxHealth;
                 _firstTime = ConvDate2Timestam(DateTime.Now);
                 //Lets do a little trick and calculate with seconds / u know Timestamp from unix? we'll do so too
-                //Logging.Write("TimeToDeath: {0} (GUID: {1}, Entry: {2}) was healed, resetting data.", target.SafeName(), target.Guid, target.Entry);
-                return indeterminateValue;
+                //Logging.Write("time_to_die: {0} (GUID: {1}, Entry: {2}) was healed, resetting data.", target.SafeName(), target.Guid, target.Entry);
+                return 9999;
             }
             if (_currentLife == _firstLifeMax)
             {
-                //Logging.Write("TimeToDeath: {0} (GUID: {1}, Entry: {2}) is at full health.", target.SafeName(), target.Guid, target.Entry);
-                return indeterminateValue;
+                //Logging.Write("time_to_die: {0} (GUID: {1}, Entry: {2}) is at full health.", target.SafeName(), target.Guid, target.Entry);
+                return 9999;
             }
-            //Logging.Write("TimeToDeath: {0} (GUID: {1}, Entry: {2}) no damage done, nothing to calculate.", target.SafeName(), target.Guid, target.Entry);
-            return indeterminateValue;
+            //Logging.Write("time_to_die: {0} (GUID: {1}, Entry: {2}) no damage done, nothing to calculate.", target.SafeName(), target.Guid, target.Entry);
+            return 9999;
         }
         
     }
