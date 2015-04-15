@@ -186,21 +186,17 @@ namespace KingWoW
         {
             get
             {
-                Logging.Write("Powered by Attilio478");
-                if ((Me.Mounted && !DemonologyWarlockSettings.Instance.AutoDismountOnCombat) || IsCRPaused || !StyxWoW.IsInGame || !StyxWoW.IsInWorld || Me.Silenced/*|| utils.IsGlobalCooldown(true)*/ || utils.isAuraActive(DRINK) || utils.isAuraActive(FOOD) || Me.IsChanneling || utils.MeIsCastingWithLag())
+                if ((Me.Mounted && !DestructionWarlockSettings.Instance.AutoDismountOnCombat) || IsCRPaused || !StyxWoW.IsInGame || !StyxWoW.IsInWorld || Me.Silenced/*|| utils.IsGlobalCooldown(true)*/ || utils.isAuraActive(DRINK) || utils.isAuraActive(FOOD) || Me.IsChanneling || utils.MeIsCastingWithLag())
                     return false;
-                Logging.Write("Powered by Attilio678");
                 //UPDATE TANK
                 //tank = utils.GetTank();
                 tank = utils.SimpleGetTank(40f);
                 if (tank == null || !tank.IsValid || !tank.IsAlive) tank = Me;
-
                 if (tank != null && (lastTank == null || lastTank.Guid != tank.Guid))
                 {
                     lastTank = tank;
                     utils.LogActivity(TANK_CHANGE, tank.Class.ToString());
                 }
-                Logging.Write("Powered by Attilio578");
                 return CombatRotation();
             }
         }
@@ -210,10 +206,9 @@ namespace KingWoW
             get
             {
                 if (Me.IsDead) return MyDeath();
-                if ((Me.Mounted && !DemonologyWarlockSettings.Instance.AutoDismountOnCombat) || IsCRPaused || !StyxWoW.IsInGame || !StyxWoW.IsInWorld || Me.Silenced/*|| utils.IsGlobalCooldown(true)*/ || utils.isAuraActive(DRINK) || utils.isAuraActive(FOOD) || Me.IsChanneling || utils.MeIsCastingWithLag() || Me.Mounted)
+                if ((Me.Mounted && !DestructionWarlockSettings.Instance.AutoDismountOnCombat) || IsCRPaused || !StyxWoW.IsInGame || !StyxWoW.IsInWorld || Me.Silenced/*|| utils.IsGlobalCooldown(true)*/ || utils.isAuraActive(DRINK) || utils.isAuraActive(FOOD) || Me.IsChanneling || utils.MeIsCastingWithLag() || Me.Mounted)
                     return false;
-                Logging.Write("Powered by Attilio678");
-                if (!Me.Combat && DemonologyWarlockSettings.Instance.UseEvocation)
+                if (!Me.Combat && DestructionWarlockSettings.Instance.UseEvocation)
                     LifeTap();
                 //UPDATE TANK
                 //tank = utils.GetTank();
@@ -248,6 +243,7 @@ namespace KingWoW
             get
             {
                 WoWUnit target = Me.CurrentTarget;
+                //Logging.Write("Powered by Attilio578");
                 if (target != null && target.IsDead)
                     Me.ClearTarget();
                 else if (target != null && !target.IsFriendly && target.Attackable && !target.IsDead)
@@ -289,16 +285,11 @@ namespace KingWoW
                 Logging.Write("Ciao " + Me.Class.ToString());
                 Logging.Write("Welcome to " + Name + " custom class");
                 Logging.Write("Tanks All HonorBuddy Forum developers for code inspiration!");
-                Logging.Write("Powered by Attilio76");
                 BotEvents.OnBotStartRequested += new BotEvents.OnBotStartStopRequestedDelegate(BotEvents_OnBotStart);
                 Lua.Events.AttachEvent("GROUP_ROSTER_UPDATE", UpdateGroupChangeEvent);
-                Logging.Write("Powered by Attilio77");
                 InitializeHotkey();
-                Logging.Write("Powered by Attilio78");
                 //RegisterHotkeys();
-                Logging.Write("Powered by Attilio74");
                 utils.FillParties();
-                Logging.Write("Powered by Attilio73");
                 return true; ;
             }
         }
@@ -363,21 +354,19 @@ namespace KingWoW
             if (utils.Mounted() || utils.MeIsCastingWithLag() /*ExtraUtilsSettings.Instance.PauseRotation || */)
                 return false;
                 
-            GetBestPet();
+            //GetBestPet();
             //GRIMOIRE_OF_SACRIFICE
             if (HasTalent(WarlockTalents.GrimoireOfSacrifice) && utils.CanCast(GRIMOIRE_OF_SACRIFICE))
             {
                 utils.LogActivity(GRIMOIRE_OF_SACRIFICE);
-                return utils.Cast(GRIMOIRE_OF_SACRIFICE);
+               return utils.Cast(GRIMOIRE_OF_SACRIFICE);
             }
-            
             //HEALTH STONE
             if (!Me.Combat && !HaveHealthStone && Me.Level >= 10 && utils.CanCast(CREATE_HEALTHSTONE) && !Me.IsMoving)
             {
                 utils.LogActivity(CREATE_HEALTHSTONE);
                 return utils.Cast(CREATE_HEALTHSTONE);
             }
-
             //Dark Intent
             if (DestructionWarlockSettings.Instance.AutoBuffBrillance && !utils.isAuraActive(DARK_INTENT) && utils.CanCast(DARK_INTENT))
             {
@@ -521,7 +510,7 @@ namespace KingWoW
                     utils.LogActivity("Start AOE");
                     return aoe(target);
                 }
-                else if (utils.CanCast("Grimoire: Doomguard") && utils.isAuraActive(DARK_SOUL))
+                else
                 {
                     utils.LogActivity("Start Single");
                     return single(target);
@@ -621,7 +610,7 @@ namespace KingWoW
             }
             
             //actions.single_target+=/immolate,cycle_targets=1,if=remains<=cast_time
-            if (utils.CanCast(IMMOLATE) && (int)utils.MyAuraTimeLeft(IMMOLATE, target)>utils.GetSpellCastTime(IMMOLATE).Milliseconds)
+            if (utils.CanCast(IMMOLATE) && (int)utils.MyAuraTimeLeft(IMMOLATE, target)<=utils.GetSpellCastTime(IMMOLATE).Milliseconds)
             {
                 utils.LogActivity(IMMOLATE, target.Name);
                 return utils.Cast(IMMOLATE, target);
