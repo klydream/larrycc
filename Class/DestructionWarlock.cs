@@ -77,7 +77,7 @@ namespace KingWoW
 
         private const string SHADOW_FURY = "SHADOW_FURY";
         private const string DARK_FLIGHT = "DARK_FLIGHT";
-        private const string GRIMOIRE_OF_SACRIFICE = "GrimoireOfSacrifice";
+        private const string GRIMOIRE_OF_SACRIFICE = "Grimoire of Sacrifice";
         
         private const string CHAOTIC_INFUSION = "Chaotic Infusion";
         private const string MARK_OF_BLEEDING_HOLLOW = "Mark of Bleeding Hollow";
@@ -357,7 +357,7 @@ namespace KingWoW
             if (utils.Mounted() || utils.MeIsCastingWithLag() /*ExtraUtilsSettings.Instance.PauseRotation || */)
                 return false;
                 
-            //GetBestPet();
+            GetBestPet();
             //GRIMOIRE_OF_SACRIFICE
             if (HasTalent(WarlockTalents.GrimoireOfSacrifice) && utils.CanCast(GRIMOIRE_OF_SACRIFICE))
             {
