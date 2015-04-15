@@ -73,7 +73,7 @@ namespace KingWoW
         private const string CREATE_HEALTHSTONE = "Create Healthstone";
         private const string MIRROR_IMAGE = "Mirror Image";
         private const string BLIZZARD = "Blizzard";
-        private const string Hand_of_Guldan = "Hand of Gul'dan";
+        private const string HAND_OF_GULDAN = "Hand of Gul'dan";
         private const string INVISIBILITY = "Invisibility";
         private const string DARK_INTENT = "Dark Intent";
         private const string DARK_SOUL = "Dark Soul: Knowledge";
@@ -119,7 +119,7 @@ namespace KingWoW
         private const string BLOOD_PACT = "Blood Pact";
         private const string ARCHMAGES_GREATER_INCANDESCENCE = "Item - Attacks Proc Archmage's Greater Incandescence";
         private const string HOWLING_SOUL = "Item - Attacks Proc Critical Strike [Howling Soul]";
-        private const int    MyGCD;
+        private       int    MyGCD = 1500;
         private DateTime nextTimeCancelMetamorphosis;
         private DateTime StartCombat;
         
@@ -215,7 +215,7 @@ namespace KingWoW
             BaseBot = "unknown";
             talents = new TalentManager();
             nextTimeCancelMetamorphosis = DateTime.Now;
-            MyGCD = 1500 * Me.SpellHasteModifier;
+            MyGCD = (int)(1500 * Me.SpellHasteModifier);
 
         }
 
@@ -432,9 +432,9 @@ namespace KingWoW
         private bool ProcWork()
         {
             //cast  Frost Bomb on cooldown.
-//actions+=/hand_of_guldan,if=!in_flight&dot.shadowflame.remains<travel_time+action.shadow_bolt.cast_time&talent.demonbolt.enabled&((set_bonus.tier17_4pc=0&((charges=1&recharge_time<4)|charges=2))|(charges=3|(charges=2&recharge_time<13.8-travel_time*2))|dot.shadowflame.remains>travel_time)
+            //actions+=/hand_of_guldan,if=!in_flight&dot.shadowflame.remains<travel_time+action.shadow_bolt.cast_time&talent.demonbolt.enabled&((set_bonus.tier17_4pc=0&((charges=1&recharge_time<4)|charges=2))|(charges=3|(charges=2&recharge_time<13.8-travel_time*2))|dot.shadowflame.remains>travel_time)
 
-            if (utils.CanCast(Hand_of_Guldan))
+            if (utils.CanCast(HAND_OF_GULDAN))
             {
                 WoWUnit target = null;
                 if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.MANUAL)
@@ -452,8 +452,8 @@ namespace KingWoW
                 
                 if (target != null && !target.IsDead && target.InLineOfSpellSight && target.Distance - target.CombatReach - 1 <= 40)
                 {
-                    utils.LogActivity(Hand_of_Guldan, target.Name);
-                    return utils.Cast(Hand_of_Guldan, target);
+                    utils.LogActivity(HAND_OF_GULDAN, target.Name);
+                    return utils.Cast(HAND_OF_GULDAN, target);
                 }
             }
             
@@ -621,9 +621,9 @@ namespace KingWoW
 
                 if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS)
                 && utils.MyAuraTimeLeft(DARK_SOUL, Me)>MyGCD
-                && (DateTime.Now>StartCombat+6 || utils.GetAuraStack(SHADOW_FLAME, target)==2)
+                && (DateTime.Now>(StartCombat+new TimeSpan(0, 0, 0, 0, 6000)) || utils.GetAuraStack(target, SHADOW_FLAME, false)==2)
                 && (CurrentDemonicFury>300 || !utils.CanCast(DARK_SOUL))
-                && ((CurrentDemonicFury>=80 && utils.GetAuraStack(MOLTEN_CORE, Me)>=1) || (CurrentDemonicFury>=40 && CurrentDemonicFury<80)) )
+                && ((CurrentDemonicFury>=80 && utils.GetAuraStack(Me, MOLTEN_CORE, true)>=1) || (CurrentDemonicFury>=40 && CurrentDemonicFury<80)) )
                 {
                     utils.LogActivity(METAMORPHOSIS);
                     return utils.Cast(METAMORPHOSIS);
