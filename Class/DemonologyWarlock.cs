@@ -223,9 +223,10 @@ namespace KingWoW
         {
             get
             {
+                Logging.Write("Powered by Attilio478");
                 if ((Me.Mounted && !DemonologyWarlockSettings.Instance.AutoDismountOnCombat) || IsCRPaused || !StyxWoW.IsInGame || !StyxWoW.IsInWorld || Me.Silenced/*|| utils.IsGlobalCooldown(true)*/ || utils.isAuraActive(DRINK) || utils.isAuraActive(FOOD) || Me.IsChanneling || utils.MeIsCastingWithLag())
                     return false;
-
+                Logging.Write("Powered by Attilio678");
                 //UPDATE TANK
                 //tank = utils.GetTank();
                 tank = utils.SimpleGetTank(40f);
@@ -236,6 +237,7 @@ namespace KingWoW
                     lastTank = tank;
                     utils.LogActivity(TANK_CHANGE, tank.Class.ToString());
                 }
+                Logging.Write("Powered by Attilio578");
                 return CombatRotation();
             }
         }
@@ -261,7 +263,8 @@ namespace KingWoW
                     utils.LogActivity(TANK_CHANGE, tank.Class.ToString());
                 }
                 if (tank != null && tank.Combat && !Me.Combat)
-                    return CombatRotation();
+                    {Logging.Write("Powered by Attilio778");
+                    	return CombatRotation();}
                 return false;
             }
         }

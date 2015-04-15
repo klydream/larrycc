@@ -186,9 +186,10 @@ namespace KingWoW
         {
             get
             {
-                if ((Me.Mounted && !DestructionWarlockSettings.Instance.AutoDismountOnCombat) || IsCRPaused || !StyxWoW.IsInGame || !StyxWoW.IsInWorld || Me.Silenced/*|| utils.IsGlobalCooldown(true)*/ || utils.isAuraActive(DRINK) || utils.isAuraActive(FOOD) || Me.IsChanneling || utils.MeIsCastingWithLag())
+                Logging.Write("Powered by Attilio478");
+                if ((Me.Mounted && !DemonologyWarlockSettings.Instance.AutoDismountOnCombat) || IsCRPaused || !StyxWoW.IsInGame || !StyxWoW.IsInWorld || Me.Silenced/*|| utils.IsGlobalCooldown(true)*/ || utils.isAuraActive(DRINK) || utils.isAuraActive(FOOD) || Me.IsChanneling || utils.MeIsCastingWithLag())
                     return false;
-
+                Logging.Write("Powered by Attilio678");
                 //UPDATE TANK
                 //tank = utils.GetTank();
                 tank = utils.SimpleGetTank(40f);
@@ -199,6 +200,7 @@ namespace KingWoW
                     lastTank = tank;
                     utils.LogActivity(TANK_CHANGE, tank.Class.ToString());
                 }
+                Logging.Write("Powered by Attilio578");
                 return CombatRotation();
             }
         }
@@ -208,10 +210,10 @@ namespace KingWoW
             get
             {
                 if (Me.IsDead) return MyDeath();
-                if ((Me.Mounted && !DestructionWarlockSettings.Instance.AutoDismountOnCombat) || IsCRPaused || !StyxWoW.IsInGame || !StyxWoW.IsInWorld || Me.Silenced/*|| utils.IsGlobalCooldown(true)*/ || utils.isAuraActive(DRINK) || utils.isAuraActive(FOOD) || Me.IsChanneling || utils.MeIsCastingWithLag() || Me.Mounted)
+                if ((Me.Mounted && !DemonologyWarlockSettings.Instance.AutoDismountOnCombat) || IsCRPaused || !StyxWoW.IsInGame || !StyxWoW.IsInWorld || Me.Silenced/*|| utils.IsGlobalCooldown(true)*/ || utils.isAuraActive(DRINK) || utils.isAuraActive(FOOD) || Me.IsChanneling || utils.MeIsCastingWithLag() || Me.Mounted)
                     return false;
-
-                if (!Me.Combat && DestructionWarlockSettings.Instance.UseEvocation)
+                Logging.Write("Powered by Attilio678");
+                if (!Me.Combat && DemonologyWarlockSettings.Instance.UseEvocation)
                     LifeTap();
                 //UPDATE TANK
                 //tank = utils.GetTank();
@@ -290,9 +292,13 @@ namespace KingWoW
                 Logging.Write("Powered by Attilio76");
                 BotEvents.OnBotStartRequested += new BotEvents.OnBotStartStopRequestedDelegate(BotEvents_OnBotStart);
                 Lua.Events.AttachEvent("GROUP_ROSTER_UPDATE", UpdateGroupChangeEvent);
+                Logging.Write("Powered by Attilio77");
                 InitializeHotkey();
-                RegisterHotkeys();
+                Logging.Write("Powered by Attilio78");
+                //RegisterHotkeys();
+                Logging.Write("Powered by Attilio74");
                 utils.FillParties();
+                Logging.Write("Powered by Attilio73");
                 return true; ;
             }
         }
@@ -391,6 +397,15 @@ namespace KingWoW
             }
             return false;
         }
+        
+        
+        private bool ProcWork()
+        {
+            //cast  Frost Bomb on cooldown.
+            //actions+=/hand_of_guldan,if=!in_flight&dot.shadowflame.remains<travel_time+action.shadow_bolt.cast_time&talent.demonbolt.enabled&((set_bonus.tier17_4pc=0&((charges=1&recharge_time<4)|charges=2))|(charges=3|(charges=2&recharge_time<13.8-travel_time*2))|dot.shadowflame.remains>travel_time)
+            return false;
+        }
+
 
         private bool BotUpdate()
         {
@@ -457,6 +472,7 @@ namespace KingWoW
             extra.WaterSpirit();
             extra.LifeSpirit();
             Defensivececk();
+            ProcWork();
             
             //foreach (var a in Me.GetAllAuras())
             //{
