@@ -79,6 +79,7 @@ namespace KingWoW
         private const string DARK_FLIGHT = "DARK_FLIGHT";
         private const string GRIMOIRE_OF_SACRIFICE = "GrimoireOfSacrifice";
         
+        private const string CHAOTIC_INFUSION = "Chaotic Infusion";
         private const string MARK_OF_BLEEDING_HOLLOW = "Mark of Bleeding Hollow";
         private const string ARCHMAGES_GREATER_INCANDESCENCE = "Item - Attacks Proc Archmage's Greater Incandescence";
         private const string HOWLING_SOUL = "Item - Attacks Proc Critical Strike [Howling Soul]";
@@ -497,9 +498,9 @@ namespace KingWoW
                     utils.LogActivity(DARK_SOUL);
                     return utils.Cast(DARK_SOUL);
                 }
-                //actions+=/summon_doomguard,if=!talent.demonic_servitude.enabled&active_enemies<9
-                //actions+=/summon_infernal,if=!talent.demonic_servitude.enabled&active_enemies>=9
-                if (active_enemies >= 6 || (active_enemies >= 4 && HasTalent(WarlockTalents.CharredRemains)) && !DestructionWarlockSettings.Instance.AvoidAOE)
+                //actions+=/summon_doomguard,if=!talent.demonic_servitude.enabled&active_enemies(target)<9
+                //actions+=/summon_infernal,if=!talent.demonic_servitude.enabled&active_enemies(target)>=9
+                if (active_enemies(target) >= 6 || (active_enemies(target) >= 4 && HasTalent(WarlockTalents.CharredRemains)) && !DestructionWarlockSettings.Instance.AvoidAOE)
                 {
                     utils.LogActivity("Start AOE");
                     return aoe(target);
@@ -583,21 +584,21 @@ namespace KingWoW
         private bool single(WoWUnit target)
         {
             //actions.single_target=havoc,target=2
-            if (utils.CanCast(HAVOC) && active_enemies>=2)
+            if (utils.CanCast(HAVOC) && active_enemies(target)>=2)
             {
                 utils.LogActivity(HAVOC, Me.FocusedUnit.Name);
                 return utils.Cast(HAVOC, Me.FocusedUnit);
             }
 
             //actions.single_target+=/shadowburn,if=talent.charred_remains.enabled&target.time_to_die<10
-            if (utils.CanCast(SHADOWBURN) && HasTalent(WarlockTalents.CharredRemains) && time_to_die(target))
+            if (utils.CanCast(SHADOWBURN) && HasTalent(WarlockTalents.CharredRemains) && time_to_die(target)<10)
             {
                 utils.LogActivity(SHADOWBURN,target.Name);
                 return utils.Cast(SHADOWBURN,target);
             }
             
-            //actions.single_target+=/fire_and_brimstone,if=buff.fire_and_brimstone.down&dot.immolate.remains<=action.immolate.cast_time&active_enemies>4
-            if (utils.CanCast(FIRE_AND_BRIMSTONE) && !utils.isAuraActive(FIRE_AND_BRIMSTONE) && active_enemies>4)
+            //actions.single_target+=/fire_and_brimstone,if=buff.fire_and_brimstone.down&dot.immolate.remains<=action.immolate.cast_time&active_enemies(target)>4
+            if (utils.CanCast(FIRE_AND_BRIMSTONE) && !utils.isAuraActive(FIRE_AND_BRIMSTONE) && active_enemies(target)>4)
             {
                 utils.LogActivity(FIRE_AND_BRIMSTONE);
                 return utils.Cast(FIRE_AND_BRIMSTONE);
@@ -610,10 +611,10 @@ namespace KingWoW
                 return utils.Cast(IMMOLATE, target);
             }
             
-            if (utils.CanCast(IMMOLATE) && (int)utils.MyAuraTimeLeft(IMMOLATE, Me.CurrentTargetGuid)>utils.GetSpellCastTime(IMMOLATE).Milliseconds)
+            if (utils.CanCast(IMMOLATE) && (int)utils.MyAuraTimeLeft(IMMOLATE, Me.FocusedUnit)>utils.GetSpellCastTime(IMMOLATE).Milliseconds)
             {
-                utils.LogActivity(IMMOLATE, Me.CurrentTargetGuid.Name);
-                return utils.Cast(IMMOLATE,Me.CurrentTargetGuid);
+                utils.LogActivity(IMMOLATE, Me.FocusedUnit.Name);
+                return utils.Cast(IMMOLATE,Me.FocusedUnit);
             }
             
             //actions.single_target+=/cancel_buff,name=fire_and_brimstone,if=buff.fire_and_brimstone.up&dot.immolate.remains>(dot.immolate.duration*0.3)
@@ -645,10 +646,10 @@ namespace KingWoW
                 return utils.Cast(CONFLAGRATE, target);
             }
             
-            //actions.single_target+=/chaos_bolt,if=talent.charred_remains.enabled&active_enemies>1&target.health.pct>20
-            if (utils.CanCast(CHAOS_BOLT) && HasTalent(WarlockTalents.CharredRemains) && active_enemies>1 && Me.CurrentTarget.HealthPercent>20)
+            //actions.single_target+=/chaos_bolt,if=talent.charred_remains.enabled&active_enemies(target)>1&target.health.pct>20
+            if (utils.CanCast(CHAOS_BOLT) && HasTalent(WarlockTalents.CharredRemains) && active_enemies(target)>1 && Me.CurrentTarget.HealthPercent>20)
             {
-                utils.LogActivity(CHAOS_BOLT, target.Name, active_enemies);
+                utils.LogActivity(CHAOS_BOLT, target.Name+active_enemies(target).ToString());
                 return utils.Cast(CHAOS_BOLT, target);
             }
             
@@ -666,7 +667,7 @@ namespace KingWoW
                 return utils.Cast(CHAOS_BOLT, target);
             }
             //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&set_bonus.tier17_2pc=1&burning_ember>=2.5
-            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(Me, BACKDRAFT, true)<3 && set_bonus.tier17_2pc=1 && burning_ember>=2.5)
+            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(Me, BACKDRAFT, true)<3 && utils.isAuraActive(CHAOTIC_INFUSION) && burning_ember>=2.5)
             {
                 utils.LogActivity(CHAOS_BOLT, target.Name);
                 return utils.Cast(CHAOS_BOLT, target);
@@ -694,8 +695,8 @@ namespace KingWoW
                 utils.LogActivity(CHAOS_BOLT, target.Name);
                 return utils.Cast(CHAOS_BOLT, target);
             }
-            //actions.single_target+=/fire_and_brimstone,if=buff.fire_and_brimstone.down&dot.immolate.remains<=(dot.immolate.duration*0.3)&active_enemies>4
-            if (utils.CanCast(FIRE_AND_BRIMSTONE) && !utils.isAuraActive(FIRE_AND_BRIMSTONE) && (int)utils.MyAuraTimeLeft(IMMOLATE, target)<=4500 && active_enemies>4)
+            //actions.single_target+=/fire_and_brimstone,if=buff.fire_and_brimstone.down&dot.immolate.remains<=(dot.immolate.duration*0.3)&active_enemies(target)>4
+            if (utils.CanCast(FIRE_AND_BRIMSTONE) && !utils.isAuraActive(FIRE_AND_BRIMSTONE) && (int)utils.MyAuraTimeLeft(IMMOLATE, target)<=4500 && active_enemies(target)>4)
             {
                 utils.LogActivity(FIRE_AND_BRIMSTONE);
                 return utils.Cast(FIRE_AND_BRIMSTONE);
@@ -731,15 +732,15 @@ namespace KingWoW
                 {
                     WoWUnit TargetForMultidot = null;
                     //apply  Nether Tempest and always refresh it right before the last tick;
-                    if (utils.CanCast(CORRUPTION) && utils.AllEnemyMobsHasMyAura(CORRUPTION).Count() < DestructionWarlockSettings.Instance.MultidotEnemyNumberMax)
-                    {
-                        TargetForMultidot = utils.NextApplyAuraTarget(CORRUPTION, 40, 1000, DestructionWarlockSettings.Instance.MultidotAvoidCC, DestructionWarlockSettings.Instance.AvoidDOTPlayers);
-                        if (TargetForMultidot != null)
-                        {
-                            utils.LogActivity("   MULTIDOT   " + NETHER_TEMPEST, TargetForMultidot.Name);
-                            return utils.Cast(CORRUPTION, TargetForMultidot);
-                        }
-                    }
+                    //if (utils.CanCast(CORRUPTION) && utils.AllEnemyMobsHasMyAura(CORRUPTION).Count() < DestructionWarlockSettings.Instance.MultidotEnemyNumberMax)
+                    //{
+                    //    TargetForMultidot = utils.NextApplyAuraTarget(CORRUPTION, 40, 1000, DestructionWarlockSettings.Instance.MultidotAvoidCC, DestructionWarlockSettings.Instance.AvoidDOTPlayers);
+                    //    if (TargetForMultidot != null)
+                    //    {
+                    //        utils.LogActivity("   MULTIDOT   " + NETHER_TEMPEST, TargetForMultidot.Name);
+                    //        return utils.Cast(CORRUPTION, TargetForMultidot);
+                    //    }
+                    //}
 
                     //apply  Living Bomb and refresh it right before or right after the last tick (the expiring Living Bomb will explode in both cases);
                     //if (utils.CanCast(LIVING_BOMB) && utils.AllEnemyMobsHasMyAura(LIVING_BOMB).Count() < 3)
@@ -851,74 +852,10 @@ namespace KingWoW
         }
         
         public double burning_ember { get { return Me.GetPowerInfo(WoWPowerType.BurningEmbers).Current / 10; } }
-        public int active_enemies { get { return utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count(); } }
-        
-        /// <summary>
-        /// seconds until the target dies.  first call initializes values. subsequent
-        /// return estimate or indeterminateValue if death can't be calculated
-        /// </summary>
-        /// <param name="target">unit to monitor</param>
-        /// <param name="indeterminateValue">return value if death cannot be calculated ( -1 or int.MaxValue are common)</param>
-        /// <returns>number of seconds </returns>
-        public static long time_to_die(WoWUnit target)
-        {
-            if (target == null || !target.IsValid || !target.IsAlive)
-            {
-                return 0;
-            }
-
-            //Fill variables on new target or on target switch, this will loose all calculations from last target
-            if (guid != target.Guid || (guid == target.Guid && target.CurrentHealth == _firstLifeMax))
-            {
-                guid = target.Guid;
-                _firstLife = target.CurrentHealth;
-                _firstLifeMax = target.MaxHealth;
-                _firstTime = ConvDate2Timestam(DateTime.Now);
-                //Lets do a little trick and calculate with seconds / u know Timestamp from unix? we'll do so too
-            }
-            _currentLife = target.CurrentHealth;
-            _currentTime = ConvDate2Timestam(DateTime.Now);
-            int timeDiff = _currentTime - _firstTime;
-            uint hpDiff = _firstLife - _currentLife;
-            if (hpDiff > 0)
-            {
-                /*
-                * Rule of three (Dreisatz):
-                * If in a given timespan a certain value of damage is done, what timespan is needed to do 100% damage?
-                * The longer the timespan the more precise the prediction
-                * time_diff/hp_diff = x/first_life_max
-                * x = time_diff*first_life_max/hp_diff
-                * 
-                * For those that forgot, http://mathforum.org/library/drmath/view/60822.html
-                */
-                long fullTime = timeDiff * _firstLifeMax / hpDiff;
-                long pastFirstTime = (_firstLifeMax - _firstLife) * timeDiff / hpDiff;
-                long calcTime = _firstTime - pastFirstTime + fullTime - _currentTime;
-                if (calcTime < 1) calcTime = 1;
-                //calc_time is a int value for time to die (seconds) so there's no need to do SecondsToTime(calc_time)
-                long timeToDie = calcTime;
-                //Logging.Write("time_to_die: {0} (GUID: {1}, Entry: {2}) dies in {3}, you are dpsing with {4} dps", target.SafeName(), target.Guid, target.Entry, timeToDie, dps);
-                return timeToDie;
-            }
-            if (hpDiff <= 0)
-            {
-                //unit was healed,resetting the initial values
-                guid = target.Guid;
-                _firstLife = target.CurrentHealth;
-                _firstLifeMax = target.MaxHealth;
-                _firstTime = ConvDate2Timestam(DateTime.Now);
-                //Lets do a little trick and calculate with seconds / u know Timestamp from unix? we'll do so too
-                //Logging.Write("time_to_die: {0} (GUID: {1}, Entry: {2}) was healed, resetting data.", target.SafeName(), target.Guid, target.Entry);
-                return 9999;
-            }
-            if (_currentLife == _firstLifeMax)
-            {
-                //Logging.Write("time_to_die: {0} (GUID: {1}, Entry: {2}) is at full health.", target.SafeName(), target.Guid, target.Entry);
-                return 9999;
-            }
-            //Logging.Write("time_to_die: {0} (GUID: {1}, Entry: {2}) no damage done, nothing to calculate.", target.SafeName(), target.Guid, target.Entry);
-            return 9999;
+        public int active_enemies(WoWUnit target) 
+        { 
+        	return utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count();
         }
-        
+       
     }
 }
