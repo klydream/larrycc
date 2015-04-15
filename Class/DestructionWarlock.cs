@@ -87,7 +87,7 @@ namespace KingWoW
         private       int    MyGCD = 1500;
         private DateTime     nextTimeCancelMetamorphosis;
         private DateTime     StartCombat;
-
+        private       long   time_to_die;
         //END TALENTS
         //END OF CONSTANTS ==============================
 
@@ -493,7 +493,7 @@ namespace KingWoW
                                                                                                                                                      || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>6
                                                                                                                                                      || (int)utils.MyAuraTimeLeft(VOID_SHARDS, Me)>6 
                                                                                                                                                      || utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW)
-                                                                                                                                                     || time_to_die(target)<40)))
+                                                                                                                                                     || time_to_die<40)))
                 {
                     utils.LogActivity(DARK_SOUL);
                     return utils.Cast(DARK_SOUL);
@@ -591,7 +591,7 @@ namespace KingWoW
             }
 
             //actions.single_target+=/shadowburn,if=talent.charred_remains.enabled&target.time_to_die<10
-            if (utils.CanCast(SHADOWBURN) && HasTalent(WarlockTalents.CharredRemains) && time_to_die(target)<10)
+            if (utils.CanCast(SHADOWBURN) && HasTalent(WarlockTalents.CharredRemains) && time_to_die<10)
             {
                 utils.LogActivity(SHADOWBURN,target.Name);
                 return utils.Cast(SHADOWBURN,target);
@@ -661,7 +661,7 @@ namespace KingWoW
             }
 
             //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&(burning_ember>=3.5|buff.dark_soul.up|target.time_to_die<20)
-            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(Me, BACKDRAFT, true)<3 && (burning_ember>=3.5 || utils.isAuraActive(DARK_SOUL) || time_to_die(target)<20))
+            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(Me, BACKDRAFT, true)<3 && (burning_ember>=3.5 || utils.isAuraActive(DARK_SOUL) || time_to_die<20))
             {
                 utils.LogActivity(CHAOS_BOLT, target.Name);
                 return utils.Cast(CHAOS_BOLT, target);
