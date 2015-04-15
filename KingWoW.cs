@@ -274,12 +274,12 @@ namespace KingWoW
                                 activePath = FireMageSettings.Instance.path_name;
                             break;
                         }
-                    //case WoWSpec.WarlockDestruction:
-                    //    {
-                    //        if (activePath == null)
-                    //            activePath = DestructionWarlockSettings.Instance.path_name;
-                    //        break;
-                    //    }
+                    case WoWSpec.WarlockDestruction:
+                        {
+                            if (activePath == null)
+                                activePath = DestructionWarlockSettings.Instance.path_name;
+                            break;
+                        }
                     case WoWSpec.WarlockDemonology:
                         {
                             if (activePath == null)

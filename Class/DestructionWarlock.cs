@@ -24,7 +24,7 @@ namespace KingWoW
     class DestructionWarlockCombatClass : KingWoWAbstractBaseClass
     {
 
-        private static string Name = "KingWoW DemonologyWarlock'";
+        private static string Name = "KingWoW DestructionWarlock'";
 
         #region CONSTANT AND VARIABLES
 
@@ -84,10 +84,10 @@ namespace KingWoW
         private const string ARCHMAGES_GREATER_INCANDESCENCE = "Item - Attacks Proc Archmage's Greater Incandescence";
         private const string HOWLING_SOUL = "Item - Attacks Proc Critical Strike [Howling Soul]";
         private const string VOID_SHARDS = "Void Shards";
-        private       int    MyGCD = 1500;
+        private       int    MyGCD=1500;
         private DateTime     nextTimeCancelMetamorphosis;
         private DateTime     StartCombat;
-        private       long   time_to_die;
+        private       long   time_to_die=9999;
         //END TALENTS
         //END OF CONSTANTS ==============================
 
@@ -357,7 +357,7 @@ namespace KingWoW
             if (utils.Mounted() || utils.MeIsCastingWithLag() /*ExtraUtilsSettings.Instance.PauseRotation || */)
                 return false;
                 
-            GetBestPet();
+            //GetBestPet();
             //GRIMOIRE_OF_SACRIFICE
             if (HasTalent(WarlockTalents.GrimoireOfSacrifice) && utils.CanCast(GRIMOIRE_OF_SACRIFICE))
             {
