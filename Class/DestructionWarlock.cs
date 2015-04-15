@@ -450,7 +450,9 @@ namespace KingWoW
         {
             extra.UseHealthstone();
             extra.UseRacials();
+            //actions=use_item,name=shards_of_nothing
             extra.UseTrinket1();//虚无碎片
+            extra.UseTrinket2();
             extra.WaterSpirit();
             extra.LifeSpirit();
             Defensivececk();
@@ -483,17 +485,20 @@ namespace KingWoW
                 {
                     Me.SetFacing(target);
                 }
-actions=use_item,name=shards_of_nothing
-actions+=/potion,name=draenic_intellect,if=buff.bloodlust.react&buff.dark_soul.remains>10|target.time_to_die<=25|buff.dark_soul.remains>10
-actions+=/berserking
-actions+=/blood_fury
-actions+=/arcane_torrent
-actions+=/mannoroths_fury
-actions+=/dark_soul,if=!talent.archimondes_darkness.enabled|(talent.archimondes_darkness.enabled&(charges=2|trinket.proc.any.react|trinket.stacking_any.intellect.react>6|target.time_to_die<40))
-actions+=/service_pet,if=talent.grimoire_of_service.enabled&(target.time_to_die>120|target.time_to_die<20|(buff.dark_soul.remains&target.health.pct<20))
-actions+=/summon_doomguard,if=!talent.demonic_servitude.enabled&active_enemies<9
-actions+=/summon_infernal,if=!talent.demonic_servitude.enabled&active_enemies>=9
-                //actions+=/run_action_list,name=aoe,if=active_enemies>=6|(talent.charred_remains.enabled&active_enemies>=4)
+                
+                //actions+=/dark_soul,if=!talent.archimondes_darkness.enabled|(talent.archimondes_darkness.enabled&(charges=2|trinket.proc.any.react|trinket.stacking_any.intellect.react>6|target.time_to_die<40))
+                if (utils.CanCast(DARK_SOUL) && !utils.HasTalent(ARCHIMONDES_DARKNESS) || (utils.HasTalent(ARCHIMONDES_DARKNESS) && (utils.GetCharges(DARK_SOUL)==2 
+                                                                                                                                  || (int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>6
+                                                                                                                                  || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>6
+                                                                                                                                  || (int)utils.MyAuraTimeLeft(VOID_SHARDS, Me)>6 
+                                                                                                                                  || utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW)
+                                                                                                                                  || target.time_to_die<40)))
+                {
+                    utils.LogActivity(DARK_SOUL);
+                    return utils.Cast(DARK_SOUL);
+                }
+                //actions+=/summon_doomguard,if=!talent.demonic_servitude.enabled&active_enemies<9
+                //actions+=/summon_infernal,if=!talent.demonic_servitude.enabled&active_enemies>=9
                 if (active_enemies >= 6 || (active_enemies >= 4 && HasTalent(WarlockTalents.CHARRED_REMAINS)) && !DestructionWarlockSettings.Instance.AvoidAOE)
                 {
                     utils.LogActivity("Start AOE");
@@ -510,13 +515,6 @@ actions+=/summon_infernal,if=!talent.demonic_servitude.enabled&active_enemies>=9
             return false;
         }
         
-
-
-
-
-
-
-
         private bool aoe()
         {
             //actions.aoe+=/havoc,target=2,if=(!talent.charred_remains.enabled|buff.fire_and_brimstone.down)
@@ -857,6 +855,79 @@ actions+=/summon_infernal,if=!talent.demonic_servitude.enabled&active_enemies>=9
         
         public double burning_ember { get { return Me.GetPowerInfo(WoWPowerType.BurningEmbers).Current / 10; } }
         public int active_enemies { return utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count(); }
+        
+        /// <summary>
+        /// seconds until the target dies.  first call initializes values. subsequent
+        /// return estimate or indeterminateValue if death can't be calculated
+        /// </summary>
+        /// <param name="target">unit to monitor</param>
+        /// <param name="indeterminateValue">return value if death cannot be calculated ( -1 or int.MaxValue are common)</param>
+        /// <returns>number of seconds </returns>
+        public static long TimeToDeath(this WoWUnit target, long indeterminateValue = -1)
+        {
+            if (target == null || !target.IsValid || !target.IsAlive)
+            {
+                //Logging.Write("TimeToDeath: {0} (GUID: {1}, Entry: {2}) is dead!", target.SafeName(), target.Guid, target.Entry);
+                return 0;
+            }
+
+            if (StyxWoW.Me.CurrentTarget.IsTrainingDummy())
+            {
+                return 111;     // pick a magic number since training dummies dont die
+            }
+
+            //Fill variables on new target or on target switch, this will loose all calculations from last target
+            if (guid != target.Guid || (guid == target.Guid && target.CurrentHealth == _firstLifeMax))
+            {
+                guid = target.Guid;
+                _firstLife = target.CurrentHealth;
+                _firstLifeMax = target.MaxHealth;
+                _firstTime = ConvDate2Timestam(DateTime.Now);
+                //Lets do a little trick and calculate with seconds / u know Timestamp from unix? we'll do so too
+            }
+            _currentLife = target.CurrentHealth;
+            _currentTime = ConvDate2Timestam(DateTime.Now);
+            int timeDiff = _currentTime - _firstTime;
+            uint hpDiff = _firstLife - _currentLife;
+            if (hpDiff > 0)
+            {
+                /*
+                * Rule of three (Dreisatz):
+                * If in a given timespan a certain value of damage is done, what timespan is needed to do 100% damage?
+                * The longer the timespan the more precise the prediction
+                * time_diff/hp_diff = x/first_life_max
+                * x = time_diff*first_life_max/hp_diff
+                * 
+                * For those that forgot, http://mathforum.org/library/drmath/view/60822.html
+                */
+                long fullTime = timeDiff * _firstLifeMax / hpDiff;
+                long pastFirstTime = (_firstLifeMax - _firstLife) * timeDiff / hpDiff;
+                long calcTime = _firstTime - pastFirstTime + fullTime - _currentTime;
+                if (calcTime < 1) calcTime = 1;
+                //calc_time is a int value for time to die (seconds) so there's no need to do SecondsToTime(calc_time)
+                long timeToDie = calcTime;
+                //Logging.Write("TimeToDeath: {0} (GUID: {1}, Entry: {2}) dies in {3}, you are dpsing with {4} dps", target.SafeName(), target.Guid, target.Entry, timeToDie, dps);
+                return timeToDie;
+            }
+            if (hpDiff <= 0)
+            {
+                //unit was healed,resetting the initial values
+                guid = target.Guid;
+                _firstLife = target.CurrentHealth;
+                _firstLifeMax = target.MaxHealth;
+                _firstTime = ConvDate2Timestam(DateTime.Now);
+                //Lets do a little trick and calculate with seconds / u know Timestamp from unix? we'll do so too
+                //Logging.Write("TimeToDeath: {0} (GUID: {1}, Entry: {2}) was healed, resetting data.", target.SafeName(), target.Guid, target.Entry);
+                return indeterminateValue;
+            }
+            if (_currentLife == _firstLifeMax)
+            {
+                //Logging.Write("TimeToDeath: {0} (GUID: {1}, Entry: {2}) is at full health.", target.SafeName(), target.Guid, target.Entry);
+                return indeterminateValue;
+            }
+            //Logging.Write("TimeToDeath: {0} (GUID: {1}, Entry: {2}) no damage done, nothing to calculate.", target.SafeName(), target.Guid, target.Entry);
+            return indeterminateValue;
+        }
         
     }
 }
