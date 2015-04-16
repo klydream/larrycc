@@ -243,7 +243,6 @@ namespace KingWoW
             get
             {
                 WoWUnit target = Me.CurrentTarget;
-                //Logging.Write("Powered by Attilio578");
                 if (target != null && target.IsDead)
                     Me.ClearTarget();
                 else if (target != null && !target.IsFriendly && target.Attackable && !target.IsDead)
@@ -759,8 +758,9 @@ namespace KingWoW
         
         private bool HasTalent(WarlockTalents tal)
         {
-            //return talents.IsSelected((int)tal);
-            return true;
+            //Logging.Write("Has Talent"+(int)tal);
+            return talents.IsSelected((int)tal);
+            //return true;
         }
         
         public enum WarlockTalents
