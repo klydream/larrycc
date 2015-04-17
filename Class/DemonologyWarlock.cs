@@ -121,8 +121,9 @@ namespace KingWoW
         private const string HOWLING_SOUL = "Howling Soul";
         private const string VOID_SHARDS = "Void Shards";
         private       int    MyGCD = 1500;
-        private DateTime nextTimeCancelMetamorphosis;
-        private DateTime StartCombat;
+        private DateTime     nextTimeCancelMetamorphosis;
+        private DateTime     startTime_hand_of_guldan
+        private DateTime     StartCombat;
         
          
 
@@ -224,10 +225,8 @@ namespace KingWoW
         {
             get
             {
-                Logging.Write("Powered by Attilio478");
                 if ((Me.Mounted && !DemonologyWarlockSettings.Instance.AutoDismountOnCombat) || IsCRPaused || !StyxWoW.IsInGame || !StyxWoW.IsInWorld || Me.Silenced/*|| utils.IsGlobalCooldown(true)*/ || utils.isAuraActive(DRINK) || utils.isAuraActive(FOOD) || Me.IsChanneling || utils.MeIsCastingWithLag())
                     return false;
-                Logging.Write("Powered by Attilio678");
                 //UPDATE TANK
                 //tank = utils.GetTank();
                 tank = utils.SimpleGetTank(40f);
@@ -238,7 +237,6 @@ namespace KingWoW
                     lastTank = tank;
                     utils.LogActivity(TANK_CHANGE, tank.Class.ToString());
                 }
-                Logging.Write("Powered by Attilio578");
                 return CombatRotation();
             }
         }
@@ -264,8 +262,7 @@ namespace KingWoW
                     utils.LogActivity(TANK_CHANGE, tank.Class.ToString());
                 }
                 if (tank != null && tank.Combat && !Me.Combat)
-                    {Logging.Write("Powered by Attilio778");
-                    	return CombatRotation();}
+                    return CombatRotation();
                 return false;
             }
         }
@@ -302,10 +299,11 @@ namespace KingWoW
                             utils.LogActivity(FACING, target.Name);
                             Me.SetFacing(target);
                         }
-                        utils.LogActivity("start combate with SOUL FIRE", target.Name);
+                        utils.LogActivity("start combate with HAND OF GULDAN", target.Name);
                         SetCancelMetamorphosis();
                         StartCombat = DateTime.Now;
-                        return utils.Cast(SOUL_FIRE, target);
+                        startTime_hand_of_guldan = DateTime.Now;
+                        return utils.Cast(HAND_OF_GULDAN, target);
                     }
                 }
                 return false;
@@ -433,37 +431,6 @@ namespace KingWoW
             return false;
         }
 
-        private bool ProcWork()
-        {
-            //cast  Frost Bomb on cooldown.
-            //actions+=/hand_of_guldan,if=!in_flight&dot.shadowflame.remains<travel_time+action.shadow_bolt.cast_time&talent.demonbolt.enabled&((set_bonus.tier17_4pc=0&((charges=1&recharge_time<4)|charges=2))|(charges=3|(charges=2&recharge_time<13.8-travel_time*2))|dot.shadowflame.remains>travel_time)
-
-            if (utils.CanCast(HAND_OF_GULDAN))
-            {
-                WoWUnit target = null;
-                if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.MANUAL)
-                    target = Me.CurrentTarget;
-                else if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.AUTO)
-                {
-                    target = utils.getTargetToAttack(40, tank);
-                }
-                else if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.SEMIAUTO)
-                {
-                    target = Me.CurrentTarget;
-                    if (target == null || target.IsDead || !target.InLineOfSpellSight || target.Distance - target.CombatReach - 1 > 40)
-                        target = utils.getTargetToAttack(40, tank);
-                }
-                
-                if (target != null && !target.IsDead && target.InLineOfSpellSight && target.Distance - target.CombatReach - 1 <= 40)
-                {
-                    utils.LogActivity(HAND_OF_GULDAN, target.Name);
-                    return utils.Cast(HAND_OF_GULDAN, target);
-                }
-            }
-            
-            return false;
-        }
-
         private bool BotUpdate()
         {
             if (BaseBot.Equals(BotManager.Current.Name))
@@ -532,8 +499,6 @@ namespace KingWoW
             extra.WaterSpirit();
             extra.LifeSpirit();
             Defensivececk();
-            UseCD();
-            ProcWork();
             
             //foreach (var a in Me.GetAllAuras())
             //{
@@ -564,15 +529,46 @@ namespace KingWoW
                     Me.SetFacing(target);
                 }
                 
-                if (utils.CanCast("Grimoire: Infernal") && utils.isAuraActive(DARK_SOUL) && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count() >= 9)
+                UseCD(target);
+                
+                hand_of_guldan_travel_time = 1500;
+                //actions+=/hand_of_guldan,if=!in_flight&dot.shadowflame.remains<travel_time+action.shadow_bolt.cast_time&(((set_bonus.tier17_4pc=0&((charges=1&recharge_time<4)|charges=2))|(charges=3|(charges=2&recharge_time<13.8-travel_time*2))&((cooldown.cataclysm.remains>dot.shadowflame.duration)|!talent.cataclysm.enabled))|dot.shadowflame.remains>travel_time)
+                if (utils.CanCast(HAND_OF_GULDAN) && !hand_of_guldan_in_flight && (int)utils.MyAuraTimeLeft(SHADOWFLAME, target)<hand_of_guldan_travel_time+utils.GetSpellCastTime(SHADOW_BOLT).Milliseconds && (((!set_bonus.tier17_4pc && ((charges==1 && recharge_time<4) || charges==2)) || (charges==3 || (charges==2 && recharge_time<13800-hand_of_guldan_travel_time*2))) || (int)utils.MyAuraTimeLeft(SHADOWFLAME, target)>hand_of_guldan_travel_time))
                 {
-                    utils.LogActivity("Grimoire: Infernal");
-                    return utils.Cast("Grimoire: Infernal");
+                    utils.LogActivity(HAND_OF_GULDAN, target.Name);
+                    return utils.Cast(HAND_OF_GULDAN, target);
                 }
-                else if (utils.CanCast("Grimoire: Doomguard") && utils.isAuraActive(DARK_SOUL))
+                //actions+=/hand_of_guldan,if=!in_flight&dot.shadowflame.remains<travel_time+action.shadow_bolt.cast_time&talent.demonbolt.enabled&((set_bonus.tier17_4pc=0&((charges=1&recharge_time<4)|charges=2))|(charges=3|(charges=2&recharge_time<13.8-travel_time*2))|dot.shadowflame.remains>travel_time)
+                //actions+=/hand_of_guldan,if=!in_flight&dot.shadowflame.remains<3.7&time<5&buff.demonbolt.remains<gcd*2&(charges>=2|set_bonus.tier17_4pc=0)&action.dark_soul.charges>=1
+                //actions+=/service_pet,if=talent.grimoire_of_service.enabled&(target.time_to_die>120|target.time_to_die<=25|(buff.dark_soul.remains&target.health.pct<20))
+                if (utils.CanCast(HAND_OF_GULDAN) && HasTalent(WarlockTalents.GrimoireOfService) && (time_to_die>120 || target.time_to_die<=25 || (utils.isAuraActive(DARK_SOUL) && Me.CurrentTarget.HealthPercent<20))
                 {
-                    utils.LogActivity("Grimoire: Doomguard");
-                    return utils.Cast("Grimoire: Doomguard");
+                    utils.LogActivity("Grimoire: Doomguard", target.Name);
+                    return utils.Cast("Grimoire: Doomguard", target);
+                }
+                //actions+=/summon_doomguard,if=!talent.demonic_servitude.enabled&active_enemies<9
+                //actions+=/summon_infernal,if=!talent.demonic_servitude.enabled&active_enemies>=9
+                //actions+=/kiljaedens_cunning,if=!cooldown.cataclysm.remains&buff.metamorphosis.up
+                //actions+=/cataclysm,if=buff.metamorphosis.up   
+                //actions+=/immolation_aura,if=demonic_fury>450&active_enemies>=3&buff.immolation_aura.down  
+                if (utils.CanCast(IMMOLATION_AURA) && utils.isAuraActive(METAMORPHOSIS) && demonic_fury>450 && active_enemies>=3 && utils.isAuraActive(IMMOLATION_AURA))
+                {
+                    utils.LogActivity(IMMOLATION_AURA, target.Name);
+                    return utils.Cast(IMMOLATION_AURA, target);
+                }
+                
+                //actions+=/doom,if=buff.metamorphosis.up&target.time_to_die>=30*spell_haste&remains<=(duration*0.3)&(remains<cooldown.cataclysm.remains|!talent.cataclysm.enabled)&trinket.stacking_proc.multistrike.react<10
+                if (utils.CanCast(DOOM, target) && utils.isAuraActive(METAMORPHOSIS) && time_to_die>=27 && utils.MyAuraTimeLeft(DOOM, target) < 3500 )
+                {
+                    utils.LogActivity(DOOM, target.Name);
+                    return utils.Cast(DOOM, target);
+                }
+                
+                //actions+=/corruption,cycle_targets=1,if=target.time_to_die>=6&remains<=(0.3*duration)&buff.metamorphosis.down
+                if (utils.CanCast(CORRUPTION, target) && !utils.isAuraActive(METAMORPHOSIS) && time_to_die>=6 && utils.MyAuraTimeLeft(CORRUPTION, target) < 3500 )
+                {
+                    utils.LogActivity(CORRUPTION, target.Name);
+                    return utils.Cast(CORRUPTION, target);
                 }
                 
                 //CurrentDemonicFury<(800-cooldown.dark_soul.remains*(10%spell_haste))
@@ -661,17 +657,7 @@ namespace KingWoW
                 }
                 
                 //apply dot
-                if (utils.CanCast(CORRUPTION, target) && utils.MyAuraTimeLeft(CORRUPTION, target) < 3500 && !utils.isAuraActive(METAMORPHOSIS))
-                {
-                    utils.LogActivity(CORRUPTION, target.Name);
-                    return utils.Cast(CORRUPTION, target);
-                }
                 
-                if (utils.CanCast(DOOM, target) && utils.MyAuraTimeLeft(DOOM, target) < 3500 && utils.isAuraActive(METAMORPHOSIS))
-                {
-                    utils.LogActivity(DOOM, target.Name);
-                    return utils.Cast(DOOM, target);
-                }
                 //if (!Me.IsMoving && nextTimeVampiricTouchAllowed <= DateTime.Now && utils.MyAuraTimeLeft(VAMPIRIC_TOUCH, target) < 4500
                 //    && !(talents.IsSelected(9) && utils.MyAuraTimeLeft(DEVOURING_PLAGUE, target) > 0) && !(Me.IsChanneling && Me.ChanneledCastingSpellId == MIND_FLY_INSANITY))
                 //{
@@ -755,7 +741,7 @@ namespace KingWoW
         //Ice veyn
         //Mirror image  Summon Doomguard  Grimoire: Doomguard Grimoire: Infernal 
         //Alter Time
-        private bool UseCD()
+        private bool UseCD(WoWUnit target)
         {
             if (Me.Combat && Me.GotTarget)
             {
@@ -769,42 +755,69 @@ namespace KingWoW
                     }
                     else if (utils.CanCast(DARK_SOUL) && DemonologyWarlockSettings.Instance.CDUseDarkSoul == DemonologyWarlockSettings.CDUseType.CONDITION)
                     {
-                        if (utils.GetAuraStack(Me, DARK_SOUL, true) == 2)
+                        //(charges=2&(time>6|(debuff.shadowflame.stack=1&action.hand_of_guldan.in_flight)))
+                        if (utils.GetCharges(DARK_SOUL)==2 && (time>6 || (utils.GetAuraStack(target, SHADOWFLAME, true)=1 && hand_of_guldan_in_flight())))
                         {
                             utils.LogActivity(DARK_SOUL);
                             return utils.Cast(DARK_SOUL);
                         }
+                        //!talent.archimondes_darkness.enabled
                         else if (!HasTalent(WarlockTalents.ArchimondesDarkness))
                         {
                             utils.LogActivity(DARK_SOUL);
                             return utils.Cast(DARK_SOUL);
                         }
-                        else if (Me.CurrentTarget.HealthPercent < DemonologyWarlockSettings.Instance.Phase1KillBossHP && CurrentDemonicFury>400)
+                        //(target.time_to_die<=20&!glyph.dark_soul.enabled)
+                        else if (time_to_die<=20 && !HasGlyph(DARK_SOUL))
                         {
                             utils.LogActivity(DARK_SOUL);
                             return utils.Cast(DARK_SOUL);
                         }
-                        else if (Me.CurrentTarget.HealthPercent < DemonologyWarlockSettings.Instance.Phase2KillBossHP)
+                        //target.time_to_die<=10|(target.time_to_die<=60&demonic_fury>400)
+                        else if (time_to_die<=10 || (time_to_die<=60 && demonic_fury>400))
                         {
                             utils.LogActivity(DARK_SOUL);
                             return utils.Cast(DARK_SOUL);
                         }
-                        else if (Me.GetAuraByName(PYROBLAST_PROC).TimeLeft.TotalMilliseconds >= 2000 && CurrentDemonicFury>=400)
+                        //((trinket.proc.any.react|trinket.stacking_proc.any.react)&(demonic_fury>600|(glyph.dark_soul.enabled&demonic_fury>450))))
+                        else if ((demonic_fury>600 || (HasGlyph(DARK_SOUL) && demonic_fury>450)) && ((int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>8
+                                                                                                    || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>8
+                                                                                                    || (int)utils.MyAuraTimeLeft(VOID_SHARDS, Me)>16 
+                                                                                                    || (int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>3))
                         {
                             utils.LogActivity(DARK_SOUL);
                             return utils.Cast(DARK_SOUL);
                         }
                     }
                     
+                    //actions+=/imp_swarm,if=!talent.demonbolt.enabled&(buff.dark_soul.up|(cooldown.dark_soul.remains>(120%(1%spell_haste)))|time_to_die<32)&time>3
+                    if (utils.CanCast(IMP_SWARM))
+                    {
+                        utils.LogActivity(IMP_SWARM, target.Name);
+                        return utils.Cast(IMP_SWARM, target);
+                    }
+                    //actions+=/felguard:felstorm
+                    if (utils.CanCast(FELSTORM))
+                    {
+                        utils.LogActivity(FELSTORM, target.Name);
+                        return utils.Cast(FELSTORM, target);
+                    }
+                    
+                    //actions+=/wrathguard:wrathstorm
+                    if (utils.CanCast(FELSTORM))
+                    {
+                        utils.LogActivity(WRATHSTORM, target.Name);
+                        return utils.Cast(WRATHSTORM, target);
+                    }
+                    
+                    //actions+=/wrathguard:mortal_cleave,if=pet.wrathguard.cooldown.wrathstorm.remains>5
+                    if (utils.CanCast(MORTAL_CLEAVE) && utils.GetSpellCooldown(WRATHSTORM).Seconds>5)
+                    {
+                        utils.LogActivity(MORTAL_CLEAVE, target.Name);
+                        return utils.Cast(MORTAL_CLEAVE, target);
+                    }
+                    
                 }
-            }
-            else
-            {
-            	if (utils.CanCast(DARK_FLIGHT))
-              {
-                  utils.LogActivity(DARK_FLIGHT);
-                  return utils.Cast(DARK_FLIGHT);
-              }
             }
             return false;
         }
@@ -937,6 +950,23 @@ namespace KingWoW
         {
             //in periond of start boost, cancel Metamorphosis before 15s
             nextTimeCancelMetamorphosis = DateTime.Now + new TimeSpan(0, 0, 0, 0, 15000);
+        }
+        
+        public bool hand_of_guldan_in_flight()
+        {
+            //in periond of start boost, cancel Metamorphosis before 15s
+            return startTime_hand_of_guldan + new TimeSpan(0, 0, 0, 0, 1500) < DateTime.Now ;
+        }
+        
+        
+        public int active_enemies_aoe(WoWUnit target) 
+        { 
+        	return utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count();
+        }
+        
+        public int active_enemies_aoe_dot() 
+        { 
+        	return utils.AllAttaccableEnemyMobsInRangeFromTarget(Me, 40).Count();
         }
         
     }

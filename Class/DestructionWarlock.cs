@@ -500,9 +500,9 @@ namespace KingWoW
                     utils.LogActivity(DARK_SOUL);
                     return utils.Cast(DARK_SOUL);
                 }
-                //actions+=/summon_doomguard,if=!talent.demonic_servitude.enabled&active_enemies(target)<9
-                //actions+=/summon_infernal,if=!talent.demonic_servitude.enabled&active_enemies(target)>=9
-                if (active_enemies(target) >= 6 || (active_enemies(target) >= 4 && HasTalent(WarlockTalents.CharredRemains)) && !DestructionWarlockSettings.Instance.AvoidAOE)
+                //actions+=/summon_doomguard,if=!talent.demonic_servitude.enabled&active_enemies_aoe(target)<9
+                //actions+=/summon_infernal,if=!talent.demonic_servitude.enabled&active_enemies_aoe(target)>=9
+                if (active_enemies_aoe(target) >= 6 || (active_enemies_aoe(target) >= 4 && HasTalent(WarlockTalents.CharredRemains)) && !DestructionWarlockSettings.Instance.AvoidAOE)
                 {
                     //utils.LogActivity("Start AOE");
                     return aoe(target);
@@ -586,7 +586,7 @@ namespace KingWoW
         private bool single(WoWUnit target)
         {
             //actions.single_target=havoc,target=2
-            //if (utils.CanCast(HAVOC) && active_enemies(target)>=2)
+            //if (utils.CanCast(HAVOC) && active_enemies_aoe(target)>=2)
             if (utils.CanCast(HAVOC) && Me.FocusedUnit != null && Me.FocusedUnit != target)
             {
                 utils.LogActivity(HAVOC, Me.FocusedUnit.Name);
@@ -600,8 +600,8 @@ namespace KingWoW
                 return utils.Cast(SHADOWBURN,target);
             }
             
-            //actions.single_target+=/fire_and_brimstone,if=buff.fire_and_brimstone.down&dot.immolate.remains<=action.immolate.cast_time&active_enemies(target)>4
-            if (utils.CanCast(FIRE_AND_BRIMSTONE) && !utils.isAuraActive(FIRE_AND_BRIMSTONE) && active_enemies(target)>4)
+            //actions.single_target+=/fire_and_brimstone,if=buff.fire_and_brimstone.down&dot.immolate.remains<=action.immolate.cast_time&active_enemies_aoe(target)>4
+            if (utils.CanCast(FIRE_AND_BRIMSTONE) && !utils.isAuraActive(FIRE_AND_BRIMSTONE) && active_enemies_aoe(target)>4)
             {
                 utils.LogActivity(FIRE_AND_BRIMSTONE);
                 return utils.Cast(FIRE_AND_BRIMSTONE);
@@ -649,10 +649,10 @@ namespace KingWoW
                 return utils.Cast(CONFLAGRATE, target);
             }
             
-            //actions.single_target+=/chaos_bolt,if=talent.charred_remains.enabled&active_enemies(target)>1&target.health.pct>20
-            if (utils.CanCast(CHAOS_BOLT) && HasTalent(WarlockTalents.CharredRemains) && active_enemies(target)>1 && Me.CurrentTarget.HealthPercent>20 && burning_ember>=1)
+            //actions.single_target+=/chaos_bolt,if=talent.charred_remains.enabled&active_enemies_aoe(target)>1&target.health.pct>20
+            if (utils.CanCast(CHAOS_BOLT) && HasTalent(WarlockTalents.CharredRemains) && active_enemies_aoe(target)>1 && Me.CurrentTarget.HealthPercent>20 && burning_ember>=1)
             {
-                utils.LogActivity(CHAOS_BOLT, target.Name+active_enemies(target).ToString());
+                utils.LogActivity(CHAOS_BOLT, target.Name+active_enemies_aoe(target).ToString());
                 return utils.Cast(CHAOS_BOLT, target);
             }
             
@@ -700,8 +700,8 @@ namespace KingWoW
                 utils.LogActivity(CHAOS_BOLT, target.Name);
                 return utils.Cast(CHAOS_BOLT, target);
             }
-            //actions.single_target+=/fire_and_brimstone,if=buff.fire_and_brimstone.down&dot.immolate.remains<=(dot.immolate.duration*0.3)&active_enemies(target)>4
-            if (utils.CanCast(FIRE_AND_BRIMSTONE) && !utils.isAuraActive(FIRE_AND_BRIMSTONE) && (int)utils.MyAuraTimeLeft(IMMOLATE, target)<=4500 && active_enemies(target)>4)
+            //actions.single_target+=/fire_and_brimstone,if=buff.fire_and_brimstone.down&dot.immolate.remains<=(dot.immolate.duration*0.3)&active_enemies_aoe(target)>4
+            if (utils.CanCast(FIRE_AND_BRIMSTONE) && !utils.isAuraActive(FIRE_AND_BRIMSTONE) && (int)utils.MyAuraTimeLeft(IMMOLATE, target)<=4500 && active_enemies_aoe(target)>4)
             {
                 utils.LogActivity(FIRE_AND_BRIMSTONE);
                 return utils.Cast(FIRE_AND_BRIMSTONE);
@@ -861,12 +861,12 @@ namespace KingWoW
         }
         
         public double burning_ember { get { return Me.GetPowerInfo(WoWPowerType.BurningEmbers).Current / 10; } }
-        public int active_enemies(WoWUnit target) 
+        public int active_enemies_aoe(WoWUnit target) 
         { 
         	return utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count();
         }
         
-        public int active_enemies_havoc(WoWUnit target) 
+        public int active_enemies_aoe_dot(WoWUnit target) 
         { 
         	return utils.AllAttaccableEnemyMobsInRangeFromTarget(Me, 40).Count();
         }
