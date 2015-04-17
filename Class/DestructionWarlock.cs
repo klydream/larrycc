@@ -437,6 +437,11 @@ namespace KingWoW
                     return SpellManager.ClickRemoteLocation(ShadowfuryCandidateTarget.Location);
                 }
             }
+            //if (Me.Combat && Me.IsMoving)
+            //{
+            //    utils.LogActivity("Burning Rush");
+            //    return utils.Cast("Burning Rush");
+            //}
             
             return false;
         }
@@ -480,16 +485,16 @@ namespace KingWoW
                 {
                     Me.SetFacing(target);
                 }
-                if (HasTalent(WarlockTalents.ArchimondesDarkness))
+                if ((int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>3 )
                 {
-                   Logging.Write("ArchimondesDarkness");
+                   Logging.Write("MARK_OF_BLEEDING_HOLLOW");
                 }
                 //actions+=/dark_soul,if=!talent.archimondes_darkness.enabled|(talent.archimondes_darkness.enabled&(charges=2|trinket.proc.any.react|trinket.stacking_any.intellect.react>6|target.time_to_die<40))
                 if (utils.CanCast(DARK_SOUL) && !utils.isAuraActive(DARK_SOUL) &&( HasTalent(WarlockTalents.ArchimondesDarkness) || (HasTalent(WarlockTalents.ArchimondesDarkness) && (utils.GetCharges(DARK_SOUL)==2 
                                                                                                                                                      || (int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>6
                                                                                                                                                      || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>6
                                                                                                                                                      || (int)utils.MyAuraTimeLeft(VOID_SHARDS, Me)>6 
-                                                                                                                                                     || utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW)
+                                                                                                                                                     || (int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>3
                                                                                                                                                      || time_to_die<40))))
                 {
                     utils.LogActivity(DARK_SOUL);
@@ -499,12 +504,12 @@ namespace KingWoW
                 //actions+=/summon_infernal,if=!talent.demonic_servitude.enabled&active_enemies(target)>=9
                 if (active_enemies(target) >= 6 || (active_enemies(target) >= 4 && HasTalent(WarlockTalents.CharredRemains)) && !DestructionWarlockSettings.Instance.AvoidAOE)
                 {
-                    utils.LogActivity("Start AOE");
+                    //utils.LogActivity("Start AOE");
                     return aoe(target);
                 }
                 else
                 {
-                    utils.LogActivity("Start Single");
+                    //utils.LogActivity("Start Single");
                     return single(target);
                 }
                 
@@ -515,7 +520,7 @@ namespace KingWoW
         private bool aoe(WoWUnit target)
         {
             //actions.aoe+=/havoc,target=2,if=(!talent.charred_remains.enabled|buff.fire_and_brimstone.down)
-            if (utils.CanCast(HAVOC) && (HasTalent(WarlockTalents.CharredRemains) || !utils.isAuraActive(FIRE_AND_BRIMSTONE)))
+            if (utils.CanCast(HAVOC) && (HasTalent(WarlockTalents.CharredRemains) || !utils.isAuraActive(FIRE_AND_BRIMSTONE)) && Me.FocusedUnit != null && Me.FocusedUnit != target)
             {
                 utils.LogActivity(HAVOC, Me.FocusedUnit.Name);
                 return utils.Cast(HAVOC, Me.FocusedUnit);
@@ -582,7 +587,7 @@ namespace KingWoW
         {
             //actions.single_target=havoc,target=2
             //if (utils.CanCast(HAVOC) && active_enemies(target)>=2)
-            if (utils.CanCast(HAVOC) && target != null)
+            if (utils.CanCast(HAVOC) && Me.FocusedUnit != null && Me.FocusedUnit != target)
             {
                 utils.LogActivity(HAVOC, Me.FocusedUnit.Name);
                 return utils.Cast(HAVOC, Me.FocusedUnit);
@@ -609,7 +614,7 @@ namespace KingWoW
                 return utils.Cast(IMMOLATE, target);
             }
             
-            if (utils.CanCast(IMMOLATE) && (int)utils.MyAuraTimeLeft(IMMOLATE, Me.FocusedUnit)<=utils.GetSpellCastTime(IMMOLATE).Milliseconds)
+            if (utils.CanCast(IMMOLATE) && (int)utils.MyAuraTimeLeft(IMMOLATE, Me.FocusedUnit)<=utils.GetSpellCastTime(IMMOLATE).Milliseconds && Me.FocusedUnit != null )
             {
                 utils.LogActivity(IMMOLATE, Me.FocusedUnit.Name);
                 return utils.Cast(IMMOLATE,Me.FocusedUnit);
@@ -665,7 +670,9 @@ namespace KingWoW
                 return utils.Cast(CHAOS_BOLT, target);
             }
             //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&set_bonus.tier17_2pc=1&burning_ember>=2.5
-            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(Me, BACKDRAFT, true)<3 && utils.isAuraActive(CHAOTIC_INFUSION) && burning_ember>=2.5)
+            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(Me, BACKDRAFT, true)<3 && utils.isAuraActive(CHAOTIC_INFUSION) && burning_ember>=2.5 && ((int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>utils.GetSpellCastTime(CHAOS_BOLT).Milliseconds
+                                                                                                                                                        || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>utils.GetSpellCastTime(CHAOS_BOLT).Milliseconds
+                                                                                                                                                        || (int)utils.MyAuraTimeLeft(CHAOTIC_INFUSION, Me)<utils.GetSpellCastTime(CHAOS_BOLT).Milliseconds+5000))
             {
                 utils.LogActivity(CHAOS_BOLT, target.Name);
                 return utils.Cast(CHAOS_BOLT, target);
@@ -857,6 +864,11 @@ namespace KingWoW
         public int active_enemies(WoWUnit target) 
         { 
         	return utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count();
+        }
+        
+        public int active_enemies_havoc(WoWUnit target) 
+        { 
+        	return utils.AllAttaccableEnemyMobsInRangeFromTarget(Me, 40).Count();
         }
        
     }

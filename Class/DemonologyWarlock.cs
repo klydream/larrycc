@@ -116,9 +116,10 @@ namespace KingWoW
         private const string GRIMOIRE_OF_SACRIFICE = "GrimoireOfSacrifice";
         private const string SHADOW_FLAME = "shadowflame";
         
-        private const string BLOOD_PACT = "Blood Pact";
-        private const string ARCHMAGES_GREATER_INCANDESCENCE = "Item - Attacks Proc Archmage's Greater Incandescence";
-        private const string HOWLING_SOUL = "Item - Attacks Proc Critical Strike [Howling Soul]";
+        private const string MARK_OF_BLEEDING_HOLLOW = "Mark of Bleeding Hollow";
+        private const string ARCHMAGES_GREATER_INCANDESCENCE = "Archmage's Greater Incandescence";
+        private const string HOWLING_SOUL = "Howling Soul";
+        private const string VOID_SHARDS = "Void Shards";
         private       int    MyGCD = 1500;
         private DateTime nextTimeCancelMetamorphosis;
         private DateTime StartCombat;
@@ -578,7 +579,7 @@ namespace KingWoW
                 if(utils.isAuraActive(METAMORPHOSIS)
                   && ((CurrentDemonicFury<650 && !utils.CanCast(DARK_SOUL)) || CurrentDemonicFury<450)
                   && !utils.isAuraActive(DARK_SOUL)
-                  && ((!utils.isAuraActive(BLOOD_PACT) && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL)) || (utils.GetSpellCooldown(DARK_SOUL).Seconds <= 20 && CurrentDemonicFury<300))
+                  && ((!utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL)) || (utils.GetSpellCooldown(DARK_SOUL).Seconds <= 20 && CurrentDemonicFury<300))
                   && Me.CurrentTarget.HealthPercent > DemonologyWarlockSettings.Instance.Phase2KillBossHP)
                 {
                 	  utils.LogActivity("Cancel Metamorphosis for next dark soul");
@@ -633,7 +634,7 @@ namespace KingWoW
                 }
                 
                 //((demonic_fury>450&action.dark_soul.recharge_time>=10&glyph.dark_soul.enabled)|(demonic_fury>650&cooldown.dark_soul.remains>=10))                
-                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS) && (utils.isAuraActive(BLOOD_PACT) || utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) || utils.isAuraActive(HOWLING_SOUL)) && ((CurrentDemonicFury>=450 && utils.CanCast(DARK_SOUL)) || ( ((int)utils.GetSpellCooldown(METAMORPHOSIS).Milliseconds>10000) && CurrentDemonicFury>=650)))
+                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS) && (utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) || utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) || utils.isAuraActive(HOWLING_SOUL)) && ((CurrentDemonicFury>=450 && utils.CanCast(DARK_SOUL)) || ( ((int)utils.GetSpellCooldown(METAMORPHOSIS).Milliseconds>10000) && CurrentDemonicFury>=650)))
                 {
                     utils.LogActivity(METAMORPHOSIS);
                     return utils.Cast(METAMORPHOSIS);
