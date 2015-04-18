@@ -573,9 +573,9 @@ namespace KingWoW
                 
                 //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&((demonic_fury<650&!glyph.dark_soul.enabled)|demonic_fury<450)&buff.dark_soul.down&(trinket.stacking_proc.multistrike.down&trinket.proc.any.down|demonic_fury<(800-cooldown.dark_soul.remains*(10%spell_haste)))&target.time_to_die>20
                 if(utils.isAuraActive(METAMORPHOSIS)
-                  && ((CurrentDemonicFury<650 && !utils.CanCast(DARK_SOUL)) || CurrentDemonicFury<450)
+                  && ((demonic_fury<650 && !utils.CanCast(DARK_SOUL)) || demonic_fury<450)
                   && !utils.isAuraActive(DARK_SOUL)
-                  && ((!utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL)) || (utils.GetSpellCooldown(DARK_SOUL).Seconds <= 20 && CurrentDemonicFury<300))
+                  && ((!utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL)) || (utils.GetSpellCooldown(DARK_SOUL).Seconds <= 20 && demonic_fury<300))
                   && Me.CurrentTarget.HealthPercent > DemonologyWarlockSettings.Instance.Phase2KillBossHP)
                 {
                 	  utils.LogActivity("Cancel Metamorphosis for next dark soul");
@@ -585,7 +585,7 @@ namespace KingWoW
                 //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges>0&dot.shadowflame.remains<action.hand_of_guldan.travel_time+action.shadow_bolt.cast_time&((demonic_fury<100&buff.dark_soul.remains>10)|time<15)&!glyph.dark_soul.enabled
                 if(	utils.isAuraActive(METAMORPHOSIS)	&& utils.GetCharges(CHAOS_WAVE)>0 && !HasGlyph(DARK_SOUL)
                 	&& (int)utils.MyAuraTimeLeft(SHADOW_FLAME, target)<hand_of_guldan_travel_time+utils.GetSpellCastTime(SHADOW_BOLT).Milliseconds
-                	&& ((CurrentDemonicFury<100 && utils.MyAuraTimeLeft(DARK_SOUL, Me)>10000) || time<15))
+                	&& ((demonic_fury<100 && utils.MyAuraTimeLeft(DARK_SOUL, Me)>10000) || time<15))
                 {
                     utils.LogActivity("Cancel Metamorphosis for start boost");
                     Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
@@ -599,62 +599,60 @@ namespace KingWoW
                     return true;
                 }
                 //actions+=/chaos_wave,if=buff.metamorphosis.up&(buff.dark_soul.up&active_enemies>=2|(charges=3|set_bonus.tier17_4pc=0&charges=2))
-                if (utils.CanCast(CHAOS_WAVE, target) && utils.isAuraActive(METAMORPHOSIS) && CurrentDemonicFury>=80  && utils.isAuraActive(DARK_SOUL) && (active_enemies>=2 || (charges==3 || (set_bonus.tier17_4pc==0 && charges==2))))
+                if (utils.CanCast(CHAOS_WAVE, target) && utils.isAuraActive(METAMORPHOSIS) && demonic_fury>=80  && utils.isAuraActive(DARK_SOUL) && (active_enemies>=2 || (charges==3 || (set_bonus.tier17_4pc==0 && charges==2))))
                 {
                     utils.LogActivity(CHAOS_WAVE, target.Name);
                     return utils.Cast(CHAOS_WAVE, target);
                 }
                 //actions+=/soul_fire,if=buff.metamorphosis.up&buff.molten_core.react&(buff.dark_soul.remains>execute_time|target.health.pct<=25)&(((buff.molten_core.stack*execute_time>=trinket.stacking_proc.multistrike.remains-1|demonic_fury<=ceil((trinket.stacking_proc.multistrike.remains-buff.molten_core.stack*execute_time)*40)+80*buff.molten_core.stack)|target.health.pct<=25)&trinket.stacking_proc.multistrike.remains>=execute_time|trinket.stacking_proc.multistrike.down|!trinket.has_stacking_proc.multistrike)
-                if (utils.CanCast(SOUL_FIRE, target) && CurrentDemonicFury>=80 && utils.isAuraActive(METAMORPHOSIS) && utils.isAuraActive(MOLTEN_CORE) && (buff.dark_soul.remains>execute_time || Me.CurrentTarget.HealthPercent<25))
+                if (utils.CanCast(SOUL_FIRE, target) && demonic_fury>=80 && utils.isAuraActive(METAMORPHOSIS) && utils.isAuraActive(MOLTEN_CORE) && (buff.dark_soul.remains>execute_time || Me.CurrentTarget.HealthPercent<25))
                 {
                     utils.LogActivity(SOUL_FIRE, target.Name);
                     return utils.Cast(SOUL_FIRE, target);
                 }
                 //actions+=/touch_of_chaos,cycle_targets=1,if=buff.metamorphosis.up&dot.corruption.remains<17.4&demonic_fury>750
-                if (utils.CanCast(TOUCH_OF_CHAOS, target) && CurrentDemonicFury>=40 && utils.isAuraActive(METAMORPHOSIS) && utils.MyAuraTimeLeft(CORRUPTION, target)<17400 && demonic_fury>750)
+                if (utils.CanCast(TOUCH_OF_CHAOS, target) && demonic_fury>=40 && utils.isAuraActive(METAMORPHOSIS) && utils.MyAuraTimeLeft(CORRUPTION, target)<17400 && demonic_fury>750)
                 {
                     utils.LogActivity(TOUCH_OF_CHAOS, target.Name);
                     return utils.Cast(TOUCH_OF_CHAOS, target);
                 }
                 //actions+=/touch_of_chaos,if=buff.metamorphosis.up
-                if (utils.CanCast(TOUCH_OF_CHAOS, target) && CurrentDemonicFury>=40 && utils.isAuraActive(METAMORPHOSIS))
+                if (utils.CanCast(TOUCH_OF_CHAOS, target) && demonic_fury>=40 && utils.isAuraActive(METAMORPHOSIS))
                 {
                     utils.LogActivity(TOUCH_OF_CHAOS, target.Name);
                     return utils.Cast(TOUCH_OF_CHAOS, target);
                 }
-                
+                //actions+=/metamorphosis,if=buff.dark_soul.remains>gcd&(time>6|debuff.shadowflame.stack=2)&(demonic_fury>300|!glyph.dark_soul.enabled)&(demonic_fury>=80&buff.molten_core.stack>=1|demonic_fury>=40)
                 if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS)
                 && utils.MyAuraTimeLeft(DARK_SOUL, Me)>MyGCD
-                && (DateTime.Now>(StartCombat+new TimeSpan(0, 0, 0, 0, 6000)) || utils.GetAuraStack(target, SHADOW_FLAME, false)==2)
-                && (CurrentDemonicFury>300 || !utils.CanCast(DARK_SOUL))
-                && ((CurrentDemonicFury>=80 && utils.GetAuraStack(Me, MOLTEN_CORE, true)>=1) || (CurrentDemonicFury>=40 && CurrentDemonicFury<80)) )
+                && (time>6 || utils.GetAuraStack(target, SHADOW_FLAME, false)==2)
+                && (demonic_fury>300 || !HasGlyph(DARK_SOUL))
+                && ((demonic_fury>=80 && utils.GetAuraStack(Me, MOLTEN_CORE, true)>=1) || (demonic_fury>=40 && demonic_fury<80)) )
                 {
                     utils.LogActivity(METAMORPHOSIS);
                     return utils.Cast(METAMORPHOSIS);
                 }
-                
-                //((demonic_fury>450&action.dark_soul.recharge_time>=10&glyph.dark_soul.enabled)|(demonic_fury>650&cooldown.dark_soul.remains>=10))                
-                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS) && (utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) || utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) || utils.isAuraActive(HOWLING_SOUL)) && ((CurrentDemonicFury>=450 && utils.CanCast(DARK_SOUL)) || ( ((int)utils.GetSpellCooldown(METAMORPHOSIS).Milliseconds>10000) && CurrentDemonicFury>=650)))
+                //actions+=/metamorphosis,if=(trinket.stacking_proc.multistrike.react|trinket.proc.any.react)&((demonic_fury>450&action.dark_soul.recharge_time>=10&glyph.dark_soul.enabled)|(demonic_fury>650&cooldown.dark_soul.remains>=10))
+                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS) && (utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) || utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) || utils.isAuraActive(HOWLING_SOUL)) && ((demonic_fury>=450 && utils.CanCast(DARK_SOUL)) || ( ((int)utils.GetSpellCooldown(METAMORPHOSIS).Milliseconds>10000) && demonic_fury>=650)))
                 {
                     utils.LogActivity(METAMORPHOSIS);
                     return utils.Cast(METAMORPHOSIS);
                 }
-
-                //actions+=/metamorphosis,if=!dot.doom.ticking&target.time_to_die>=33&demonic_fury>300                
-                if (utils.CanCast(METAMORPHOSIS) && CurrentDemonicFury>300 && !utils.isAuraActive(DOOM, target) && Me.CurrentTarget.HealthPercent > 9)
+                //actions+=/metamorphosis,if=!cooldown.cataclysm.remains&talent.cataclysm.enabled
+                //actions+=/metamorphosis,if=!dot.doom.ticking&target.time_to_die>=30%(1%spell_haste)&demonic_fury>300
+                if (utils.CanCast(METAMORPHOSIS) && demonic_fury>300 && !utils.isAuraActive(DOOM, target) && Me.CurrentTarget.HealthPercent > 9)
                 {
                     utils.LogActivity(METAMORPHOSIS);
                     return utils.Cast(METAMORPHOSIS);
                 }
-                //(!dot.shadowflame.ticking&!action.hand_of_guldan.in_flight_to_target)
-                //|floor(demonic_fury%80)*action.soul_fire.execute_time>=target.time_to_die                
-                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS) && ((CurrentDemonicFury>750 && (utils.GetCharges(HAND_OF_GULDAN)==0 || (!utils.isAuraActive(SHADOW_FLAME, target)))) || (CurrentDemonicFury>240 && Me.CurrentTarget.HealthPercent < 4)))
+                //actions+=/metamorphosis,if=(demonic_fury>750&(action.hand_of_guldan.charges=0|(!dot.shadowflame.ticking&!action.hand_of_guldan.in_flight_to_target)))|floor(demonic_fury%80)*action.soul_fire.execute_time>=target.time_to_die
+                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS) && ((demonic_fury>750 && (utils.GetCharges(HAND_OF_GULDAN)==0 || (!utils.isAuraActive(SHADOW_FLAME, target) && hand_of_guldan_in_flight))) || (demonic_fury>240 && time_to_die < 10)))
                 {
                     utils.LogActivity(METAMORPHOSIS);
                     return utils.Cast(METAMORPHOSIS);
                 }
-                
-                if (utils.CanCast(METAMORPHOSIS) && CurrentDemonicFury>=950 && !utils.isAuraActive(METAMORPHOSIS))
+                //actions+=/metamorphosis,if=demonic_fury>=950
+                if (utils.CanCast(METAMORPHOSIS) && demonic_fury>=950 && !utils.isAuraActive(METAMORPHOSIS))
                 {
                     utils.LogActivity(METAMORPHOSIS);
                     return utils.Cast(METAMORPHOSIS);
@@ -902,7 +900,7 @@ namespace KingWoW
             DemonicServitude
         }
         
-        private static uint CurrentDemonicFury { get { return Me.GetCurrentPower(WoWPowerType.DemonicFury); } }
+        private static uint demonic_fury { get { return Me.GetCurrentPower(WoWPowerType.DemonicFury); } }
         
         #region Pet Support
 
