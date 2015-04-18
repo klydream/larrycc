@@ -571,7 +571,7 @@ namespace KingWoW
                     return utils.Cast(CORRUPTION, target);
                 }
                 
-                //CurrentDemonicFury<(800-cooldown.dark_soul.remains*(10%spell_haste))
+                //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&((demonic_fury<650&!glyph.dark_soul.enabled)|demonic_fury<450)&buff.dark_soul.down&(trinket.stacking_proc.multistrike.down&trinket.proc.any.down|demonic_fury<(800-cooldown.dark_soul.remains*(10%spell_haste)))&target.time_to_die>20
                 if(utils.isAuraActive(METAMORPHOSIS)
                   && ((CurrentDemonicFury<650 && !utils.CanCast(DARK_SOUL)) || CurrentDemonicFury<450)
                   && !utils.isAuraActive(DARK_SOUL)
@@ -582,11 +582,10 @@ namespace KingWoW
                     Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
                     return true;
                 }
-                
-                //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges>0&dot.shadowflame.remains<action.hand_of_guldan.travel_time+action.shadow_bolt.cast_time&((demonic_fury<100&buff.dark_soul.remains>10)|time<15)
-                if(	utils.isAuraActive(METAMORPHOSIS)	&& utils.GetCharges(CHAOS_WAVE)>0
-                	&& (int)utils.MyAuraTimeLeft(SHADOW_FLAME, target)<500+utils.GetSpellCastTime(SHADOW_BOLT).Milliseconds
-                	&& ((CurrentDemonicFury<100 && utils.MyAuraTimeLeft(DARK_SOUL, Me)>10000) || nextTimeCancelMetamorphosis <= DateTime.Now))
+                //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges>0&dot.shadowflame.remains<action.hand_of_guldan.travel_time+action.shadow_bolt.cast_time&((demonic_fury<100&buff.dark_soul.remains>10)|time<15)&!glyph.dark_soul.enabled
+                if(	utils.isAuraActive(METAMORPHOSIS)	&& utils.GetCharges(CHAOS_WAVE)>0 && !HasGlyph(DARK_SOUL)
+                	&& (int)utils.MyAuraTimeLeft(SHADOW_FLAME, target)<hand_of_guldan_travel_time+utils.GetSpellCastTime(SHADOW_BOLT).Milliseconds
+                	&& ((CurrentDemonicFury<100 && utils.MyAuraTimeLeft(DARK_SOUL, Me)>10000) || time<15))
                 {
                     utils.LogActivity("Cancel Metamorphosis for start boost");
                     Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
@@ -599,26 +598,31 @@ namespace KingWoW
                     Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
                     return true;
                 }
-                
-                //buff.dark_soul.up&active_enemies>=2|(charges=3|set_bonus.tier17_4pc=0&charges=2)
-                if (utils.CanCast(CHAOS_WAVE, target) && CurrentDemonicFury>=80 && utils.isAuraActive(METAMORPHOSIS) && (utils.isAuraActive(DARK_SOUL) || utils.GetCharges(CHAOS_WAVE) == 3))
+                //actions+=/chaos_wave,if=buff.metamorphosis.up&(buff.dark_soul.up&active_enemies>=2|(charges=3|set_bonus.tier17_4pc=0&charges=2))
+                if (utils.CanCast(CHAOS_WAVE, target) && utils.isAuraActive(METAMORPHOSIS) && CurrentDemonicFury>=80  && utils.isAuraActive(DARK_SOUL) && (active_enemies>=2 || (charges==3 || (set_bonus.tier17_4pc==0 && charges==2))))
                 {
                     utils.LogActivity(CHAOS_WAVE, target.Name);
                     return utils.Cast(CHAOS_WAVE, target);
                 }
-                
-                if (utils.CanCast(SOUL_FIRE, target) && CurrentDemonicFury>=80 && utils.isAuraActive(MOLTEN_CORE) && utils.isAuraActive(METAMORPHOSIS))
+                //actions+=/soul_fire,if=buff.metamorphosis.up&buff.molten_core.react&(buff.dark_soul.remains>execute_time|target.health.pct<=25)&(((buff.molten_core.stack*execute_time>=trinket.stacking_proc.multistrike.remains-1|demonic_fury<=ceil((trinket.stacking_proc.multistrike.remains-buff.molten_core.stack*execute_time)*40)+80*buff.molten_core.stack)|target.health.pct<=25)&trinket.stacking_proc.multistrike.remains>=execute_time|trinket.stacking_proc.multistrike.down|!trinket.has_stacking_proc.multistrike)
+                if (utils.CanCast(SOUL_FIRE, target) && CurrentDemonicFury>=80 && utils.isAuraActive(METAMORPHOSIS) && utils.isAuraActive(MOLTEN_CORE) && (buff.dark_soul.remains>execute_time || Me.CurrentTarget.HealthPercent<25))
                 {
                     utils.LogActivity(SOUL_FIRE, target.Name);
                     return utils.Cast(SOUL_FIRE, target);
                 }
-                
-                if (utils.CanCast(TOUCH_OF_CHAOS, target) && CurrentDemonicFury>=40 && !utils.isAuraActive(MOLTEN_CORE) && utils.isAuraActive(METAMORPHOSIS))
+                //actions+=/touch_of_chaos,cycle_targets=1,if=buff.metamorphosis.up&dot.corruption.remains<17.4&demonic_fury>750
+                if (utils.CanCast(TOUCH_OF_CHAOS, target) && CurrentDemonicFury>=40 && utils.isAuraActive(METAMORPHOSIS) && utils.MyAuraTimeLeft(CORRUPTION, target)<17400 && demonic_fury>750)
                 {
                     utils.LogActivity(TOUCH_OF_CHAOS, target.Name);
                     return utils.Cast(TOUCH_OF_CHAOS, target);
                 }
-
+                //actions+=/touch_of_chaos,if=buff.metamorphosis.up
+                if (utils.CanCast(TOUCH_OF_CHAOS, target) && CurrentDemonicFury>=40 && utils.isAuraActive(METAMORPHOSIS))
+                {
+                    utils.LogActivity(TOUCH_OF_CHAOS, target.Name);
+                    return utils.Cast(TOUCH_OF_CHAOS, target);
+                }
+                
                 if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS)
                 && utils.MyAuraTimeLeft(DARK_SOUL, Me)>MyGCD
                 && (DateTime.Now>(StartCombat+new TimeSpan(0, 0, 0, 0, 6000)) || utils.GetAuraStack(target, SHADOW_FLAME, false)==2)
