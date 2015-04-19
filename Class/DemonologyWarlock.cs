@@ -134,7 +134,7 @@ namespace KingWoW
         private       int    molten_core_execute_time;
         private const int    hand_of_guldan_travel_time = 1500;
         private       long   time_to_die=9999;
-        private       long   time_elapse=0;
+        private       long   time_elapse=20;
 
         //END TALENTS
         //END OF CONSTANTS ==============================
@@ -549,7 +549,7 @@ namespace KingWoW
                 //actions+=/hand_of_guldan,if=!in_flight&dot.shadowflame.remains<travel_time+action.shadow_bolt.cast_time&talent.demonbolt.enabled&((set_bonus.tier17_4pc=0&((charges=1&recharge_time()<4)|charges=2))|(charges=3|(charges=2&recharge_time()<13.8-travel_time*2))|dot.shadowflame.remains>travel_time)
                 //actions+=/hand_of_guldan,if=!in_flight&dot.shadowflame.remains<3.7&time<5&buff.demonbolt.remains<gcd*2&(charges>=2|set_bonus.tier17_4pc=0)&action.dark_soul.charges>=1
                 //actions+=/service_pet,if=talent.grimoire_of_service.enabled&(target.time_to_die>120|target.time_to_die<=25|(buff.dark_soul.remains&target.health.pct<20))
-                if (utils.CanCast(HAND_OF_GULDAN) && HasTalent(WarlockTalents.GrimoireOfService) && (time_to_die>120 || time_to_die<=25 || (utils.isAuraActive(DARK_SOUL) && Me.CurrentTarget.HealthPercent<20)))
+                if (utils.CanCast("Grimoire: Doomguard") && HasTalent(WarlockTalents.GrimoireOfService) && (time_to_die>120 || time_to_die<=25 || (utils.isAuraActive(DARK_SOUL) && Me.CurrentTarget.HealthPercent<20)))
                 {
                     utils.LogActivity("Grimoire: Doomguard", target.Name);
                     return utils.Cast("Grimoire: Doomguard", target);
@@ -581,10 +581,10 @@ namespace KingWoW
                 
                 //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&((demonic_fury<650&!glyph.dark_soul.enabled)|demonic_fury<450)&buff.dark_soul.down&(trinket.stacking_proc.multistrike.down&trinket.proc.any.down|demonic_fury<(800-cooldown.dark_soul.remains*(10%spell_haste)))&target.time_to_die>20
                 if(utils.isAuraActive(METAMORPHOSIS)
-                  && ((demonic_fury<650 && !utils.CanCast(DARK_SOUL)) || demonic_fury<450)
+                  && ((demonic_fury<650 && !HasGlyph(DARK_SOUL)) || demonic_fury<450)
                   && !utils.isAuraActive(DARK_SOUL)
                   && ((!utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL)) || (utils.GetSpellCooldown(DARK_SOUL).Seconds <= 20 && demonic_fury<300))
-                  && Me.CurrentTarget.HealthPercent > DemonologyWarlockSettings.Instance.Phase2KillBossHP)
+                  && time_to_die>20)
                 {
                 	  utils.LogActivity("Cancel Metamorphosis for next dark soul");
                     Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
@@ -600,7 +600,7 @@ namespace KingWoW
                     return true;
                 }
                 //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges=3&(!buff.dark_soul.remains>gcd|action.metamorphosis.cooldown<gcd)
-                if(utils.isAuraActive(METAMORPHOSIS) && utils.GetCharges(CHAOS_WAVE)==3 && (utils.MyAuraTimeLeft(DARK_SOUL, Me)<MyGCD || (float)utils.GetSpellCooldown(METAMORPHOSIS).Milliseconds<MyGCD))
+                if(utils.isAuraActive(METAMORPHOSIS) && utils.GetCharges(CHAOS_WAVE)==3 && (utils.MyAuraTimeLeft(DARK_SOUL, Me)<MyGCD || (int)utils.GetSpellCooldown(METAMORPHOSIS).Milliseconds<MyGCD))
                 {
                     utils.LogActivity("Cancel Metamorphosis");
                     Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
