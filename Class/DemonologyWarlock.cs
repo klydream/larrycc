@@ -681,7 +681,7 @@ namespace KingWoW
                     return utils.Cast(IMP_SWARM, target);
                 }
                 //actions+=/hellfire,interrupt=1,if=active_enemies>=5
-                if (utils.CanCast(HELLFIRE) && active_enemies>=5)
+                if (utils.CanCast(HELLFIRE) && active_enemies_surround()>=5)
                 {
                     utils.LogActivity(HELLFIRE, target.Name);
                     return utils.Cast(HELLFIRE, target);
@@ -704,7 +704,7 @@ namespace KingWoW
                     return utils.Cast(SOUL_FIRE, target);
                 }
                 //actions+=/life_tap,if=mana.pct<40&buff.dark_soul.down
-                if (utils.CanCast(LIFE_TAP) && mana.pct<40 && !utils.isAuraActive(DARK_SOUL) )
+                if (utils.CanCast(LIFE_TAP) && Me.ManaPercent<40 && !utils.isAuraActive(DARK_SOUL) )
                 {
                     utils.LogActivity(LIFE_TAP);
                     return utils.Cast(LIFE_TAP);
@@ -819,7 +819,7 @@ namespace KingWoW
                     else if (utils.CanCast(DARK_SOUL) && DemonologyWarlockSettings.Instance.CDUseDarkSoul == DemonologyWarlockSettings.CDUseType.CONDITION)
                     {
                         //(charges=2&(time>6|(debuff.shadowflame.stack=1&action.hand_of_guldan.in_flight)))
-                        if (utils.GetCharges(DARK_SOUL)==2 && (time_elapse>6 || (utils.GetAuraStack(target, SHADOWFLAME, true)=1 && hand_of_guldan_in_flight())))
+                        if (utils.GetCharges(DARK_SOUL)==2 && (time_elapse>6 || (utils.GetAuraStack(target, SHADOWFLAME, true)==1 && hand_of_guldan_in_flight())))
                         {
                             utils.LogActivity(DARK_SOUL);
                             return utils.Cast(DARK_SOUL);
@@ -1023,12 +1023,12 @@ namespace KingWoW
         public bool hand_of_guldan_in_flight()
         {
             //in periond of start boost, cancel Metamorphosis before 15s
-            return startTime_hand_of_guldan + new TimeSpan(0, 0, 0, 0, 1500) < DateTime.Now ;
+            return (startTime_hand_of_guldan + new TimeSpan(0, 0, 0, 0, 1500) < DateTime.Now);
         }
         
         public int recharge_time()
         {
-            TimeSpan time_recharge = DateTime.Now - new TimeSpan(0, 0, 0, 0, 1500);
+            TimeSpan time_recharge = new TimeSpan(0, 0, 0, 0, 1500)-(DateTime.Now - startTime_hand_of_guldan);
             return time_recharge.Seconds;
         }
         
