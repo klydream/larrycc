@@ -533,7 +533,7 @@ namespace KingWoW
             }
             
             //actions.aoe+=/chaos_bolt,if=!talent.charred_remains.enabled&buff.havoc.remains>cast_time&buff.havoc.stack>=3
-            if (utils.CanCast(CHAOS_BOLT) && (HasTalent(WarlockTalents.CharredRemains) && (int)utils.MyAuraTimeLeft(HAVOC, Me)>utils.GetSpellCastTime(CHAOS_BOLT).Milliseconds && utils.GetAuraStack(Me, HAVOC, true)>=3))
+            if (utils.CanCast(CHAOS_BOLT) && (HasTalent(WarlockTalents.CharredRemains) && (int)utils.MyAuraTimeLeft(HAVOC, Me)>utils.GetSpellCastTime(CHAOS_BOLT).TotalMilliseconds && utils.GetAuraStack(Me, HAVOC, true)>=3))
             {
                 utils.LogActivity(CHAOS_BOLT, target.Name);
                 return utils.Cast(CHAOS_BOLT, target);
@@ -608,13 +608,13 @@ namespace KingWoW
             }
             
             //actions.single_target+=/immolate,cycle_targets=1,if=remains<=cast_time
-            if (utils.CanCast(IMMOLATE) && (int)utils.MyAuraTimeLeft(IMMOLATE, target)<=utils.GetSpellCastTime(IMMOLATE).Milliseconds)
+            if (utils.CanCast(IMMOLATE) && (int)utils.MyAuraTimeLeft(IMMOLATE, target)<=utils.GetSpellCastTime(IMMOLATE).TotalMilliseconds)
             {
                 utils.LogActivity(IMMOLATE, target.Name);
                 return utils.Cast(IMMOLATE, target);
             }
             
-            if (utils.CanCast(IMMOLATE) && (int)utils.MyAuraTimeLeft(IMMOLATE, Me.FocusedUnit)<=utils.GetSpellCastTime(IMMOLATE).Milliseconds && Me.FocusedUnit != null )
+            if (utils.CanCast(IMMOLATE) && (int)utils.MyAuraTimeLeft(IMMOLATE, Me.FocusedUnit)<=utils.GetSpellCastTime(IMMOLATE).TotalMilliseconds && Me.FocusedUnit != null )
             {
                 utils.LogActivity(IMMOLATE, Me.FocusedUnit.Name);
                 return utils.Cast(IMMOLATE,Me.FocusedUnit);
@@ -636,7 +636,7 @@ namespace KingWoW
             }
             
             //actions.single_target+=/chaos_bolt,if=buff.havoc.remains>cast_time&buff.havoc.stack>=3
-            if (utils.CanCast(CHAOS_BOLT) && (int)utils.MyAuraTimeLeft(HAVOC, Me)>utils.GetSpellCastTime(CHAOS_BOLT).Milliseconds &&  utils.GetAuraStack(Me, HAVOC, true)>=3)
+            if (utils.CanCast(CHAOS_BOLT) && (int)utils.MyAuraTimeLeft(HAVOC, Me)>utils.GetSpellCastTime(CHAOS_BOLT).TotalMilliseconds &&  utils.GetAuraStack(Me, HAVOC, true)>=3)
             {
                 utils.LogActivity(CHAOS_BOLT, target.Name);
                 return utils.Cast(CHAOS_BOLT, target);
@@ -670,15 +670,15 @@ namespace KingWoW
                 return utils.Cast(CHAOS_BOLT, target);
             }
             //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&set_bonus.tier17_2pc=1&burning_ember>=2.5
-            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(Me, BACKDRAFT, true)<3 && utils.isAuraActive(CHAOTIC_INFUSION) && burning_ember>=2.5 && ((int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>utils.GetSpellCastTime(CHAOS_BOLT).Milliseconds
-                                                                                                                                                        || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>utils.GetSpellCastTime(CHAOS_BOLT).Milliseconds
-                                                                                                                                                        || (int)utils.MyAuraTimeLeft(CHAOTIC_INFUSION, Me)<utils.GetSpellCastTime(CHAOS_BOLT).Milliseconds+5000))
+            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(Me, BACKDRAFT, true)<3 && utils.isAuraActive(CHAOTIC_INFUSION) && burning_ember>=2.5 && ((int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>utils.GetSpellCastTime(CHAOS_BOLT).TotalMilliseconds
+                                                                                                                                                        || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>utils.GetSpellCastTime(CHAOS_BOLT).TotalMilliseconds
+                                                                                                                                                        || (int)utils.MyAuraTimeLeft(CHAOTIC_INFUSION, Me)<utils.GetSpellCastTime(CHAOS_BOLT).TotalMilliseconds+5000))
             {
                 utils.LogActivity(CHAOS_BOLT, target.Name);
                 return utils.Cast(CHAOS_BOLT, target);
             }
             //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&buff.archmages_greater_incandescence_int.react&buff.archmages_greater_incandescence_int.remains>cast_time
-            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(Me, BACKDRAFT, true)<3 && utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && (int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>utils.GetSpellCastTime(CHAOS_BOLT).Milliseconds)
+            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(Me, BACKDRAFT, true)<3 && utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && (int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>utils.GetSpellCastTime(CHAOS_BOLT).TotalMilliseconds)
             {
                 utils.LogActivity(CHAOS_BOLT, target.Name);
                 return utils.Cast(CHAOS_BOLT, target);
@@ -690,12 +690,12 @@ namespace KingWoW
             //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.multistrike.react&trinket.proc.multistrike.remains>cast_time
             //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.versatility.react&trinket.proc.versatility.remains>cast_time
             //actions.single_target+=/chaos_bolt,if=buff.backdraft.stack<3&trinket.proc.mastery.react&trinket.proc.mastery.remains>cast_time
-            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(Me, BACKDRAFT, true)<3 && utils.isAuraActive(HOWLING_SOUL) && (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>utils.GetSpellCastTime(CHAOS_BOLT).Milliseconds)
+            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(Me, BACKDRAFT, true)<3 && utils.isAuraActive(HOWLING_SOUL) && (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>utils.GetSpellCastTime(CHAOS_BOLT).TotalMilliseconds)
             {
                 utils.LogActivity(CHAOS_BOLT, target.Name);
                 return utils.Cast(CHAOS_BOLT, target);
             }
-            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(Me, BACKDRAFT, true)<3 && utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) && (int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>utils.GetSpellCastTime(CHAOS_BOLT).Milliseconds)
+            if (utils.CanCast(CHAOS_BOLT) && utils.GetAuraStack(Me, BACKDRAFT, true)<3 && utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) && (int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>utils.GetSpellCastTime(CHAOS_BOLT).TotalMilliseconds)
             {
                 utils.LogActivity(CHAOS_BOLT, target.Name);
                 return utils.Cast(CHAOS_BOLT, target);

@@ -1,173 +1,51 @@
-//CurrentDemonicFury<(800-cooldown.dark_soul.remains*(10%spell_haste))
-                if(utils.isAuraActive(METAMORPHOSIS)
-                  && ((CurrentDemonicFury<650 && !utils.CanCast(DARK_SOUL)) || CurrentDemonicFury<450)
-                  && !utils.isAuraActive(DARK_SOUL)
-                  && ((!utils.isAuraActive(BLOOD_PACT) && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL)) || (utils.GetSpellCooldown(DARK_SOUL).Seconds <= 20 && CurrentDemonicFury<300))
-                  && Me.CurrentTarget.HealthPercent > DestructionWarlockSettings.Instance.Phase2KillBossHP)
-                {
-                	  utils.LogActivity("Cancel Metamorphosis for next dark soul");
-                    Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
-                    return true;
-                }
-                
-                //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges>0&dot.shadowflame.remains<action.hand_of_guldan.travel_time+action.shadow_bolt.cast_time&((demonic_fury<100&buff.dark_soul.remains>10)|time<15)
-                if(	utils.isAuraActive(METAMORPHOSIS)	&& utils.GetCharges(CHAOS_WAVE)>0
-                	&& (int)utils.MyAuraTimeLeft(SHADOW_FLAME, target)<500+utils.GetSpellCastTime(SHADOW_BOLT).Milliseconds
-                	&& ((CurrentDemonicFury<100 && utils.MyAuraTimeLeft(DARK_SOUL, Me)>10000) || nextTimeCancelMetamorphosis <= DateTime.Now))
-                {
-                    utils.LogActivity("Cancel Metamorphosis for start boost");
-                    Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
-                    return true;
-                }
-                //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges=3&(!buff.dark_soul.remains>gcd|action.metamorphosis.cooldown<gcd)
-                if(utils.isAuraActive(METAMORPHOSIS) && utils.GetCharges(CHAOS_WAVE)==3 && (utils.MyAuraTimeLeft(DARK_SOUL, Me)<MyGCD || (float)utils.GetSpellCooldown(METAMORPHOSIS).Milliseconds<MyGCD))
-                {
-                    utils.LogActivity("Cancel Metamorphosis");
-                    Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
-                    return true;
-                }
-                
-                //buff.dark_soul.up&active_enemies>=2|(charges=3|set_bonus.tier17_4pc=0&charges=2)
-                if (utils.CanCast(CHAOS_WAVE, target) && CurrentDemonicFury>=80 && utils.isAuraActive(METAMORPHOSIS) && (utils.isAuraActive(DARK_SOUL) || utils.GetCharges(CHAOS_WAVE) == 3))
-                {
-                    utils.LogActivity(CHAOS_WAVE, target.Name);
-                    return utils.Cast(CHAOS_WAVE, target);
-                }
-                
-                if (utils.CanCast(SOUL_FIRE, target) && CurrentDemonicFury>=80 && utils.isAuraActive(MOLTEN_CORE) && utils.isAuraActive(METAMORPHOSIS))
-                {
-                    utils.LogActivity(SOUL_FIRE, target.Name);
-                    return utils.Cast(SOUL_FIRE, target);
-                }
-                
-                if (utils.CanCast(TOUCH_OF_CHAOS, target) && CurrentDemonicFury>=40 && !utils.isAuraActive(MOLTEN_CORE) && utils.isAuraActive(METAMORPHOSIS))
-                {
-                    utils.LogActivity(TOUCH_OF_CHAOS, target.Name);
-                    return utils.Cast(TOUCH_OF_CHAOS, target);
-                }
-
-                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS)
-                && utils.MyAuraTimeLeft(DARK_SOUL, Me)>MyGCD
-                && (DateTime.Now>StartCombat+6 || utils.GetAuraStack(SHADOW_FLAME, target)==2)
-                && (CurrentDemonicFury>300 || !utils.CanCast(DARK_SOUL))
-                && ((CurrentDemonicFury>=80 && utils.GetAuraStack(MOLTEN_CORE, Me)>=1) || (CurrentDemonicFury>=40 && CurrentDemonicFury<80)) )
-                {
-                    utils.LogActivity(METAMORPHOSIS);
-                    return utils.Cast(METAMORPHOSIS);
-                }
-                
-                //((demonic_fury>450&action.dark_soul.recharge_time>=10&glyph.dark_soul.enabled)|(demonic_fury>650&cooldown.dark_soul.remains>=10))                
-                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS) && (utils.isAuraActive(BLOOD_PACT) || utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) || utils.isAuraActive(HOWLING_SOUL)) && ((CurrentDemonicFury>=450 && utils.CanCast(DARK_SOUL)) || ( ((int)utils.GetSpellCooldown(METAMORPHOSIS).Milliseconds>10000) && CurrentDemonicFury>=650)))
-                {
-                    utils.LogActivity(METAMORPHOSIS);
-                    return utils.Cast(METAMORPHOSIS);
-                }
-
-                //actions+=/metamorphosis,if=!dot.doom.ticking&target.time_to_die>=33&demonic_fury>300                
-                if (utils.CanCast(METAMORPHOSIS) && CurrentDemonicFury>300 && !utils.isAuraActive(DOOM, target) && Me.CurrentTarget.HealthPercent > 9)
-                {
-                    utils.LogActivity(METAMORPHOSIS);
-                    return utils.Cast(METAMORPHOSIS);
-                }
-                //(!dot.shadowflame.ticking&!action.hand_of_guldan.in_flight_to_target)
-                //|floor(demonic_fury%80)*action.soul_fire.execute_time>=target.time_to_die                
-                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS) && ((CurrentDemonicFury>750 && (utils.GetCharges(HAND_OF_GULDAN)==0 || (!utils.isAuraActive(SHADOW_FLAME, target)))) || (CurrentDemonicFury>240 && Me.CurrentTarget.HealthPercent < 4)))
-                {
-                    utils.LogActivity(METAMORPHOSIS);
-                    return utils.Cast(METAMORPHOSIS);
-                }
-                
-                if (utils.CanCast(METAMORPHOSIS) && CurrentDemonicFury>=950 && !utils.isAuraActive(METAMORPHOSIS))
-                {
-                    utils.LogActivity(METAMORPHOSIS);
-                    return utils.Cast(METAMORPHOSIS);
-                }
-                
-                //apply dot
-                if (utils.CanCast(CORRUPTION, target) && utils.MyAuraTimeLeft(CORRUPTION, target) < 3500 && !utils.isAuraActive(METAMORPHOSIS))
-                {
-                    utils.LogActivity(CORRUPTION, target.Name);
-                    return utils.Cast(CORRUPTION, target);
-                }
-                
-                if (utils.CanCast(DOOM, target) && utils.MyAuraTimeLeft(DOOM, target) < 3500 && utils.isAuraActive(METAMORPHOSIS))
-                {
-                    utils.LogActivity(DOOM, target.Name);
-                    return utils.Cast(DOOM, target);
-                }
-                //if (!Me.IsMoving && nextTimeVampiricTouchAllowed <= DateTime.Now && utils.MyAuraTimeLeft(VAMPIRIC_TOUCH, target) < 4500
-                //    && !(talents.IsSelected(9) && utils.MyAuraTimeLeft(DEVOURING_PLAGUE, target) > 0) && !(Me.IsChanneling && Me.ChanneledCastingSpellId == MIND_FLY_INSANITY))
-                //{
-                //    utils.LogActivity("VAMPIRIC_TOUCH", target.Name);
-                //    SetNextTimeVampiricTouch();
-                //    return utils.Cast(VAMPIRIC_TOUCH, target);
-                //}
-
-                //apply  Nether Tempest and always refresh it right before the last tick;
-                //if (utils.CanCast(NETHER_TEMPEST, target) && (utils.MyAuraTimeLeft(NETHER_TEMPEST, target) < 1500) && !(target.IsPlayer && DestructionWarlockSettings.Instance.AvoidDOTPlayers))
-                //{
-                //    utils.LogActivity(NETHER_TEMPEST, target.Name);
-                //    return utils.Cast(NETHER_TEMPEST, target);
-                //}
-
-                //apply  Living Bomb and refresh it right before or right after the last tick (the expiring Living Bomb will explode in both cases);
-                //if (utils.CanCast(LIVING_BOMB, target) && (utils.MyAuraTimeLeft(LIVING_BOMB, target) < 1500) && !(target.IsPlayer && DestructionWarlockSettings.Instance.AvoidDOTPlayers))
-                //{
-                //    utils.LogActivity(LIVING_BOMB, target.Name);
-                //    return utils.Cast(LIVING_BOMB, target);
-                //}
-
-                //+++++++++++++++++++++++++AOE rotation start+++++++++++++++++++++++++++++++//
-                if (DestructionWarlockSettings.Instance.UseFlameStrike && utils.CanCast(FLAMESTRIKE) && !FrostMageSettings.Instance.AvoidAOE && target.Distance <= 40 && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count() >= DestructionWarlockSettings.Instance.AOECount)
-                {
-                    utils.LogActivity(FLAMESTRIKE, target.Name);
-                    utils.Cast(FLAMESTRIKE);
-                    return SpellManager.ClickRemoteLocation(target.Location);
-                }
-
-                //if (DestructionWarlockSettings.Instance.UseDragonBreath && utils.CanCast(DRAGON_BREATH) && !FrostMageSettings.Instance.AvoidAOE && utils.AllAttaccableEnemyMobsInRange(15).Count() >= DestructionWarlockSettings.Instance.AOECount)
-                //{
-                //    utils.LogActivity(DRAGON_BREATH);
-                //    return utils.Cast(DRAGON_BREATH);
-                //}
-                //
-                //if (DestructionWarlockSettings.Instance.UseArcaneExplosion && utils.CanCast(ARCANE_EXPLOSION) && !FrostMageSettings.Instance.AvoidAOE && utils.AllAttaccableEnemyMobsInRange(10).Count() >= DestructionWarlockSettings.Instance.AOECount)
-                //{
-                //    utils.LogActivity(ARCANE_EXPLOSION);
-                //    return utils.Cast(ARCANE_EXPLOSION);
-                //}
-                //
-                //if (DestructionWarlockSettings.Instance.UseRingOfFrost && utils.CanCast(RING_OF_FROST) && target.Distance2DSqr <= 30 * 30)
-                //{
-                //    utils.LogActivity(RING_OF_FROST, target.Name);
-                //    utils.Cast(RING_OF_FROST);
-                //    return SpellManager.ClickRemoteLocation(target.Location);
-                //}
-
-                Multidot(); 
-
-                //Cast  SHADOW_BOLT as a filler spell.
-                if (!Me.IsMoving && utils.CanCast(SHADOW_BOLT, target))
-                {
-                    utils.LogActivity(SHADOW_BOLT, target.Name);
-                    return utils.Cast(SHADOW_BOLT, target);
-                }
-
-                //+++++++++++++++++++++++DPS moving   START+++++++++++++++++++++++++++
-                //BURNING_RUSH
-                if (Me.IsMoving && utils.CanCast(BURNING_RUSH) && !utils.isAuraActive(BURNING_RUSH))
-                {
-                    utils.LogActivity(BURNING_RUSH);
-                    utils.Cast(BURNING_RUSH);
-                }
-                //TOUCH_OF_CHAOS
-                if (Me.IsMoving && SpellManager.HasSpell(TOUCH_OF_CHAOS) && utils.isAuraActive(METAMORPHOSIS))
-                {
-                    utils.LogActivity(TOUCH_OF_CHAOS, target.Name);
-                    return utils.Cast(TOUCH_OF_CHAOS, target);
-                }
-            }
-            else if (ExtraUtilsSettings.Instance.movementEnabled && Me.CurrentTarget != null && !Me.CurrentTarget.IsDead && (!Me.CurrentTarget.InLineOfSpellSight || Me.CurrentTarget.Distance - Me.CurrentTarget.CombatReach - 1 > DestructionWarlockSettings.Instance.PullDistance))
-            {
-                movement.KingHealMove(Me.CurrentTarget, DestructionWarlockSettings.Instance.PullDistance);
-            }
+20:335 my HP% 100    MANA% 90.31     Master Demonologist1321123123123s
+20:335 my HP% 100    MANA% 90.31     Track Pets1321123123123s
+20:335 my HP% 100    MANA% 90.31     Warlock1321123123123s
+20:335 my HP% 100    MANA% 90.31     Dark Intent1321123123123s
+20:335 my HP% 100    MANA% 90.31     Whispers of Insanity1321123123123s
+20:335 my HP% 100    MANA% 90.31     Void Shards1321123123123s
+20:335 my HP% 100    MANA% 90.31     Garrison Ability Override1321123123123s
+20:335 my HP% 100    MANA% 90.31     Update Resources on Apply1321123123123s
+20:335 my HP% 100    MANA% 90.31     Logging Relearn Master1321123123123s
+20:335 my HP% 100    MANA% 90.31     Garrison Owner1321123123123s
+20:335 my HP% 100    MANA% 90.31     Blood Pact1321123123123s
+20:335 my HP% 100    MANA% 90.31     Demonic Fury1321123123123s
+20:335 my HP% 100    MANA% 90.31     Wild Imps1321123123123s
+20:335 my HP% 100    MANA% 90.31     Doom1321123123123s
+20:335 my HP% 100    MANA% 90.31     Archimonde's Darkness1321123123123s
+20:335 my HP% 100    MANA% 90.31     Soul Leech1321123123123s
+20:335 my HP% 100    MANA% 90.31     Demonic Servitude1321123123123s
+20:335 my HP% 100    MANA% 90.31     Glyph of Eternal Resolve1321123123123s
+20:335 my HP% 100    MANA% 90.31     Glyph of Siphon Life1321123123123s
+20:335 my HP% 100    MANA% 90.31     Item - Attacks Proc Archmage's Greater Incandescence1321123123123s
+20:335 my HP% 100    MANA% 90.31     Mark of Bleeding Hollow1321123123123s
+20:335 my HP% 100    MANA% 90.31     Item - Warlock T17 Demonology 2P Bonus1321123123123s
+20:335 my HP% 100    MANA% 90.31     Item - Attacks Proc Critical Strike [Howling Soul]1321123123123s
+20:335 my HP% 100    MANA% 90.31     Item - Warlock T17 Demonology 4P Bonus1321123123123s
+20:335 my HP% 100    MANA% 90.31     Empowered Demons1321123123123s
+20:335 my HP% 100    MANA% 90.31     Soul Link1321123123123s
+20:335 my HP% 100    MANA% 90.31     Override Command Demon1321123123123s
+20:335 my HP% 100    MANA% 90.31     Mark of Bleeding Hollow1321123123123s
+20:335 my HP% 100    MANA% 90.31     Molten Core1321123123123s
+20:335 my HP% 100    MANA% 90.31     Demonic Calling1321123123123s
+20:416 my HP% 100    MANA% 90.31     Master Demonologist1321123123123s
+20:416 my HP% 100    MANA% 90.31     Track Pets1321123123123s
+20:416 my HP% 100    MANA% 90.31     Warlock1321123123123s
+20:416 my HP% 100    MANA% 90.31     Dark Intent1321123123123s
+20:416 my HP% 100    MANA% 90.31     Whispers of Insanity1321123123123s
+20:416 my HP% 100    MANA% 90.31     Void Shards1321123123123s
+20:416 my HP% 100    MANA% 90.31     Garrison Ability Override1321123123123s
+20:416 my HP% 100    MANA% 90.31     Update Resources on Apply1321123123123s
+20:416 my HP% 100    MANA% 90.31     Logging Relearn Master1321123123123s
+20:416 my HP% 100    MANA% 90.31     Garrison Owner1321123123123s
+20:416 my HP% 100    MANA% 90.31     Blood Pact1321123123123s
+20:416 my HP% 100    MANA% 90.31     Demonic Fury1321123123123s
+20:416 my HP% 100    MANA% 90.31     Wild Imps1321123123123s
+20:416 my HP% 100    MANA% 90.31     Doom1321123123123s
+20:416 my HP% 100    MANA% 90.31     Archimonde's Darkness1321123123123s
+20:416 my HP% 100    MANA% 90.31     Soul Leech1321123123123s
+20:416 my HP% 100    MANA% 90.31     Demonic Servitude1321123123123s
+20:416 my HP% 100    MANA% 90.31     Glyph of Eternal Resolve1321123123123s
+20:416 my HP% 100    MANA% 90.31     Glyph of Siphon Life1321123123123s
+20:416 my HP% 100    MANA% 90.31     Item - Attacks Proc Archmage's Greater Incandescence1321123123123s
+20:416 my HP% 100    MANA% 90.31     Mark of Bleeding Hollow1321123123123s
