@@ -543,7 +543,8 @@ namespace KingWoW
                 //}
                 if (utils.CanCast("Metamorphosis: Touch of Chaos", target))
                     utils.LogActivity("bbbbbbbbbbbbbbbbbbbbbbbb");
-                    
+                else
+                    utils.LogActivity("aaaaaaaaaaaaaaaaaaaaaaaa");    
                 //utils.LogActivity("aaaaaaaaaaaaaaaaaaaaaaaa"+(int)utils.MyAuraTimeLeft("Shadowflame", target));
                 //actions+=/hand_of_guldan,if=!in_flight&dot.shadowflame.remains<travel_time+action.shadow_bolt.cast_time&(((set_bonus.tier17_4pc=0&((charges=1&recharge_time()<4)|charges=2))|(charges=3|(charges=2&recharge_time()<13.8-travel_time*2))&((cooldown.cataclysm.remains>dot.shadowflame.duration)|!talent.cataclysm.enabled))|dot.shadowflame.remains>travel_time)
                 if (utils.CanCast(HAND_OF_GULDAN) && !hand_of_guldan_in_flight() && (int)utils.MyAuraTimeLeft(SHADOWFLAME, target)<hand_of_guldan_travel_time+utils.GetSpellCastTime(SHADOW_BOLT).TotalMilliseconds && 
@@ -567,7 +568,7 @@ namespace KingWoW
                 //actions+=/kiljaedens_cunning,if=!cooldown.cataclysm.remains&buff.metamorphosis.up
                 //actions+=/cataclysm,if=buff.metamorphosis.up   
                 //actions+=/immolation_aura,if=demonic_fury>450&active_enemies>=3&buff.immolation_aura.down  
-                if (utils.CanCast(IMMOLATION_AURA) && utils.isAuraActive(METAMORPHOSIS) && demonic_fury>450 && active_enemies_surround()>=3 && utils.isAuraActive(IMMOLATION_AURA))
+                if (SpellManager.HasSpell("Hellfire") && utils.isAuraActive(METAMORPHOSIS) && demonic_fury>450 && active_enemies_surround()>=3 && !utils.isAuraActive(IMMOLATION_AURA))
                 {
                     utils.LogActivity(IMMOLATION_AURA, target.Name);
                     return utils.Cast(IMMOLATION_AURA, target);
