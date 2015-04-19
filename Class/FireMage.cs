@@ -482,8 +482,8 @@ namespace KingWoW
                 case FireMageSettings.ArmorType.MOLTEN:
                     if (!utils.isAuraActive(MOLTEN_ARMOR) && utils.CanCast(MOLTEN_ARMOR) && !Me.IsMoving)
                     {
-                        utils.LogActivity(MOLTEN_ARMOR);
-                        return utils.Cast(MOLTEN_ARMOR);
+                        //utils.LogActivity(MOLTEN_ARMOR);
+                        //return utils.Cast(MOLTEN_ARMOR);
                     }
                     break;
                 case FireMageSettings.ArmorType.MAGE:
@@ -814,6 +814,11 @@ namespace KingWoW
                     utils.LogActivity(COMBUSTION, target.Name);
                     return utils.Cast(COMBUSTION, target);
                 }*/
+                
+                if (utils.isAuraActive(PYROBLAST, target))
+                    utils.LogActivity("bbbbbbbbbbbbbbbbbbbbbbbb");
+                else
+                    utils.LogActivity("aaaaaaaaaaaaaaaaaaaaaaaa");    
 
                 //COMBUSTION
                 if (FireMageSettings.Instance.CDUseCombustion == FireMageSettings.CDCombustionUseType.COOLDOWN && utils.CanCast(COMBUSTION)

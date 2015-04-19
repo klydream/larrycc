@@ -541,10 +541,11 @@ namespace KingWoW
                 //{
                 //    utils.LogActivity(a.Name+"1321123123123s");
                 //}
-                if (utils.CanCast("Metamorphosis: Touch of Chaos", target))
+                if (utils.CanCast(SOUL_FIRE, target) && utils.isAuraActive(METAMORPHOSIS))
                     utils.LogActivity("bbbbbbbbbbbbbbbbbbbbbbbb");
                 else
                     utils.LogActivity("aaaaaaaaaaaaaaaaaaaaaaaa");    
+                
                 //utils.LogActivity("aaaaaaaaaaaaaaaaaaaaaaaa"+(int)utils.MyAuraTimeLeft("Shadowflame", target));
                 //actions+=/hand_of_guldan,if=!in_flight&dot.shadowflame.remains<travel_time+action.shadow_bolt.cast_time&(((set_bonus.tier17_4pc=0&((charges=1&recharge_time()<4)|charges=2))|(charges=3|(charges=2&recharge_time()<13.8-travel_time*2))&((cooldown.cataclysm.remains>dot.shadowflame.duration)|!talent.cataclysm.enabled))|dot.shadowflame.remains>travel_time)
                 if (utils.CanCast(HAND_OF_GULDAN) && !hand_of_guldan_in_flight() && (int)utils.MyAuraTimeLeft(SHADOWFLAME, target)<hand_of_guldan_travel_time+utils.GetSpellCastTime(SHADOW_BOLT).TotalMilliseconds && 
@@ -568,14 +569,14 @@ namespace KingWoW
                 //actions+=/kiljaedens_cunning,if=!cooldown.cataclysm.remains&buff.metamorphosis.up
                 //actions+=/cataclysm,if=buff.metamorphosis.up   
                 //actions+=/immolation_aura,if=demonic_fury>450&active_enemies>=3&buff.immolation_aura.down  
-                if (SpellManager.HasSpell("Hellfire") && utils.isAuraActive(METAMORPHOSIS) && demonic_fury>450 && active_enemies_surround()>=3 && !utils.isAuraActive(IMMOLATION_AURA))
+                if (utils.CanCast(SOUL_FIRE, target) && utils.isAuraActive(METAMORPHOSIS) && demonic_fury>450 && active_enemies_surround()>=3 && !utils.isAuraActive(IMMOLATION_AURA))
                 {
                     utils.LogActivity(IMMOLATION_AURA, target.Name);
                     return utils.Cast(IMMOLATION_AURA, target);
                 }
                 
                 //actions+=/doom,if=buff.metamorphosis.up&target.time_to_die>=30*spell_haste&remains<=(duration*0.3)&(remains<cooldown.cataclysm.remains|!talent.cataclysm.enabled)&trinket.stacking_proc.multistrike.react<10
-                if (utils.CanCast(DOOM, target) && utils.isAuraActive(METAMORPHOSIS) && time_to_die>=27 && utils.MyAuraTimeLeft(DOOM, target) < 3500 )
+                if (utils.CanCast(SOUL_FIRE, target) && utils.isAuraActive(METAMORPHOSIS) && time_to_die>=27 && utils.MyAuraTimeLeft(DOOM, target) < 3500 )
                 {
                     utils.LogActivity(DOOM, target.Name);
                     return utils.Cast(DOOM, target);
@@ -616,7 +617,7 @@ namespace KingWoW
                     return true;
                 }
                 //actions+=/chaos_wave,if=buff.metamorphosis.up&(buff.dark_soul.up&active_enemies>=2|(charges=3|set_bonus.tier17_4pc=0&charges=2))
-                if (utils.CanCast(CHAOS_WAVE, target) && utils.isAuraActive(METAMORPHOSIS) && demonic_fury>=80  && utils.isAuraActive(DARK_SOUL) && (active_enemies_aoe(target)>=2 || (utils.GetCharges(CHAOS_WAVE)==3 || (!set_bonus.tier17_4pc && utils.GetCharges(CHAOS_WAVE)==2))))
+                if (utils.CanCast(SOUL_FIRE, target) && utils.isAuraActive(METAMORPHOSIS) && demonic_fury>=80  && utils.isAuraActive(DARK_SOUL) && (active_enemies_aoe(target)>=2 || (utils.GetCharges(CHAOS_WAVE)==3 || (!set_bonus.tier17_4pc && utils.GetCharges(CHAOS_WAVE)==2))))
                 {
                     utils.LogActivity(CHAOS_WAVE, target.Name);
                     return utils.Cast(CHAOS_WAVE, target);
@@ -628,13 +629,13 @@ namespace KingWoW
                     return utils.Cast(SOUL_FIRE, target);
                 }
                 //actions+=/touch_of_chaos,cycle_targets=1,if=buff.metamorphosis.up&dot.corruption.remains<17.4&demonic_fury>750
-                if (utils.CanCast(TOUCH_OF_CHAOS, target) && utils.isAuraActive(METAMORPHOSIS) && utils.MyAuraTimeLeft(CORRUPTION, target)<17400 && demonic_fury>750)
+                if (utils.CanCast(SOUL_FIRE, target) && utils.isAuraActive(METAMORPHOSIS) && utils.MyAuraTimeLeft(CORRUPTION, target)<17400 && demonic_fury>750)
                 {
                     utils.LogActivity(TOUCH_OF_CHAOS, target.Name);
                     return utils.Cast(TOUCH_OF_CHAOS, target);
                 }
                 //actions+=/touch_of_chaos,if=buff.metamorphosis.up
-                if (demonic_fury>=40 && utils.isAuraActive(METAMORPHOSIS))
+                if (utils.CanCast(SOUL_FIRE, target) && demonic_fury>=40 && utils.isAuraActive(METAMORPHOSIS))
                 {
                     utils.LogActivity(TOUCH_OF_CHAOS, target.Name);
                     return utils.Cast(TOUCH_OF_CHAOS, target);
@@ -679,7 +680,7 @@ namespace KingWoW
                 if(utils.isAuraActive(METAMORPHOSIS) )
                 {
                     utils.LogActivity("Cancel Metamorphosis when no demonic_fury"+demonic_fury);
-                    Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
+                    //Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
                     return true;
                 }
                 
