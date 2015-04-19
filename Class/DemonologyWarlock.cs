@@ -124,6 +124,7 @@ namespace KingWoW
         private DateTime     nextTimeCancelMetamorphosis;
         private DateTime     startTime_hand_of_guldan
         private DateTime     StartCombat;
+        private       int    molten_core_execute_time;
         
          
 
@@ -326,12 +327,12 @@ namespace KingWoW
                 Logging.Write("Ciao " + Me.Class.ToString());
                 Logging.Write("Welcome to " + Name + " custom class");
                 Logging.Write("Tanks All HonorBuddy Forum developers for code inspiration!");
-                Logging.Write("Powered by Attilio76");
                 BotEvents.OnBotStartRequested += new BotEvents.OnBotStartStopRequestedDelegate(BotEvents_OnBotStart);
                 Lua.Events.AttachEvent("GROUP_ROSTER_UPDATE", UpdateGroupChangeEvent);
                 InitializeHotkey();
                 RegisterHotkeys();
                 utils.FillParties();
+                molten_core_execute_time = utils.GetSpellCastTime(SOUL_FIRE).Milliseconds) * 0.5;
                 return true; ;
             }
         }
@@ -657,6 +658,59 @@ namespace KingWoW
                     utils.LogActivity(METAMORPHOSIS);
                     return utils.Cast(METAMORPHOSIS);
                 }
+                
+                //actions+=/cancel_metamorphosis
+                if(utils.isAuraActive(METAMORPHOSIS) )
+                {
+                    utils.LogActivity("Cancel Metamorphosis");
+                    Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
+                    return true;
+                }
+                
+                //actions+=/imp_swarm
+                if (utils.CanCast(IMP_SWARM))
+                {
+                    utils.LogActivity(IMP_SWARM, target.Name);
+                    return utils.Cast(IMP_SWARM, target);
+                }
+                //actions+=/hellfire,interrupt=1,if=active_enemies>=5
+                if (utils.CanCast(HELLFIRE) && active_enemies>=5)
+                {
+                    utils.LogActivity(HELLFIRE, target.Name);
+                    return utils.Cast(HELLFIRE, target);
+                }
+                
+                //actions+=/soul_fire,if=buff.molten_core.react&(buff.molten_core.stack>=7|target.health.pct<=25|(buff.dark_soul.remains&cooldown.metamorphosis.remains>buff.dark_soul.remains)|trinket.proc.any.remains>execute_time|trinket.stacking_proc.multistrike.remains>molten_core_execute_time)
+                //                                             &(buff.dark_soul.remains<action.shadow_bolt.cast_time|buff.dark_soul.remains>execute_time)
+                if (utils.CanCast(SOUL_FIRE) && (utils.GetAuraStack(target, MOLTEN_CORE, true)>=7 || Me.CurrentTarget.HealthPercent<25 || (utils.isAuraActive(DARK_SOUL) && utils.GetSpellCooldown(METAMORPHOSIS).Milliseconds>(int)utils.MyAuraTimeLeft(DARK_SOUL, Me)) || (int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>molten_core_execute_time
+                                                                                                                                                                                                                                                                         || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>molten_core_execute_time
+                                                                                                                                                                                                                                                                         || (int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>molten_core_execute_time)
+                   && utils.isAuraActive(MOLTEN_CORE) && ((int)utils.MyAuraTimeLeft(DARK_SOUL, Me)<utils.GetSpellCastTime(SHADOW_BOLT).Milliseconds || (int)utils.MyAuraTimeLeft(DARK_SOUL, Me)>molten_core_execute_time)
+                {
+                    utils.LogActivity(SOUL_FIRE, target.Name);
+                    return utils.Cast(SOUL_FIRE, target);
+                }
+                //actions+=/soul_fire,if=buff.molten_core.react&target.time_to_die<(time+target.time_to_die)*0.25+cooldown.dark_soul.remains
+                if (utils.CanCast(SOUL_FIRE) && utils.isAuraActive(MOLTEN_CORE) && time_to_die<20 )
+                {
+                    utils.LogActivity(SOUL_FIRE, target.Name);
+                    return utils.Cast(SOUL_FIRE, target);
+                }
+                //actions+=/life_tap,if=mana.pct<40&buff.dark_soul.down
+                if (utils.CanCast(LIFE_TAP) && mana.pct<40 && !utils.isAuraActive(DARK_SOUL) )
+                {
+                    utils.LogActivity(LIFE_TAP);
+                    return utils.Cast(LIFE_TAP);
+                }
+                //actions+=/hellfire,interrupt=1,if=active_enemies>=4
+                //actions+=/shadow_bolt
+                if (utils.CanCast(SHADOW_BOLT))
+                {
+                    utils.LogActivity(SHADOW_BOLT, target.Name);
+                    return utils.Cast(SHADOW_BOLT, target);
+                }
+                //actions+=/hellfire,moving=1,interrupt=1
+                //actions+=/life_tap
                 
                 //apply dot
                 
