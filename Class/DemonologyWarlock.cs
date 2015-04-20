@@ -876,78 +876,75 @@ namespace KingWoW
             if (Me.Combat && Me.GotTarget)
             {
 
-                if (extra.IsTargetBoss())
+                if (utils.CanCast(DARK_SOUL) && DemonologyWarlockSettings.Instance.CDUseDarkSoul == DemonologyWarlockSettings.CDUseType.BOSS)
                 {
-                    if (utils.CanCast(DARK_SOUL) && DemonologyWarlockSettings.Instance.CDUseDarkSoul == DemonologyWarlockSettings.CDUseType.BOSS)
+                    utils.LogActivity(DARK_SOUL);
+                    return utils.Cast(DARK_SOUL);
+                }
+                else if (utils.CanCast(DARK_SOUL) && DemonologyWarlockSettings.Instance.CDUseDarkSoul == DemonologyWarlockSettings.CDUseType.CONDITION)
+                {
+                    //(charges=2&(time>6|(debuff.shadowflame.stack=1&action.hand_of_guldan.in_flight)))
+                    if (utils.GetCharges(DARK_SOUL)==2 && (time_elapse>6 || (utils.GetAuraStack(target, SHADOWFLAME, true)==1 && hand_of_guldan_in_flight())))
                     {
                         utils.LogActivity(DARK_SOUL);
                         return utils.Cast(DARK_SOUL);
                     }
-                    else if (utils.CanCast(DARK_SOUL) && DemonologyWarlockSettings.Instance.CDUseDarkSoul == DemonologyWarlockSettings.CDUseType.CONDITION)
+                    //!talent.archimondes_darkness.enabled
+                    else if (!HasTalent(WarlockTalents.ArchimondesDarkness))
                     {
-                        //(charges=2&(time>6|(debuff.shadowflame.stack=1&action.hand_of_guldan.in_flight)))
-                        if (utils.GetCharges(DARK_SOUL)==2 && (time_elapse>6 || (utils.GetAuraStack(target, SHADOWFLAME, true)==1 && hand_of_guldan_in_flight())))
-                        {
-                            utils.LogActivity(DARK_SOUL);
-                            return utils.Cast(DARK_SOUL);
-                        }
-                        //!talent.archimondes_darkness.enabled
-                        else if (!HasTalent(WarlockTalents.ArchimondesDarkness))
-                        {
-                            utils.LogActivity(DARK_SOUL);
-                            return utils.Cast(DARK_SOUL);
-                        }
-                        //(target.time_to_die<=20&!glyph.dark_soul.enabled)
-                        else if (time_to_die<=20 && !HasGlyph(DARK_SOUL))
-                        {
-                            utils.LogActivity(DARK_SOUL);
-                            return utils.Cast(DARK_SOUL);
-                        }
-                        //target.time_to_die<=10|(target.time_to_die<=60&demonic_fury>400)
-                        else if (time_to_die<=10 || (time_to_die<=60 && demonic_fury>400))
-                        {
-                            utils.LogActivity(DARK_SOUL);
-                            return utils.Cast(DARK_SOUL);
-                        }
-                        //((trinket.proc.any.react|trinket.stacking_proc.any.react)&(demonic_fury>600|(glyph.dark_soul.enabled&demonic_fury>450))))
-                        else if ((demonic_fury>600 || (HasGlyph(DARK_SOUL) && demonic_fury>450)) && ((int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>8
-                                                                                                    || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>8
-                                                                                                    || (int)utils.MyAuraTimeLeft(VOID_SHARDS, Me)>16 
-                                                                                                    || (int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>3))
-                        {
-                            utils.LogActivity(DARK_SOUL);
-                            return utils.Cast(DARK_SOUL);
-                        }
+                        utils.LogActivity(DARK_SOUL);
+                        return utils.Cast(DARK_SOUL);
                     }
-                    
-                    //actions+=/imp_swarm,if=!talent.demonbolt.enabled&(buff.dark_soul.up|(cooldown.dark_soul.remains>(120%(1%spell_haste)))|time_to_die<32)&time>3
-                    if (utils.CanCast(IMP_SWARM))
+                    //(target.time_to_die<=20&!glyph.dark_soul.enabled)
+                    else if (time_to_die<=20 && !HasGlyph(DARK_SOUL))
                     {
-                        utils.LogActivity(IMP_SWARM, target.Name);
-                        return utils.Cast(IMP_SWARM, target);
+                        utils.LogActivity(DARK_SOUL);
+                        return utils.Cast(DARK_SOUL);
                     }
-                    //actions+=/felguard:felstorm
-                    if (utils.CanCast(FELSTORM))
+                    //target.time_to_die<=10|(target.time_to_die<=60&demonic_fury>400)
+                    else if (time_to_die<=10 || (time_to_die<=60 && demonic_fury>400))
                     {
-                        utils.LogActivity(FELSTORM, target.Name);
-                        return utils.Cast(FELSTORM, target);
+                        utils.LogActivity(DARK_SOUL);
+                        return utils.Cast(DARK_SOUL);
                     }
-                    
-                    //actions+=/wrathguard:wrathstorm
-                    if (utils.CanCast(FELSTORM))
+                    //((trinket.proc.any.react|trinket.stacking_proc.any.react)&(demonic_fury>600|(glyph.dark_soul.enabled&demonic_fury>450))))
+                    else if ((demonic_fury>600 || (HasGlyph(DARK_SOUL) && demonic_fury>450)) && ((int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>8
+                                                                                                || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>8
+                                                                                                || (int)utils.MyAuraTimeLeft(VOID_SHARDS, Me)>16 
+                                                                                                || (int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>3))
                     {
-                        utils.LogActivity(WRATHSTORM, target.Name);
-                        return utils.Cast(WRATHSTORM, target);
+                        utils.LogActivity(DARK_SOUL);
+                        return utils.Cast(DARK_SOUL);
                     }
-                    
-                    //actions+=/wrathguard:mortal_cleave,if=pet.wrathguard.cooldown.wrathstorm.remains>5
-                    if (utils.CanCast(MORTAL_CLEAVE) && utils.GetSpellCooldown(WRATHSTORM).Seconds>5)
-                    {
-                        utils.LogActivity(MORTAL_CLEAVE, target.Name);
-                        return utils.Cast(MORTAL_CLEAVE, target);
-                    }
-                    
                 }
+                
+                //actions+=/imp_swarm,if=!talent.demonbolt.enabled&(buff.dark_soul.up|(cooldown.dark_soul.remains>(120%(1%spell_haste)))|time_to_die<32)&time>3
+                if (utils.CanCast(IMP_SWARM))
+                {
+                    utils.LogActivity(IMP_SWARM, target.Name);
+                    return utils.Cast(IMP_SWARM, target);
+                }
+                //actions+=/felguard:felstorm
+                if (utils.CanCast(FELSTORM))
+                {
+                    utils.LogActivity(FELSTORM, target.Name);
+                    return utils.Cast(FELSTORM, target);
+                }
+                
+                //actions+=/wrathguard:wrathstorm
+                if (utils.CanCast(FELSTORM))
+                {
+                    utils.LogActivity(WRATHSTORM, target.Name);
+                    return utils.Cast(WRATHSTORM, target);
+                }
+                
+                //actions+=/wrathguard:mortal_cleave,if=pet.wrathguard.cooldown.wrathstorm.remains>5
+                if (utils.CanCast(MORTAL_CLEAVE) && utils.GetSpellCooldown(WRATHSTORM).Seconds>5)
+                {
+                    utils.LogActivity(MORTAL_CLEAVE, target.Name);
+                    return utils.Cast(MORTAL_CLEAVE, target);
+                }
+
             }
             return false;
         }
