@@ -602,7 +602,7 @@ namespace KingWoW
                   && ((!utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL)) || (utils.GetSpellCooldown(DARK_SOUL).Seconds <= 20 && demonic_fury<300))
                   && time_to_die>20)
                 {
-                	  utils.LogActivity("Cancel Metamorphosis for next dark soul");
+                	  utils.LogActivity("Cancel Metamorphosis for next dark soul"+demonic_fury);
                     Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
                     //SetnextTimeUseNoGcd();
                     return true;
@@ -612,7 +612,7 @@ namespace KingWoW
                 	&& (int)utils.MyAuraTimeLeft(SHADOWFLAME, target)<hand_of_guldan_travel_time+utils.GetSpellCastTime(SHADOW_BOLT).TotalMilliseconds
                 	&& ((demonic_fury<100 && utils.MyAuraTimeLeft(DARK_SOUL, Me)>10000) || time_elapse<15))
                 {
-                    utils.LogActivity("Cancel Metamorphosis for start boost");
+                    utils.LogActivity("Cancel Metamorphosis for start boost"+demonic_fury);
                     Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
                     //SetnextTimeUseNoGcd();
                     return true;
@@ -620,7 +620,7 @@ namespace KingWoW
                 //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges=3&(!buff.dark_soul.remains>gcd|action.metamorphosis.cooldown<gcd)
                 if(utils.CanCast(SOUL_FIRE) && utils.isAuraActive(METAMORPHOSIS) && utils.GetCharges(CHAOS_WAVE)==3 && (utils.MyAuraTimeLeft(DARK_SOUL, Me)<MyGCD || (int)utils.GetSpellCooldown(METAMORPHOSIS).TotalMilliseconds<MyGCD))
                 {
-                    utils.LogActivity("Cancel Metamorphosis before METAMORPHOSIS");
+                    utils.LogActivity("Cancel Metamorphosis before METAMORPHOSIS"+demonic_fury);
                     Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
                     //SetnextTimeUseNoGcd();
                     return true;
@@ -658,7 +658,7 @@ namespace KingWoW
                 {
                     if(utils.Cast(METAMORPHOSIS))
                     {
-                    	  utils.LogActivity(METAMORPHOSIS);
+                    	  utils.LogActivity(METAMORPHOSIS+demonic_fury);
                         SetnextTimeUseNoGcd();
                         return true;
                     }
@@ -674,7 +674,7 @@ namespace KingWoW
                 {
                     if(utils.Cast(METAMORPHOSIS))
                     {
-                    	  utils.LogActivity(METAMORPHOSIS);
+                    	  utils.LogActivity(METAMORPHOSIS+demonic_fury);
                         SetnextTimeUseNoGcd();
                         return true;
                     }
@@ -690,7 +690,7 @@ namespace KingWoW
                 {
                     if(utils.Cast(METAMORPHOSIS))
                     {
-                    	  utils.LogActivity(METAMORPHOSIS);
+                    	  utils.LogActivity(METAMORPHOSIS+demonic_fury);
                         SetnextTimeUseNoGcd();
                         return true;
                     }
@@ -705,7 +705,7 @@ namespace KingWoW
                 {
                     if(utils.Cast(METAMORPHOSIS))
                     {
-                    	  utils.LogActivity(METAMORPHOSIS);
+                    	  utils.LogActivity(METAMORPHOSIS+demonic_fury);
                         SetnextTimeUseNoGcd();
                         return true;
                     }
@@ -720,7 +720,7 @@ namespace KingWoW
                 {
                     if(utils.Cast(METAMORPHOSIS))
                     {
-                    	  utils.LogActivity(METAMORPHOSIS);
+                    	  utils.LogActivity(METAMORPHOSIS+demonic_fury);
                         SetnextTimeUseNoGcd();
                         return true;
                     }
