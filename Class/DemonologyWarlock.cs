@@ -880,7 +880,7 @@ namespace KingWoW
                     utils.LogActivity(DARK_SOUL);
                     return utils.Cast(DARK_SOUL);
                 }
-                else if (utils.CanCast(DARK_SOUL) && DemonologyWarlockSettings.Instance.CDUseDarkSoul == DemonologyWarlockSettings.CDUseType.CONDITION)
+                else if (utils.CanCast(DARK_SOUL) && DemonologyWarlockSettings.Instance.CDUseDarkSoul == DemonologyWarlockSettings.CDUseType.CONDITION && !utils.isAuraActive(DARK_SOUL))
                 {
                     //(charges=2&(time>6|(debuff.shadowflame.stack=1&action.hand_of_guldan.in_flight)))
                     if (utils.GetCharges(DARK_SOUL)==2 && (time_elapse>6 || (utils.GetAuraStack(target, SHADOWFLAME, true)==1 && hand_of_guldan_in_flight())))
