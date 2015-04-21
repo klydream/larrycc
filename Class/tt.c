@@ -40,7 +40,8 @@ actions+=/metamorphosis,if=demonic_fury>=950
 actions+=/cancel_metamorphosis
 actions+=/imp_swarm
 actions+=/hellfire,interrupt=1,if=active_enemies>=5
-actions+=/soul_fire,if=buff.molten_core.react&(buff.molten_core.stack>=7|target.health.pct<=25|(buff.dark_soul.remains&cooldown.metamorphosis.remains>buff.dark_soul.remains)|trinket.proc.any.remains>execute_time|trinket.stacking_proc.multistrike.remains>execute_time)&(buff.dark_soul.remains<action.shadow_bolt.cast_time|buff.dark_soul.remains>execute_time)
+actions+=/soul_fire,if=buff.molten_core.react&(buff.molten_core.stack>=7|target.health.pct<=25|(buff.dark_soul.remains&cooldown.metamorphosis.remains>buff.dark_soul.remains)|trinket.proc.any.remains>execute_time|trinket.stacking_proc.multistrike.remains>execute_time)
+	                                           &(buff.dark_soul.remains<action.shadow_bolt.cast_time|buff.dark_soul.remains>execute_time)
 actions+=/soul_fire,if=buff.molten_core.react&target.time_to_die<(time+target.time_to_die)*0.25+cooldown.dark_soul.remains
 actions+=/life_tap,if=mana.pct<40&buff.dark_soul.down
 actions+=/hellfire,interrupt=1,if=active_enemies>=4
@@ -52,6 +53,9 @@ actions+=/life_tap
 
 
 
+actions+=/soul_fire,if=buff.molten_core.react
+	&(buff.molten_core.stack>=7|target.health.pct<=25|(buff.dark_soul.remains&cooldown.metamorphosis.remains>buff.dark_soul.remains)|trinket.proc.any.remains>execute_time|trinket.stacking_proc.multistrike.remains>execute_time)
+	&(buff.dark_soul.remains<action.shadow_bolt.cast_time|buff.dark_soul.remains>execute_time)
 
 
 
@@ -111,3 +115,34 @@ actions.aoe+=/conflagrate,if=buff.fire_and_brimstone.up&charges=2
 actions.aoe+=/immolate,if=buff.fire_and_brimstone.up&dot.immolate.remains<=(dot.immolate.duration*0.3)
 actions.aoe+=/chaos_bolt,if=talent.charred_remains.enabled&buff.fire_and_brimstone.up
 actions.aoe+=/incinerate
+
+
+
+
+                if(utils.CanCast(SOUL_FIRE) && utils.isAuraActive(METAMORPHOSIS) 
+                  && ((demonic_fury<650 && !HasGlyph(DARK_SOUL)) || demonic_fury<450)
+                  && !utils.isAuraActive(DARK_SOUL)
+                  && ((!utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL)) 
+                       || (utils.GetSpellCooldown(DARK_SOUL).Seconds <= 20 && utils.GetCharges(DARK_SOUL)==0 && demonic_fury<300)) && time_to_die>20)
+                {
+                	  utils.LogActivity("Cancel Metamorphosis for next dark soul"+demonic_fury);
+                    Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
+                    return true;
+                }
+                
+                
+                if(utils.CanCast(SOUL_FIRE) && utils.isAuraActive(METAMORPHOSIS) && ((demonic_fury<650 && !HasGlyph(DARK_SOUL)) || demonic_fury<450) && !utils.isAuraActive(DARK_SOUL) && time_to_die>20)
+                {
+                    if(!utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL))
+                    {    
+                        Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
+                        utils.LogActivity("Cancel Metamorphosis for next dark soul with no other buff"+demonic_fury);
+                        return true;
+                    }
+                    else if(utils.GetSpellCooldown(DARK_SOUL).Seconds <= 20 && utils.GetCharges(DARK_SOUL)==0 && demonic_fury<300)
+                    {    
+                        Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
+                        utils.LogActivity("Cancel Metamorphosis for next dark soul with other buff"+demonic_fury);
+                        return true;
+                    }
+                }

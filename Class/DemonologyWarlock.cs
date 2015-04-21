@@ -133,6 +133,7 @@ namespace KingWoW
         private const int    hand_of_guldan_travel_time = 1500;
         private       long   time_to_die=9999;
         private       int    time_elapse=0;
+        private       bool   start_combat=false;
 
         //END TALENTS
         //END OF CONSTANTS ==============================
@@ -244,6 +245,22 @@ namespace KingWoW
                     lastTank = tank;
                     utils.LogActivity(TANK_CHANGE, tank.Class.ToString());
                 }
+                if ((tank.Combat || Me.Combat) && !start_combat)
+                {
+                    utils.LogActivity("start combat");
+                    SetnextTimeUseNoGcd();
+                    StartCombat = DateTime.Now;
+                    startTime_hand_of_guldan = DateTime.Now;
+                    start_combat = true;
+                }
+                else if(!tank.Combat && !Me.Combat)
+                {
+                	  utils.LogActivity("start combat stop");
+                	  start_combat = false;
+                }
+
+                
+                
                 return CombatRotation();
             }
         }
@@ -307,9 +324,6 @@ namespace KingWoW
                             Me.SetFacing(target);
                         }
                         utils.LogActivity("start combate with HAND OF GULDAN", target.Name);
-                        SetnextTimeUseNoGcd();
-                        StartCombat = DateTime.Now;
-                        startTime_hand_of_guldan = DateTime.Now;
                         return utils.Cast(HAND_OF_GULDAN, target);
                     }
                 }
@@ -405,7 +419,7 @@ namespace KingWoW
                 
             GetBestPet();
             //HEALTH STONE
-            if (HasTalent(WarlockTalents.GrimoireOfSacrifice) && utils.CanCast(GRIMOIRE_OF_SACRIFICE))
+            if (HasTalent(WarlockTalents.GrimoireOfSacrifice) && utils.CanCast(GRIMOIRE_OF_SACRIFICE) && !utils.isAuraActive(GRIMOIRE_OF_SACRIFICE))
             {
                 utils.LogActivity(GRIMOIRE_OF_SACRIFICE);
                 return utils.Cast(GRIMOIRE_OF_SACRIFICE);
@@ -559,7 +573,7 @@ namespace KingWoW
                 }
                 //utils.LogActivity("aaaaaaaaaaaaaaaaaaaaaaaa"+(int)utils.MyAuraTimeLeft("Shadowflame", target));
                 //actions+=/hand_of_guldan,if=!in_flight&dot.shadowflame.remains<travel_time+action.shadow_bolt.cast_time&(((set_bonus.tier17_4pc=0&((charges=1&recharge_time()<4)|charges=2))|(charges=3|(charges=2&recharge_time()<13.8-travel_time*2))&((cooldown.cataclysm.remains>dot.shadowflame.duration)|!talent.cataclysm.enabled))|dot.shadowflame.remains>travel_time)
-                if (utils.CanCast(HAND_OF_GULDAN) && !hand_of_guldan_in_flight() && (int)utils.MyAuraTimeLeft(SHADOWFLAME, target)<hand_of_guldan_travel_time+utils.GetSpellCastTime(SHADOW_BOLT).TotalMilliseconds && 
+                if (utils.CanCast(HAND_OF_GULDAN) && !hand_of_guldan_in_flight && (int)utils.MyAuraTimeLeft(SHADOWFLAME, target)<hand_of_guldan_travel_time+utils.GetSpellCastTime(SHADOW_BOLT).TotalMilliseconds && 
                 (((!set_bonus.tier17_4pc && ((utils.GetCharges(HAND_OF_GULDAN)==1 && recharge_time()<4) || utils.GetCharges(HAND_OF_GULDAN)==2)) 
                    || (utils.GetCharges(HAND_OF_GULDAN)==3 || (utils.GetCharges(HAND_OF_GULDAN)==2 && recharge_time()<13800-hand_of_guldan_travel_time*2))) || (int)utils.MyAuraTimeLeft(SHADOWFLAME, target)>hand_of_guldan_travel_time))
                 {
@@ -601,16 +615,20 @@ namespace KingWoW
                 }
                 
                 //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&((demonic_fury<650&!glyph.dark_soul.enabled)|demonic_fury<450)&buff.dark_soul.down&(trinket.stacking_proc.multistrike.down&trinket.proc.any.down|demonic_fury<(800-cooldown.dark_soul.remains*(10%spell_haste)))&target.time_to_die>20
-                if(utils.CanCast(SOUL_FIRE) && utils.isAuraActive(METAMORPHOSIS) 
-                  && ((demonic_fury<650 && !HasGlyph(DARK_SOUL)) || demonic_fury<450)
-                  && !utils.isAuraActive(DARK_SOUL)
-                  && ((!utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL)) || (utils.GetSpellCooldown(DARK_SOUL).Seconds <= 20 && demonic_fury<300))
-                  && time_to_die>20)
+                if(utils.CanCast(SOUL_FIRE) && utils.isAuraActive(METAMORPHOSIS) && ((demonic_fury<650 && !HasGlyph(DARK_SOUL)) || demonic_fury<450) && !utils.isAuraActive(DARK_SOUL) && time_to_die>20)
                 {
-                	  utils.LogActivity("Cancel Metamorphosis for next dark soul"+demonic_fury);
-                    Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
-                    //SetnextTimeUseNoGcd();
-                    return true;
+                    if(!utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL))
+                    {    
+                        Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
+                        utils.LogActivity("Cancel Metamorphosis for next dark soul with no other buff"+demonic_fury);
+                        return true;
+                    }
+                    else if(utils.GetSpellCooldown(DARK_SOUL).Seconds <= 20 && utils.GetCharges(DARK_SOUL)==0 && demonic_fury<300)
+                    {    
+                        Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
+                        utils.LogActivity("Cancel Metamorphosis for next dark soul with other buff"+demonic_fury);
+                        return true;
+                    }
                 }
                 //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges>0&dot.shadowflame.remains<action.hand_of_guldan.travel_time+action.shadow_bolt.cast_time&((demonic_fury<100&buff.dark_soul.remains>10)|time<15)&!glyph.dark_soul.enabled
                 if(utils.CanCast(SOUL_FIRE) && utils.isAuraActive(METAMORPHOSIS)	&& utils.GetCharges(CHAOS_WAVE)>0 && !HasGlyph(DARK_SOUL)
@@ -619,7 +637,6 @@ namespace KingWoW
                 {
                     utils.LogActivity("Cancel Metamorphosis for start boost"+demonic_fury);
                     Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
-                    //SetnextTimeUseNoGcd();
                     return true;
                 }
                 //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&action.hand_of_guldan.charges=3&(!buff.dark_soul.remains>gcd|action.metamorphosis.cooldown<gcd)
@@ -627,7 +644,6 @@ namespace KingWoW
                 {
                     utils.LogActivity("Cancel Metamorphosis before METAMORPHOSIS"+demonic_fury);
                     Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
-                    //SetnextTimeUseNoGcd();
                     return true;
                 }
                 //actions+=/chaos_wave,if=buff.metamorphosis.up&(buff.dark_soul.up&active_enemies>=2|(charges=3|set_bonus.tier17_4pc=0&charges=2))
@@ -651,7 +667,7 @@ namespace KingWoW
                 //actions+=/touch_of_chaos,if=buff.metamorphosis.up
                 if (utils.CanCast(SOUL_FIRE, target) && demonic_fury>=40 && utils.isAuraActive(METAMORPHOSIS))
                 {
-                    utils.LogActivity(TOUCH_OF_CHAOS, target.Name);
+                    utils.LogActivity(TOUCH_OF_CHAOS+target.Name+utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)+utils.MyAuraTimeLeft(HOWLING_SOUL, Me)+utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me));
                     return utils.Cast(TOUCH_OF_CHAOS, target);
                 }
                 //actions+=/metamorphosis,if=buff.dark_soul.remains>gcd&(time>6|debuff.shadowflame.stack=2)&(demonic_fury>300|!glyph.dark_soul.enabled)&(demonic_fury>=80&buff.molten_core.stack>=1|demonic_fury>=40)
@@ -663,7 +679,7 @@ namespace KingWoW
                 {
                     if(utils.Cast(METAMORPHOSIS))
                     {
-                    	  utils.LogActivity(METAMORPHOSIS+demonic_fury);
+                    	  utils.LogActivity(METAMORPHOSIS+demonic_fury+"with dark soul");
                         SetnextTimeUseNoGcd();
                         return true;
                     }
@@ -675,11 +691,11 @@ namespace KingWoW
                     
                 }
                 //actions+=/metamorphosis,if=(trinket.stacking_proc.multistrike.react|trinket.proc.any.react)&((demonic_fury>450&action.dark_soul.recharge_time()>=10&glyph.dark_soul.enabled)|(demonic_fury>650&cooldown.dark_soul.remains>=10))
-                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS) && (utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) || utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) || utils.isAuraActive(HOWLING_SOUL)) && ((demonic_fury>=450 && utils.CanCast(DARK_SOUL)) || ( ((int)utils.GetSpellCooldown(METAMORPHOSIS).TotalMilliseconds>10000) && demonic_fury>=650)))
+                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS) && (utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) || utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) || utils.isAuraActive(HOWLING_SOUL)) && ((demonic_fury>=450 && HasGlyph(DARK_SOUL)) || ( ((int)utils.GetSpellCooldown(DARK_SOUL).TotalMilliseconds>10000) && utils.GetCharges(DARK_SOUL)==0 && demonic_fury>=650)))
                 {
                     if(utils.Cast(METAMORPHOSIS))
                     {
-                    	  utils.LogActivity(METAMORPHOSIS+demonic_fury);
+                    	  utils.LogActivity(METAMORPHOSIS+demonic_fury+"with other buff and have enough dark soul cooldown");
                         SetnextTimeUseNoGcd();
                         return true;
                     }
@@ -695,7 +711,7 @@ namespace KingWoW
                 {
                     if(utils.Cast(METAMORPHOSIS))
                     {
-                    	  utils.LogActivity(METAMORPHOSIS+demonic_fury);
+                    	  utils.LogActivity(METAMORPHOSIS+demonic_fury+"for doom");
                         SetnextTimeUseNoGcd();
                         return true;
                     }
@@ -706,11 +722,11 @@ namespace KingWoW
                     }
                 }
                 //actions+=/metamorphosis,if=(demonic_fury>750&(action.hand_of_guldan.charges=0|(!dot.shadowflame.ticking&!action.hand_of_guldan.in_flight_to_target)))|floor(demonic_fury%80)*action.soul_fire.execute_time>=target.time_to_die
-                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS) && ((demonic_fury>750 && (utils.GetCharges(HAND_OF_GULDAN)==0 || (!utils.isAuraActive(SHADOWFLAME, target) && hand_of_guldan_in_flight()))) || (demonic_fury>240 && time_to_die < 10)))
+                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS) && ((demonic_fury>750 && (utils.GetCharges(HAND_OF_GULDAN)==0 || (!utils.isAuraActive(SHADOWFLAME, target) && hand_of_guldan_in_flight))) || (demonic_fury>240 && time_to_die < 10)))
                 {
                     if(utils.Cast(METAMORPHOSIS))
                     {
-                    	  utils.LogActivity(METAMORPHOSIS+demonic_fury);
+                    	  utils.LogActivity(METAMORPHOSIS+demonic_fury+"for hand_of_guldan");
                         SetnextTimeUseNoGcd();
                         return true;
                     }
@@ -725,7 +741,7 @@ namespace KingWoW
                 {
                     if(utils.Cast(METAMORPHOSIS))
                     {
-                    	  utils.LogActivity(METAMORPHOSIS+demonic_fury);
+                    	  utils.LogActivity(METAMORPHOSIS+demonic_fury+"with overload demonic_fury");
                         SetnextTimeUseNoGcd();
                         return true;
                     }
@@ -888,7 +904,7 @@ namespace KingWoW
                 else if (utils.CanCast(DARK_SOUL) && DemonologyWarlockSettings.Instance.CDUseDarkSoul == DemonologyWarlockSettings.CDUseType.CONDITION && !utils.isAuraActive(DARK_SOUL))
                 {
                     //(charges=2&(time>6|(debuff.shadowflame.stack=1&action.hand_of_guldan.in_flight)))
-                    if (utils.GetCharges(DARK_SOUL)==2 && (time_elapse>6 || (utils.GetAuraStack(target, SHADOWFLAME, true)==1 && hand_of_guldan_in_flight())))
+                    if (utils.GetCharges(DARK_SOUL)==2 && (time_elapse>6 || (utils.GetAuraStack(target, SHADOWFLAME, true)==1 && hand_of_guldan_in_flight)))
                     {
                         utils.LogActivity(DARK_SOUL);
                         return utils.Cast(DARK_SOUL);
@@ -917,7 +933,7 @@ namespace KingWoW
                                                                                                 || (int)utils.MyAuraTimeLeft(VOID_SHARDS, Me)>16 
                                                                                                 || (int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>3))
                     {
-                        utils.LogActivity(DARK_SOUL);
+                        utils.LogActivity(DARK_SOUL+"with other burst");
                         return utils.Cast(DARK_SOUL);
                     }
                 }
@@ -1088,10 +1104,10 @@ namespace KingWoW
             nextTimeUseNoGcd = DateTime.Now + new TimeSpan(0, 0, 0, 0, 800);
         }
         
-        public bool hand_of_guldan_in_flight()
+        public bool hand_of_guldan_in_flight
         {
             //in periond of start boost, cancel Metamorphosis before 15s
-            return (startTime_hand_of_guldan + new TimeSpan(0, 0, 0, 0, 1500) > DateTime.Now);
+            get { return (startTime_hand_of_guldan + new TimeSpan(0, 0, 0, 0, 1500) > DateTime.Now);}
         }
         
         public int recharge_time()
