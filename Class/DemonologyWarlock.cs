@@ -132,7 +132,7 @@ namespace KingWoW
         private       int    molten_core_execute_time;
         private const int    hand_of_guldan_travel_time = 1500;
         private       long   time_to_die=9999;
-        private       long   time_elapse=20;
+        private       long   time_elapse=0;
 
         //END TALENTS
         //END OF CONSTANTS ==============================
@@ -552,6 +552,8 @@ namespace KingWoW
                 //    utils.LogActivity("ddddddddddddddddddddddddddddddd");  
                 if (nextTimeUseNoGcd>DateTime.Now)
                     return true;
+                if (utils.CanCast(SOUL_FIRE, target)&& time_elapse<20)
+                    time_elapse=DateTime.Now-StartCombat;
                 //utils.LogActivity("aaaaaaaaaaaaaaaaaaaaaaaa"+(int)utils.MyAuraTimeLeft("Shadowflame", target));
                 //actions+=/hand_of_guldan,if=!in_flight&dot.shadowflame.remains<travel_time+action.shadow_bolt.cast_time&(((set_bonus.tier17_4pc=0&((charges=1&recharge_time()<4)|charges=2))|(charges=3|(charges=2&recharge_time()<13.8-travel_time*2))&((cooldown.cataclysm.remains>dot.shadowflame.duration)|!talent.cataclysm.enabled))|dot.shadowflame.remains>travel_time)
                 if (utils.CanCast(HAND_OF_GULDAN) && !hand_of_guldan_in_flight() && (int)utils.MyAuraTimeLeft(SHADOWFLAME, target)<hand_of_guldan_travel_time+utils.GetSpellCastTime(SHADOW_BOLT).TotalMilliseconds && 
