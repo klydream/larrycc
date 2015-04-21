@@ -556,8 +556,10 @@ namespace KingWoW
                 //    utils.LogActivity(a.Name+"1321123123123s");
                 //}
                 
-                //if (utils.CanCast(SOUL_FIRE, target) && utils.isAuraActive(METAMORPHOSIS))
+                //if ((int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>3)
                 //    utils.LogActivity("bbbbbbbbbbbbbbbbbbbbbbbb");
+                //if (utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW))
+                //    utils.LogActivity("aaaaaaaaaaaaaaaa");
                 //else
                 //    utils.LogActivity("aaaaaaaaaaaaaaaaaaaaaaaa");   
                 //if (utils.isAuraActive(METAMORPHOSIS))
@@ -617,7 +619,8 @@ namespace KingWoW
                 //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&((demonic_fury<650&!glyph.dark_soul.enabled)|demonic_fury<450)&buff.dark_soul.down&(trinket.stacking_proc.multistrike.down&trinket.proc.any.down|demonic_fury<(800-cooldown.dark_soul.remains*(10%spell_haste)))&target.time_to_die>20
                 if(utils.CanCast(SOUL_FIRE) && utils.isAuraActive(METAMORPHOSIS) && ((demonic_fury<650 && !HasGlyph(DARK_SOUL)) || demonic_fury<450) && !utils.isAuraActive(DARK_SOUL) && time_to_die>20)
                 {
-                    if(!utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL))
+                    utils.LogActivity("Cancel Metamorphosis111111111111111111111111111"+demonic_fury);
+                    if(utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)==0 && !utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) && !utils.isAuraActive(HOWLING_SOUL))
                     {    
                         Me.GetAuraByName(METAMORPHOSIS).TryCancelAura();
                         utils.LogActivity("Cancel Metamorphosis for next dark soul with no other buff"+demonic_fury);
@@ -667,7 +670,7 @@ namespace KingWoW
                 //actions+=/touch_of_chaos,if=buff.metamorphosis.up
                 if (utils.CanCast(SOUL_FIRE, target) && demonic_fury>=40 && utils.isAuraActive(METAMORPHOSIS))
                 {
-                    utils.LogActivity(TOUCH_OF_CHAOS+target.Name+utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)+utils.MyAuraTimeLeft(HOWLING_SOUL, Me)+utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me));
+                    utils.LogActivity(TOUCH_OF_CHAOS+demonic_fury+"aaa"+target.Name+utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)+"aaa"+utils.MyAuraTimeLeft(HOWLING_SOUL, Me)+"aaa"+utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)+"aaa"+utils.MyAuraTimeLeft(DARK_SOUL, Me));
                     return utils.Cast(TOUCH_OF_CHAOS, target);
                 }
                 //actions+=/metamorphosis,if=buff.dark_soul.remains>gcd&(time>6|debuff.shadowflame.stack=2)&(demonic_fury>300|!glyph.dark_soul.enabled)&(demonic_fury>=80&buff.molten_core.stack>=1|demonic_fury>=40)
@@ -691,7 +694,7 @@ namespace KingWoW
                     
                 }
                 //actions+=/metamorphosis,if=(trinket.stacking_proc.multistrike.react|trinket.proc.any.react)&((demonic_fury>450&action.dark_soul.recharge_time()>=10&glyph.dark_soul.enabled)|(demonic_fury>650&cooldown.dark_soul.remains>=10))
-                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS) && (utils.isAuraActive(MARK_OF_BLEEDING_HOLLOW) || utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) || utils.isAuraActive(HOWLING_SOUL)) && ((demonic_fury>=450 && HasGlyph(DARK_SOUL)) || ( ((int)utils.GetSpellCooldown(DARK_SOUL).TotalMilliseconds>10000) && utils.GetCharges(DARK_SOUL)==0 && demonic_fury>=650)))
+                if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS) && (StyxWoW.Me.HasAura(173322) || utils.isAuraActive(ARCHMAGES_GREATER_INCANDESCENCE) || utils.isAuraActive(HOWLING_SOUL)) && ((demonic_fury>=450 && HasGlyph(DARK_SOUL)) || ( ((int)utils.GetSpellCooldown(DARK_SOUL).TotalMilliseconds>10000) && utils.GetCharges(DARK_SOUL)==0 && demonic_fury>=650)))
                 {
                     if(utils.Cast(METAMORPHOSIS))
                     {
@@ -942,10 +945,10 @@ namespace KingWoW
                         return utils.Cast(DARK_SOUL);
                     }
                     //((trinket.proc.any.react|trinket.stacking_proc.any.react)&(demonic_fury>600|(glyph.dark_soul.enabled&demonic_fury>450))))
-                    else if ((demonic_fury>600 || (HasGlyph(DARK_SOUL) && demonic_fury>450)) && ((int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>8
-                                                                                                || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>8
-                                                                                                || (int)utils.MyAuraTimeLeft(VOID_SHARDS, Me)>16 
-                                                                                                || (int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>3))
+                    else if ((demonic_fury>600 || (HasGlyph(DARK_SOUL) && demonic_fury>450)) && ((int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>8000
+                                                                                                || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>8000
+                                                                                                || (int)utils.MyAuraTimeLeft(VOID_SHARDS, Me)>16000
+                                                                                                || (int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>3000))
                     {
                         utils.LogActivity(DARK_SOUL+"with other burst");
                         return utils.Cast(DARK_SOUL);

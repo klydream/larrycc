@@ -459,7 +459,7 @@ namespace KingWoW
             
             //foreach (var a in Me.GetAllAuras())
             //{
-            //    utils.LogActivity(a.Name+"1321123123123s");
+            //    utils.LogActivity(a.SpellId+a.Name+a.TimeLeft+"kkkkkkkkkkkkkkkkkkkkkkkkkkk");
             //}
             //Multidot();
 
@@ -485,16 +485,17 @@ namespace KingWoW
                 {
                     Me.SetFacing(target);
                 }
-                if ((int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>3 )
+                if ((int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>3000 )
                 {
                    Logging.Write("MARK_OF_BLEEDING_HOLLOW");
                 }
+                
                 //actions+=/dark_soul,if=!talent.archimondes_darkness.enabled|(talent.archimondes_darkness.enabled&(charges=2|trinket.proc.any.react|trinket.stacking_any.intellect.react>6|target.time_to_die<40))
                 if (utils.CanCast(DARK_SOUL) && !utils.isAuraActive(DARK_SOUL) &&( HasTalent(WarlockTalents.ArchimondesDarkness) || (HasTalent(WarlockTalents.ArchimondesDarkness) && (utils.GetCharges(DARK_SOUL)==2 
-                                                                                                                                                     || (int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>6
-                                                                                                                                                     || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>6
-                                                                                                                                                     || (int)utils.MyAuraTimeLeft(VOID_SHARDS, Me)>6 
-                                                                                                                                                     || (int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>3
+                                                                                                                                                     || (int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>6000
+                                                                                                                                                     || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>6000
+                                                                                                                                                     || (int)utils.MyAuraTimeLeft(VOID_SHARDS, Me)>6000
+                                                                                                                                                     || (int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>3000
                                                                                                                                                      || time_to_die<40))))
                 {
                     utils.LogActivity(DARK_SOUL);

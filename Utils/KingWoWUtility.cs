@@ -230,7 +230,7 @@ namespace KingWoW
             if (u == null || !u.IsValid || !u.IsAlive)
                 return 0;
 
-            var aura = u.GetAllAuras().FirstOrDefault(a => a.Name == auraName && a.CreatorGuid == Me.Guid);
+            var aura = u.GetAllAuras().Where(a => a.Name == auraName && a.TimeLeft > TimeSpan.Zero).FirstOrDefault();
             return aura != null ? aura.TimeLeft.TotalMilliseconds : 0;
 
         }
@@ -241,7 +241,7 @@ namespace KingWoW
             if (u == null || !u.IsValid || !u.IsAlive)
                 return 0;
 
-            var aura = u.GetAllAuras().FirstOrDefault(a => a.SpellId == auraid && a.CreatorGuid == Me.Guid);
+            var aura = u.GetAllAuras().Where(a => a.SpellId == auraid && a.TimeLeft > TimeSpan.Zero && a.CreatorGuid == StyxWoW.Me.Guid).FirstOrDefault();
             return aura != null ? aura.TimeLeft.TotalMilliseconds : 0;
 
         }

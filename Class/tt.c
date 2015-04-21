@@ -168,3 +168,34 @@ actions+=/soul_fire,if=buff.molten_core.react&buff.molten_core.stack>=8
                     utils.LogActivity(SOUL_FIRE, target.Name);
                     return utils.Cast(SOUL_FIRE, target);
                 }
+                
+                
+actions+=/dark_soul,if=!talent.demonbolt.enabled&((charges=2&(time>6|(debuff.shadowflame.stack=1&action.hand_of_guldan.in_flight)))|!talent.archimondes_darkness.enabled|(target.time_to_die<=20&!glyph.dark_soul.enabled)|target.time_to_die<=10|(target.time_to_die<=60&demonic_fury>400)|((trinket.proc.any.react|trinket.stacking_proc.any.react)&(demonic_fury>600|(glyph.dark_soul.enabled&demonic_fury>450))))
+
+
+
+
+
+actions+=/soul_fire,if=buff.metamorphosis.up&buff.molten_core.react&(buff.dark_soul.remains>execute_time|target.health.pct<=25|((trinket.stacking_proc.multistrike.react|trinket.proc.any.react)&buff.molten_core.stack>=8))
+	
+	
+	
+	
+(((     buff.molten_core.stack*execute_time>=trinket.stacking_proc.multistrike.remains-1
+        |demonic_fury<=ceil((trinket.stacking_proc.multistrike.remains-buff.molten_core.stack*execute_time)*40)+80*buff.molten_core.stack)
+        |target.health.pct<=25)
+&trinket.stacking_proc.multistrike.remains>=execute_time|trinket.stacking_proc.multistrike.down|!trinket.has_stacking_proc.multistrike)
+
+
+
+
+
+
+
+WoWAura wantedAura = onUnit.GetAllAuras()
+                .Where(a => a.SpellId == auraID && a.TimeLeft > TimeSpan.Zero && (!fromMyAura || a.CreatorGuid == StyxWoW.Me.Guid)).FirstOrDefault();
+                
+                
+                
+                
+                var aura = u.GetAllAuras().FirstOrDefault(a => a.SpellId == auraid && a.CreatorGuid == Me.Guid);
