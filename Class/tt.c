@@ -148,3 +148,23 @@ actions+=/soul_fire,if=buff.molten_core.react&buff.molten_core.stack>=8
                         return true;
                     }
                 }
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                //actions+=/soul_fire,if=buff.molten_core.react&(buff.molten_core.stack>=7|target.health.pct<=25|(buff.dark_soul.remains&cooldown.metamorphosis.remains>buff.dark_soul.remains)|trinket.proc.any.remains>execute_time|trinket.stacking_proc.multistrike.remains>molten_core_execute_time)
+                //                                             &(buff.dark_soul.remains<action.shadow_bolt.cast_time|buff.dark_soul.remains>execute_time)
+                if (utils.CanCast(SOUL_FIRE) && (utils.GetAuraStack(target, MOLTEN_CORE, true)>=7 || Me.CurrentTarget.HealthPercent<25 || (utils.isAuraActive(DARK_SOUL) && utils.GetSpellCooldown(METAMORPHOSIS).TotalMilliseconds>(int)utils.MyAuraTimeLeft(DARK_SOUL, Me)) || (int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>molten_core_execute_time
+                                                                                                                                                                                                                                                                         || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>molten_core_execute_time
+                                                                                                                                                                                                                                                                         || (int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>molten_core_execute_time)
+                   && utils.isAuraActive(MOLTEN_CORE) && ((int)utils.MyAuraTimeLeft(DARK_SOUL, Me)<utils.GetSpellCastTime(SHADOW_BOLT).TotalMilliseconds || (int)utils.MyAuraTimeLeft(DARK_SOUL, Me)>molten_core_execute_time))
+                {
+                    utils.LogActivity(SOUL_FIRE, target.Name);
+                    return utils.Cast(SOUL_FIRE, target);
+                }

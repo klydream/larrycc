@@ -673,7 +673,7 @@ namespace KingWoW
                 //actions+=/metamorphosis,if=buff.dark_soul.remains>gcd&(time>6|debuff.shadowflame.stack=2)&(demonic_fury>300|!glyph.dark_soul.enabled)&(demonic_fury>=80&buff.molten_core.stack>=1|demonic_fury>=40)
                 if (utils.CanCast(METAMORPHOSIS) && !utils.isAuraActive(METAMORPHOSIS)
                 && utils.MyAuraTimeLeft(DARK_SOUL, Me)>MyGCD
-                && (time_elapse>6 || utils.GetAuraStack(target, SHADOWFLAME, false)==2)
+                && (time_elapse>6 || utils.GetAuraStack(target, SHADOWFLAME, true)==2)
                 && (demonic_fury>300 || !HasGlyph(DARK_SOUL))
                 && ((demonic_fury>=80 && utils.GetAuraStack(Me, MOLTEN_CORE, true)>=1) || (demonic_fury>=40 && demonic_fury<80)) )
                 {
@@ -773,19 +773,27 @@ namespace KingWoW
                     utils.LogActivity(HELLFIRE, target.Name);
                     return utils.Cast(HELLFIRE, target);
                 }
+                //actions+=/soul_fire,if=buff.molten_core.react&(buff.molten_core.stack>=7|target.health.pct<=25|(buff.dark_soul.remains&cooldown.metamorphosis.remains>buff.dark_soul.remains)|trinket.proc.any.remains>execute_time|trinket.stacking_proc.multistrike.remains>molten_core_execute_time)
+                //                                             &(buff.dark_soul.remains<action.shadow_bolt.cast_time|buff.dark_soul.remains>execute_time)
+                //if (utils.CanCast(SOUL_FIRE) && (utils.GetAuraStack(target, MOLTEN_CORE, true)>=7 || Me.CurrentTarget.HealthPercent<25 || (utils.isAuraActive(DARK_SOUL) && utils.GetSpellCooldown(METAMORPHOSIS).TotalMilliseconds>(int)utils.MyAuraTimeLeft(DARK_SOUL, Me)) || (int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>molten_core_execute_time
+                //                                                                                                                                                                                                                                                         || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>molten_core_execute_time
+                //                                                                                                                                                                                                                                                         || (int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>molten_core_execute_time)
+                //   && utils.isAuraActive(MOLTEN_CORE) && ((int)utils.MyAuraTimeLeft(DARK_SOUL, Me)<utils.GetSpellCastTime(SHADOW_BOLT).TotalMilliseconds || (int)utils.MyAuraTimeLeft(DARK_SOUL, Me)>molten_core_execute_time))
+                //{
+                //    utils.LogActivity(SOUL_FIRE, target.Name);
+                //    return utils.Cast(SOUL_FIRE, target);
+                //}
                 
                 //actions+=/soul_fire,if=buff.molten_core.react&(buff.molten_core.stack>=7|target.health.pct<=25|(buff.dark_soul.remains&cooldown.metamorphosis.remains>buff.dark_soul.remains))&(trinket.proc.any.remains>execute_time|trinket.stacking_proc.multistrike.remains>execute_time|(buff.dark_soul.remains<action.shadow_bolt.cast_time&buff.dark_soul.remains>execute_time))
-                if (utils.CanCast(SOUL_FIRE) && utils.isAuraActive(MOLTEN_CORE) && (utils.GetAuraStack(target, MOLTEN_CORE, true)>=7 || Me.CurrentTarget.HealthPercent<25 || (utils.isAuraActive(DARK_SOUL) && utils.GetSpellCooldown(METAMORPHOSIS).TotalMilliseconds>(int)utils.MyAuraTimeLeft(DARK_SOUL, Me))) 
-                   && ( (int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>molten_core_execute_time 
-                        || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>molten_core_execute_time 
-                        || (int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>molten_core_execute_time
-                        || ((int)utils.MyAuraTimeLeft(DARK_SOUL, Me)<utils.GetSpellCastTime(SHADOW_BOLT).TotalMilliseconds && (int)utils.MyAuraTimeLeft(DARK_SOUL, Me)>molten_core_execute_time)))
+                if (utils.CanCast(SOUL_FIRE) && utils.isAuraActive(MOLTEN_CORE) && (utils.GetAuraStack(Me, MOLTEN_CORE, true)>=7 || Me.CurrentTarget.HealthPercent<25 || (utils.isAuraActive(DARK_SOUL) && utils.GetSpellCooldown(METAMORPHOSIS).TotalMilliseconds>(int)utils.MyAuraTimeLeft(DARK_SOUL, Me))) 
+                   && ( (int)utils.MyAuraTimeLeft(ARCHMAGES_GREATER_INCANDESCENCE, Me)>molten_core_execute_time || (int)utils.MyAuraTimeLeft(HOWLING_SOUL, Me)>molten_core_execute_time 
+                        || (int)utils.MyAuraTimeLeft(MARK_OF_BLEEDING_HOLLOW, Me)>molten_core_execute_time || ((int)utils.MyAuraTimeLeft(DARK_SOUL, Me)<utils.GetSpellCastTime(SHADOW_BOLT).TotalMilliseconds && (int)utils.MyAuraTimeLeft(DARK_SOUL, Me)>molten_core_execute_time)))
                 {
                     utils.LogActivity(SOUL_FIRE, target.Name);
                     return utils.Cast(SOUL_FIRE, target);
                 }
                 //actions+=/soul_fire,if=buff.molten_core.react&buff.molten_core.stack>=8
-                if (utils.CanCast(SOUL_FIRE) && && utils.GetAuraStack(target, MOLTEN_CORE, true)>=8)
+                if (utils.CanCast(SOUL_FIRE) && utils.GetAuraStack(Me, MOLTEN_CORE, true)>=8)
                 {
                     utils.LogActivity(SOUL_FIRE, target.Name);
                     return utils.Cast(SOUL_FIRE, target);
