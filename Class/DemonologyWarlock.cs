@@ -525,7 +525,6 @@ namespace KingWoW
             //{
             //    utils.LogActivity(a.Name+"1321123123123s");
             //}
-            Multidot();
 
             WoWUnit target = null;
             if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.MANUAL)
@@ -855,34 +854,6 @@ namespace KingWoW
                     return SpellManager.ClickRemoteLocation(target.Location);
                 }
 
-                //if (DemonologyWarlockSettings.Instance.UseDragonBreath && utils.CanCast(DRAGON_BREATH) && !DemonologyWarlockSettings.Instance.AvoidAOE && utils.AllAttaccableEnemyMobsInRange(15).Count() >= DemonologyWarlockSettings.Instance.AOECount)
-                //{
-                //    utils.LogActivity(DRAGON_BREATH);
-                //    return utils.Cast(DRAGON_BREATH);
-                //}
-                //
-                //if (DemonologyWarlockSettings.Instance.UseArcaneExplosion && utils.CanCast(ARCANE_EXPLOSION) && !DemonologyWarlockSettings.Instance.AvoidAOE && utils.AllAttaccableEnemyMobsInRange(10).Count() >= DemonologyWarlockSettings.Instance.AOECount)
-                //{
-                //    utils.LogActivity(ARCANE_EXPLOSION);
-                //    return utils.Cast(ARCANE_EXPLOSION);
-                //}
-                //
-                //if (DemonologyWarlockSettings.Instance.UseRingOfFrost && utils.CanCast(RING_OF_FROST) && target.Distance2DSqr <= 30 * 30)
-                //{
-                //    utils.LogActivity(RING_OF_FROST, target.Name);
-                //    utils.Cast(RING_OF_FROST);
-                //    return SpellManager.ClickRemoteLocation(target.Location);
-                //}
-
-                Multidot(); 
-
-                //Cast  SHADOW_BOLT as a filler spell.
-                if (!Me.IsMoving && utils.CanCast(SHADOW_BOLT, target))
-                {
-                    utils.LogActivity(SHADOW_BOLT, target.Name);
-                    return utils.Cast(SHADOW_BOLT, target);
-                }
-
                 //+++++++++++++++++++++++DPS moving   START+++++++++++++++++++++++++++
                 //BURNING_RUSH
                 if (Me.IsMoving && utils.CanCast(BURNING_RUSH) && !utils.isAuraActive(BURNING_RUSH))
@@ -986,41 +957,6 @@ namespace KingWoW
             return false;
         }
 
-        private bool Multidot()
-        {
-            if (DemonologyWarlockSettings.Instance.MultidotEnabled)
-            {
-                int enemyNumber = utils.AllAttaccableEnemyMobsInRangeTargettingMyParty(40f, DemonologyWarlockSettings.Instance.MultidotAvoidCC).Count();
-                if (enemyNumber >= DemonologyWarlockSettings.Instance.MultidotEnemyNumberMin)
-                {
-                    WoWUnit TargetForMultidot = null;
-                    //apply  Nether Tempest and always refresh it right before the last tick;
-                    if (utils.CanCast(CORRUPTION) && utils.AllEnemyMobsHasMyAura(CORRUPTION).Count() < DemonologyWarlockSettings.Instance.MultidotEnemyNumberMax)
-                    {
-                        TargetForMultidot = utils.NextApplyAuraTarget(CORRUPTION, 40, 1000, DemonologyWarlockSettings.Instance.MultidotAvoidCC, DemonologyWarlockSettings.Instance.AvoidDOTPlayers);
-                        if (TargetForMultidot != null)
-                        {
-                            utils.LogActivity("   MULTIDOT   " + NETHER_TEMPEST, TargetForMultidot.Name);
-                            return utils.Cast(CORRUPTION, TargetForMultidot);
-                        }
-                    }
-
-                    //apply  Living Bomb and refresh it right before or right after the last tick (the expiring Living Bomb will explode in both cases);
-                    //if (utils.CanCast(LIVING_BOMB) && utils.AllEnemyMobsHasMyAura(LIVING_BOMB).Count() < 3)
-                    //{
-                    //    TargetForMultidot = utils.NextApplyAuraTarget(LIVING_BOMB, 40, 1000, DemonologyWarlockSettings.Instance.MultidotAvoidCC, DemonologyWarlockSettings.Instance.AvoidDOTPlayers);
-                    //    if (TargetForMultidot != null)
-                    //    {
-                    //        utils.LogActivity("   MULTIDOT   " + LIVING_BOMB, TargetForMultidot.Name);
-                    //        return utils.Cast(LIVING_BOMB, TargetForMultidot);
-                    //    }
-                    //}
-
-                }
-            }
-            return false;
-        }
-        
         private bool HasGlyph(string tal)
         {
             return talents.HasGlyph(tal);
