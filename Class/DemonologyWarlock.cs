@@ -608,11 +608,23 @@ namespace KingWoW
                     return utils.Cast(DOOM, target);
                 }
                 
+                if (utils.CanCast(SOUL_FIRE, target) && Me.FocusedUnit != null && Me.FocusedUnit != target && utils.isAuraActive(METAMORPHOSIS) && time_to_die>=27 && utils.MyAuraTimeLeft(DOOM, Me.FocusedUnit) < 3500)
+                {
+                    utils.LogActivity(DOOM, Me.FocusedUnit.Name);
+                    return utils.Cast(DOOM, Me.FocusedUnit);
+                }
+                
                 //actions+=/corruption,cycle_targets=1,if=target.time_to_die>=6&remains<=(0.3*duration)&buff.metamorphosis.down
                 if (utils.CanCast(CORRUPTION, target) && !utils.isAuraActive(METAMORPHOSIS) && time_to_die>=6 && utils.MyAuraTimeLeft(CORRUPTION, target) < 3500 )
                 {
                     utils.LogActivity(CORRUPTION, target.Name);
                     return utils.Cast(CORRUPTION, target);
+                }
+                
+                if (utils.CanCast(CORRUPTION, target) && Me.FocusedUnit != null && Me.FocusedUnit != target && !utils.isAuraActive(METAMORPHOSIS) && time_to_die>=6 && utils.MyAuraTimeLeft(CORRUPTION, Me.FocusedUnit) < 3500)
+                {
+                    utils.LogActivity(CORRUPTION, Me.FocusedUnit.Name);
+                    return utils.Cast(CORRUPTION, Me.FocusedUnit);
                 }
                 
                 //actions+=/cancel_metamorphosis,if=buff.metamorphosis.up&((demonic_fury<650&!glyph.dark_soul.enabled)|demonic_fury<450)&buff.dark_soul.down&(trinket.stacking_proc.multistrike.down&trinket.proc.any.down|demonic_fury<(800-cooldown.dark_soul.remains*(10%spell_haste)))&target.time_to_die>20
