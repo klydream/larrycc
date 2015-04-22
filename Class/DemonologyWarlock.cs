@@ -823,28 +823,7 @@ namespace KingWoW
                 //actions+=/life_tap
                 
                 //apply dot
-                
-                //if (!Me.IsMoving && nextTimeVampiricTouchAllowed <= DateTime.Now && utils.MyAuraTimeLeft(VAMPIRIC_TOUCH, target) < 4500
-                //    && !(talents.IsSelected(9) && utils.MyAuraTimeLeft(DEVOURING_PLAGUE, target) > 0) && !(Me.IsChanneling && Me.ChanneledCastingSpellId == MIND_FLY_INSANITY))
-                //{
-                //    utils.LogActivity("VAMPIRIC_TOUCH", target.Name);
-                //    SetNextTimeVampiricTouch();
-                //    return utils.Cast(VAMPIRIC_TOUCH, target);
-                //}
 
-                //apply  Nether Tempest and always refresh it right before the last tick;
-                //if (utils.CanCast(NETHER_TEMPEST, target) && (utils.MyAuraTimeLeft(NETHER_TEMPEST, target) < 1500) && !(target.IsPlayer && DemonologyWarlockSettings.Instance.AvoidDOTPlayers))
-                //{
-                //    utils.LogActivity(NETHER_TEMPEST, target.Name);
-                //    return utils.Cast(NETHER_TEMPEST, target);
-                //}
-
-                //apply  Living Bomb and refresh it right before or right after the last tick (the expiring Living Bomb will explode in both cases);
-                //if (utils.CanCast(LIVING_BOMB, target) && (utils.MyAuraTimeLeft(LIVING_BOMB, target) < 1500) && !(target.IsPlayer && DemonologyWarlockSettings.Instance.AvoidDOTPlayers))
-                //{
-                //    utils.LogActivity(LIVING_BOMB, target.Name);
-                //    return utils.Cast(LIVING_BOMB, target);
-                //}
 
                 //+++++++++++++++++++++++++AOE rotation start+++++++++++++++++++++++++++++++//
                 if (DemonologyWarlockSettings.Instance.UseFlameStrike && utils.CanCast(FLAMESTRIKE) && !DemonologyWarlockSettings.Instance.AvoidAOE && target.Distance <= 40 && utils.AllAttaccableEnemyMobsInRangeFromTarget(target, 10).Count() >= DemonologyWarlockSettings.Instance.AOECount)
