@@ -525,7 +525,21 @@ namespace KingWoW
             //{
             //    utils.LogActivity(a.Name+"1321123123123s");
             //}
-
+            
+            //+++++++++++++++++++++++DPS moving   START+++++++++++++++++++++++++++
+            //BURNING_RUSH
+            if (Me.IsMoving && utils.CanCast(BURNING_RUSH) && !utils.isAuraActive(BURNING_RUSH))
+            {
+                utils.LogActivity(BURNING_RUSH);
+                utils.Cast(BURNING_RUSH);
+            }
+            else if (!Me.IsMoving && utils.isAuraActive(BURNING_RUSH))
+            {
+                utils.LogActivity("Cancel BURNING RUSH");
+                Me.GetAuraByName(BURNING_RUSH).TryCancelAura();
+                return true;
+            }
+            
             WoWUnit target = null;
             if (DemonologyWarlockSettings.Instance.TargetTypeSelected == DemonologyWarlockSettings.TargetType.MANUAL)
                 target = Me.CurrentTarget;
@@ -564,7 +578,14 @@ namespace KingWoW
                 //if (utils.isAuraActive(METAMORPHOSIS))
                 //    utils.LogActivity("ccccccccccccccccccccccccccccc");
                 //else
-                //    utils.LogActivity("ddddddddddddddddddddddddddddddd");  
+                //    utils.LogActivity("ddddddddddddddddddddddddddddddd");
+                //TOUCH_OF_CHAOS
+                //if (Me.IsMoving && SpellManager.HasSpell(TOUCH_OF_CHAOS) && utils.isAuraActive(METAMORPHOSIS))
+                //{
+                //    utils.LogActivity(TOUCH_OF_CHAOS, target.Name);
+                //    return utils.Cast(TOUCH_OF_CHAOS, target);
+                //}
+                  
                 if (nextTimeUseNoGcd>DateTime.Now)
                     return true;
                 if (utils.CanCast(SOUL_FIRE, target)&& time_elapse<20)
@@ -844,20 +865,7 @@ namespace KingWoW
                     utils.Cast(FLAMESTRIKE);
                     return SpellManager.ClickRemoteLocation(target.Location);
                 }
-
-                //+++++++++++++++++++++++DPS moving   START+++++++++++++++++++++++++++
-                //BURNING_RUSH
-                if (Me.IsMoving && utils.CanCast(BURNING_RUSH) && !utils.isAuraActive(BURNING_RUSH))
-                {
-                    utils.LogActivity(BURNING_RUSH);
-                    utils.Cast(BURNING_RUSH);
-                }
-                //TOUCH_OF_CHAOS
-                if (Me.IsMoving && SpellManager.HasSpell(TOUCH_OF_CHAOS) && utils.isAuraActive(METAMORPHOSIS))
-                {
-                    utils.LogActivity(TOUCH_OF_CHAOS, target.Name);
-                    return utils.Cast(TOUCH_OF_CHAOS, target);
-                }
+                
             }
             else if (ExtraUtilsSettings.Instance.movementEnabled && Me.CurrentTarget != null && !Me.CurrentTarget.IsDead && (!Me.CurrentTarget.InLineOfSpellSight || Me.CurrentTarget.Distance - Me.CurrentTarget.CombatReach - 1 > DemonologyWarlockSettings.Instance.PullDistance))
             {
