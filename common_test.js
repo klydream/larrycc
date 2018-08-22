@@ -64,152 +64,27 @@
      * @param {Number} index 属于哪一个刷新
      */
     exports.appendTestData = function(dom, count, isReset, index) {
-        if (typeof dom === 'string') {
-            dom = document.querySelector(dom);
-        }
-
-        var prevTitle = typeof index !== 'undefined' ? ('Tab' + index) : '';
-
-        var counterIndex = index || 0;
-
-        counterArr[counterIndex] = counterArr[counterIndex] || 0;
-
-        if (isReset) {
-            dom.innerHTML = '';
-            counterArr[counterIndex] = 0;
-        }
-
-        var template = '<div id={{commentId}} class="comment"> \
-          <div> \
-            <div class="author"> \
-              <div data-v-f3bf5228="" class="v-tooltip-container" style="z-index: 0;"> \
-                <div class="v-tooltip-content"> \
-                  <a href="javascript:void(0);" target="_blank" class="avatar"> \
-                    <img src="{{commentAvatar}}"> \
-                  </a> \
-                </div> <!----> \
-              </div> \
-              <div class="info"> \
-                <a href="javascript:void(0);" target="_blank" class="name">{{commentCommenter}} \
-                </a> <!----> <!----> \
-                <div class="meta"> \
-                  <span>{{commentIndex}}楼 · {{commentTime}} \
-                  </span> \
-                </div> \
-              </div> \
-            </div> \
-            <div class="comment-wrap"> \
-              <p>{{commentContent}}</p> \
-              <span class="pull-right"> \
-                <div class="tool-group" class="pull-right"> \
-                  <a href="javascript:void(0)" onclick="addStar(0)"> \
-                    <span id="star0" class="glyphicon glyphicon-star-empty" style="color:#969696;top:0px"></span> \
-                  </a> \
-                  <span id="star_num0" class="label label-default">{{ pid.pid_value | get_star_num(0) }}</span> \
-                  <a ng-if="comment.commenter == user.username" class="commentTools comment-delete" href="javascript:void(0);" ng-click="deletefslcmt(saying.id, comment.id)"> \
-                    <span>删除</span> \
-                  </a> \
-                  <a class="commentTools comment-reply" href="javascript:void(0);" ng-click="showSecondComment(comment, comment.commenter)"> \
-                    <span>回复</span> \
-                  </a> \
-                </div> \
-              </span> \
-            </div> \
-          </div> \
-        </div> \
-        <div class="sub-comment-list">';
-
-        var subCommentTemplate = '<div id={{commentId}} class="sub-comment"> \
-              <p> \
-                <div data-v-f3bf5228="" class="v-tooltip-container" style="z-index: 0;"> \
-                  <div class="v-tooltip-content"> \
-                    <a href="javascript:void(0);" target="_blank">{{replier}} \
-                    </a>： \
-                  </div> <!----> \
-                </div>  \
-                <span> \
-                  <a href="/u/0efd14e6d258" class="maleskine-author" target="_blank" data-user-slug="0efd14e6d258">@{{toCommenter}} \
-                  </a> {{replyContent}} \
-                </span> \
-              </p> \
-              <div class="sub-tool-group"> \
-                <span>{{replyTime}} \
-                </span> \
-                <a class=""> \
-                  <i class="iconfont ic-comment"> \
-                  </i> \
-                  <span>回复 \
-                  </span> \
-                </a> <!----> <!----> \
-              </div> \
-            </div>';
-
-
-          var moreCommentTemplate = '<div class="sub-comment more-comment"> \
-            <a class="add-comment-btn" href="javascript:void(0);" ng-click="showComment()"> \
-              <span>查看全部{{commentChildCommentNumber}}条评论</span> \
-              <span class="glyphicon glyphicon-list-alt"></span> \
-            </a> <!----> <!----> <!----> \
-          </div> <!----> \
-          </div>';
-
-        var html = '',
-            dateStr = (new Date()).toLocaleString();
-
-        for (var i = 0; i < count; i++) {
-            html += exports.renderTemplate(template, {
-                commentId: 'comment-' + counterArr[counterIndex],
-                commentAvatar: 'https://cdn2.jianshu.io/assets/default_avatar/10-e691107df16746d4a9f3fe9496fd1848.jpg',
-                commentCommenter: 'larry',
-                commentIndex: counterArr[counterIndex] + 1,
-                commentContent: prevTitle + '测试第【' + counterArr[counterIndex] + '】条新闻标题',
-                commentStarNumber: 5,
-                commentTime: dateStr
-            });
-            for (var j = 0; j < 3; j++) {
-              html += exports.renderTemplate(subCommentTemplate, {
-                  commentId: 5,
-                  replier: 'klydream',
-                  toCommenter: 'larry',
-                  replyContent: '这是一条回复',
-                  replyTime: dateStr
-              });
-            }
-            html += exports.renderTemplate(moreCommentTemplate, {
-                commentChildCommentNumber: 5
-            });
-            counterArr[counterIndex]++;
-        }
-
-        var child = exports.parseHtml(html);
-
-        dom.appendChild(child);
+      var testhtml = exports.testcomment(count, index);
+      return exports.appendData(dom, isReset, testhtml)
     };
 
     /**
-     * 添加测试数据
+     *
      * @param {String} dom 目标dom
      * @param {Number} count 需要添加的数量
      * @param {Boolean} isReset 是否需要重置，下拉刷新的时候需要
-     * @param {Number} index 属于哪一个刷新
      */
-    exports.appendData = function(dom, count, isReset, index) {
+    exports.appendData = function(dom, isReset, data) {
         if (typeof dom === 'string') {
             dom = document.querySelector(dom);
         }
 
-        var prevTitle = typeof index !== 'undefined' ? ('Tab' + index) : '';
-
-        var counterIndex = index || 0;
-
-        counterArr[counterIndex] = counterArr[counterIndex] || 0;
-
         if (isReset) {
             dom.innerHTML = '';
-            counterArr[counterIndex] = 0;
         }
 
-        var template = '<div id={{commentId}} class="comment"> \
+        var template = '<div id=${commentlist.id} class="commentlist"> \
+        <div id=${comment.id} class="comment"> \
           <div> \
             <div class="author"> \
               <div data-v-f3bf5228="" class="v-tooltip-container" style="z-index: 0;"> \
@@ -223,7 +98,7 @@
                 <a href="javascript:void(0);" target="_blank" class="name">{{commentCommenter}} \
                 </a> <!----> <!----> \
                 <div class="meta"> \
-                  <span>{{commentIndex}}楼 · {{commentTime}} \
+                  <span>{{commentIndexAdd}}楼 · {{commentTime}} \
                   </span> \
                 </div> \
               </div> \
@@ -232,22 +107,23 @@
               <p>{{commentContent}}</p> \
               <span class="pull-right"> \
                 <div class="tool-group" class="pull-right"> \
-                  <a href="javascript:void(0)" onclick="addStar(0)"> \
-                    <span id="star0" class="glyphicon glyphicon-star-empty" style="color:#969696;top:0px"></span> \
+                  <a href="javascript:void(0)" onclick="addStar({{record.id}}, {{commentIndex + 1}})"> \
+                    <span id="commentStar{{commentIndex}}" class="glyphicon glyphicon-star-empty" style="color:#969696;top:0px"></span> \
                   </a> \
-                  <span id="star_num0" class="label label-default">{{ pid.pid_value | get_star_num(0) }}</span> \
-                  <a ng-if="comment.commenter == user.username" class="commentTools comment-delete" href="javascript:void(0);" ng-click="deletefslcmt(saying.id, comment.id)"> \
+                  <span id="commentStarNum{{commentIndex}}" class="label label-default">{{ commentStarNumber }}</span> \
+                  <a ng-if="commentCommenter == user.username" class="commentTools comment-delete" href="javascript:void(0);" ng-click="deletefslcmt(record.id, commentId)"> \
                     <span>删除</span> \
                   </a> \
-                  <a class="commentTools comment-reply" href="javascript:void(0);" ng-click="showSecondComment(comment, comment.commenter)"> \
+                  <a class="commentTools comment-reply" href="javascript:void(0);" ng-click="showSecondComment(comment, commentCommenter)"> \
                     <span>回复</span> \
                   </a> \
                 </div> \
               </span> \
             </div> \
           </div> \
-        </div> \
-        <div class="sub-comment-list">';
+        </div>';
+
+        var subCommentBegin = '<div class="sub-comment-list">';
 
         var subCommentTemplate = '<div id={{commentId}} class="sub-comment"> \
               <p> \
@@ -274,46 +150,88 @@
               </div> \
             </div>';
 
-
           var moreCommentTemplate = '<div class="sub-comment more-comment"> \
             <a class="add-comment-btn" href="javascript:void(0);" ng-click="showComment()"> \
               <span>查看全部{{commentChildCommentNumber}}条评论</span> \
               <span class="glyphicon glyphicon-list-alt"></span> \
             </a> <!----> <!----> <!----> \
-          </div> <!----> \
           </div>';
 
-        var html = '',
-            dateStr = (new Date()).toLocaleString();
+          var commentEnd = '</div></div>';
 
-        for (var i = 0; i < count; i++) {
+        var html = '';
+
+        for (var i = 0; i < data.length; i++) {
             html += exports.renderTemplate(template, {
-                commentId: 'comment-' + counterArr[counterIndex],
-                commentAvatar: 'https://cdn2.jianshu.io/assets/default_avatar/10-e691107df16746d4a9f3fe9496fd1848.jpg',
-                commentCommenter: 'larry',
-                commentIndex: counterArr[counterIndex] + 1,
-                commentContent: prevTitle + '测试第【' + counterArr[counterIndex] + '】条新闻标题',
-                commentStarNumber: 5,
-                commentTime: dateStr
+                commentId: data[i].id,
+                commentAvatar: data[i].avatar,
+                commentCommenter: data[i].commenter,
+                commentIndex: data[i].index,
+                commentIndexAdd: data[i].index + 1,
+                commentContent: data[i].content,
+                commentStarNumber: data[i].starNumber,
+                commentTime: data[i].time
             });
-            for (var j = 0; j < 3; j++) {
-              html += exports.renderTemplate(subCommentTemplate, {
-                  commentId: 5,
-                  replier: 'klydream',
-                  toCommenter: 'larry',
-                  replyContent: '这是一条回复',
-                  replyTime: dateStr
+            if(data[i].childComment.length > 0){
+              html += subCommentBegin;
+              for (var j = 0; j < data[i].childComment.length; j++) {
+                html += exports.renderTemplate(subCommentTemplate, {
+                    commentId: data[i].childComment[j].id,
+                    replier: data[i].childComment[j].replier,
+                    toCommenter: data[i].childComment[j].toCommenter,
+                    replyContent: data[i].childComment[j].replyContent,
+                    replyTime: data[i].childComment[j].replyTime
+                });
+              }
+            }
+            if(data[i].childCommentLength > 3){
+              html += exports.renderTemplate(moreCommentTemplate, {
+                  commentChildCommentNumber: data[i].childCommentLength
               });
             }
-            html += exports.renderTemplate(moreCommentTemplate, {
-                commentChildCommentNumber: 5
-            });
-            counterArr[counterIndex]++;
+            html += commentEnd;
         }
 
         var child = exports.parseHtml(html);
 
         dom.appendChild(child);
     };
+
+    exports.testcomment = function(count, index){
+      var datas=[],
+          dateStr = (new Date()).toLocaleString();
+
+      var counterIndex = index || 0;
+
+      counterArr[counterIndex] = counterArr[counterIndex] || 0;
+
+      for (var i = 0; i < count; i++) {
+        var childs = [],
+            data = {},
+            child = {};
+        data['id'] = counterArr[counterIndex];
+        data['avatar'] = 'https://cdn2.jianshu.io/assets/default_avatar/10-e691107df16746d4a9f3fe9496fd1848.jpg';
+        data['commenter'] = 'larry';
+        data['index'] = counterArr[counterIndex];
+        data['content'] = "This is a piece of comment";
+        data['starNumber'] = counterArr[counterIndex];
+        data['time'] = dateStr;
+        for (var j = 0; j < (counterArr[counterIndex] > 3 ? 3 : i); j++){
+          child['id'] = j;
+          child['replier'] = 'klydream';
+          child['toCommenter'] = 'larry';
+          child['replyContent'] = "This is a piece of child comment";
+          child['replyTime'] = dateStr;
+          childs.push(child);
+          //console.log(child)
+        }
+        data['childComment'] = childs;
+        data['childCommentLength'] = counterArr[counterIndex];
+        datas.push(data);
+        counterArr[counterIndex]++;
+      }
+      //console.log(datas)
+      return datas
+    }
 
 })(window.Common = {});
